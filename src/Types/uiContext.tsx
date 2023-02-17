@@ -2,8 +2,6 @@ import { createContext, useContext } from "react";
 import { lightTheme, Theme } from "../theme";
 
 export type UiContext = {
-    sideMenu: boolean,
-    setSideMenu: (s: boolean) => void,
     darkMode: boolean,
     setDarkMode: (d: boolean) => void,
     spinnerVisible: boolean,
@@ -22,35 +20,21 @@ export type UiContext = {
     setOpenNetwork: (n: boolean) => void,
     openHundred: boolean,
     setOpenHundred: (h: boolean) => void,
-    openAirdrop: boolean,
-    setOpenAirdrop: (a: boolean) => void,
-    airdropSpinner: boolean,
-    setAirdropSpinner: (a: boolean) => void
     toastSuccessMessage: (m: string, autoClose?: boolean, closeDelay?: number) => void,
     toastErrorMessage: (message: string, autoClose?: boolean, closeDelay?:number) => void,
     switchModal: boolean,
     setSwitchModal: (m: boolean) => void,
     scale: boolean, 
     setScale: (h: boolean) => void
-    claimLegacyHnd: boolean,
-    setClaimLegacyHnd: (c: boolean) => void,
-    claimHnd: boolean,
-    setClaimHnd: (c: boolean) => void,
-    claimLockHnd: boolean,
-    setClaimLockHnd: (c: boolean) => void
     showWallets: boolean,
     setShowWallets: (w: boolean) => void,
     mobileMenuOpen: boolean,
     setMobileMenuOpen: (m: boolean) => void,
     accountOpen: boolean,
     setAccountOpen: (a: boolean) => void
-    optimismMessage: boolean,
-    setOptimismMessage: (a: boolean) => void
 }
 
 export const MyUiContext = createContext<UiContext>({
-    sideMenu: false,
-    setSideMenu: () => undefined,
     darkMode: false,
     setDarkMode: () => undefined,
     spinnerVisible: false,
@@ -69,30 +53,18 @@ export const MyUiContext = createContext<UiContext>({
     setOpenNetwork: () => undefined,
     openHundred: false,
     setOpenHundred: () => undefined,
-    openAirdrop: false,
-    setOpenAirdrop: () => undefined,
-    airdropSpinner: false,
-    setAirdropSpinner : () => undefined,
     toastSuccessMessage : () => undefined,
     toastErrorMessage: () => undefined,
     switchModal: false,
     setSwitchModal: () => undefined,
     scale: false,
     setScale: () => undefined,
-    claimLegacyHnd: false,
-    setClaimLegacyHnd: () => undefined,
-    claimHnd: false,
-    setClaimHnd: () => undefined,
-    claimLockHnd: false,
-    setClaimLockHnd: () => undefined,
     showWallets: false,
     setShowWallets: () => undefined,
     mobileMenuOpen: false,
     setMobileMenuOpen: () => undefined,
     accountOpen: false,
     setAccountOpen: () => undefined,
-    optimismMessage: false,
-    setOptimismMessage: () => undefined
 })
 
 export const useUiContext = () : UiContext => useContext(MyUiContext)

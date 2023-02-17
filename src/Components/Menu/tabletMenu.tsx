@@ -9,8 +9,6 @@ import NavbarMobile from "../Navbar/navbarMobile"
 import NavBarRight from "../Navbar/navBarRight"
 import ThemeSwitch from "../Navbar/themeSwitch"
 import NetworkButton from "./NetworkButton/networkButton"
-import HundredButton from "./HundredButton/hundredButton"
-import AirdropButton from "../AirdropButton/airdropButton"
 import { useUiContext } from "../../Types/uiContext"
 
 const TabletMenu: React.FC = () => {
@@ -24,9 +22,7 @@ const TabletMenu: React.FC = () => {
                     <NavBarRight>
                     {isTablet && !isMobile ?
                         <>
-                            <AirdropButton/>
-                            <HundredButton />
-                            <NetworkButton/> 
+                            <NetworkButton/>
                             <AddressButton />
                         </>
                     : null}
@@ -37,9 +33,7 @@ const TabletMenu: React.FC = () => {
             <NavbarMobile>
             {isMobile ? 
                 <NavBarRight className="navbar-right-content">
-                    <AirdropButton/>
-                    <HundredButton />
-                    <NetworkButton /> 
+                    <NetworkButton />
                     <AddressButton />
                 </NavBarRight>
             : null}

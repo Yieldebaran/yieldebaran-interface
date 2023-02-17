@@ -7,7 +7,7 @@ import { useUiContext } from "../../Types/uiContext"
 import "./accountSettings.css"
 
 const AccountSettings: React.FC = () => {
-    const {setSideMenu, setOpenAddress} = useUiContext()
+    const {setOpenAddress} = useUiContext()
     const {address, setAddress} = useGlobalContext()
     const { connector, deactivate} = useWeb3React<ethers.providers.Web3Provider>()
 
@@ -20,7 +20,6 @@ const AccountSettings: React.FC = () => {
         window.localStorage.removeItem("provider")
         deactivate()
 
-        setSideMenu(false) 
         setOpenAddress(false)
         setAddress("")
     }
