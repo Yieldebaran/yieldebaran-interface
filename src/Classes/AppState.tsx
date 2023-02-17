@@ -59,6 +59,7 @@ export type AppState = {
     accountEthBalance: FVal,
     blockNumber: number,
     blockTimestamp: number,
+  provider: ethers.providers.JsonRpcProvider | null
 }
 
 export const ethcallProvider = new Provider()
@@ -81,7 +82,10 @@ export const loadAppState = async (provider: any, network: Network, userAddress?
         return getEapStates(ethcallProvider, network, [60, 7 * 24 * 3600], userAddress)
     }
 
-    return zeroAppState
+    return {
+      ...zeroAppState,
+      provider,
+    }
 }
 
 function randomHex(size: number) {

@@ -3,7 +3,7 @@ import {lightTheme, darkTheme, Theme} from './theme'
 import './App.css';
 import { Network } from './networks'
 import Spinner from './Components/Spinner/spinner';
-import ReactToolTip from 'react-tooltip'
+import ReactTooltip from 'react-tooltip'
 import 'react-toastify/dist/ReactToastify.css'
 import Buffer from "buffer"
 import { MyUiContext } from './Types/uiContext';
@@ -24,8 +24,8 @@ global.Buffer = window.Buffer || Buffer.Buffer
 
 const App: React.FC = () => {
   const [address, setAddress] = useState<string>("")
-  
-  
+
+
   const [network, setNetwork] = useState<Network | null>(null)
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [spinnerVisible, setSpinnerVisible] = useState<boolean>(false)
@@ -44,7 +44,7 @@ const App: React.FC = () => {
   const [scale, setScale] = useState(false)
 
   const { width } = useWindowSize()
-  
+
   useEffect(() => {
     setShow(true)
 
@@ -135,7 +135,7 @@ const App: React.FC = () => {
         })}>
           <div id="app" className={`App scroller ${darkMode ? "dark" : "light"}`}>
             <Hundred/>
-            <ReactToolTip id="tooltip" effect="solid"/>
+            <ReactTooltip id="tooltip"/>
             <Spinner/>
           </div>
           <ToastContainer/>

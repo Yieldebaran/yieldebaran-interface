@@ -32,6 +32,7 @@ export const zeroAppState = {
     blockNumber: 0,
     blockTimestamp: 0,
     states: [],
+  provider: null,
 }
 
 export const YieldebaranDataContext = createContext<AppDataContext>({
