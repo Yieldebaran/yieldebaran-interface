@@ -18,6 +18,11 @@ export const useBalance = (tokenAddress: string | null, ownerAddress: string | n
 
     const contract = new ethers.Contract(tokenAddress, erc20Abi, appState.provider);
 
+    const filterTransferFrom = contract.filters.Transfer(ownerAddress);
+    const filterTransferTo = contract.filters.Transfer(null, ownerAddress);
+    const filterDeposit = contract.filters.Deposit(ownerAddress);
+    const filterWithdrawal = contract.filters.Withdrawal(ownerAddress);
+
     const fetchAndSetBalance = () => {
       if (!contract) {
         setBalance('0');
@@ -30,10 +35,8 @@ export const useBalance = (tokenAddress: string | null, ownerAddress: string | n
       });
     };
 
-    function transferEventHandler(from: string, to: string) {
-      if (!ownerAddress) return;
-      if (isAddressesEq(from, ownerAddress) || isAddressesEq(to, ownerAddress))
-        fetchAndSetBalance();
+    function transferEventHandler() {
+      fetchAndSetBalance()
     }
 
     function depositOrWithdrawalHandler(address: string) {
@@ -44,7 +47,8 @@ export const useBalance = (tokenAddress: string | null, ownerAddress: string | n
     const trackTokenTransfer = () => {
       if (!contract || !tokenAddress) return;
       console.log('trackTokenTransfer fired');
-      contract.on('Transfer', transferEventHandler);
+      contract.on(filterTransferFrom, transferEventHandler);
+      contract.on(filterTransferTo, transferEventHandler);
       if (isAddressesEq(tokenAddress, network.weth)) {
         contract?.on('Deposit', depositOrWithdrawalHandler);
         contract?.on('Withdrawal', depositOrWithdrawalHandler);
@@ -53,9 +57,10 @@ export const useBalance = (tokenAddress: string | null, ownerAddress: string | n
 
     const clearTokenTransferTracking = () => {
       console.log('trackTokenTransfer remove listener');
-      contract?.removeListener('Transfer', transferEventHandler);
-      contract?.removeListener('Deposit', depositOrWithdrawalHandler);
-      contract?.removeListener('Withdrawal', depositOrWithdrawalHandler);
+      contract?.removeListener(filterTransferFrom, transferEventHandler);
+      contract?.removeListener(filterTransferTo, transferEventHandler);
+      contract?.removeListener(filterDeposit, depositOrWithdrawalHandler);
+      contract?.removeListener(filterWithdrawal, depositOrWithdrawalHandler);
     };
 
     fetchAndSetBalance();
