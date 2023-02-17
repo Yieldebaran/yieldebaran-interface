@@ -50,8 +50,8 @@ export const useBalance = (tokenAddress: string | null, ownerAddress: string | n
       contract.on(filterTransferFrom, transferEventHandler);
       contract.on(filterTransferTo, transferEventHandler);
       if (isAddressesEq(tokenAddress, network.weth)) {
-        contract?.on('Deposit', depositOrWithdrawalHandler);
-        contract?.on('Withdrawal', depositOrWithdrawalHandler);
+        contract?.on(filterDeposit, depositOrWithdrawalHandler);
+        contract?.on(filterWithdrawal, depositOrWithdrawalHandler);
       }
     };
 
