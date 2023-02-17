@@ -258,6 +258,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
     accountEthBalance: accountEthBalance.toFVal(formatter(18)),
     blockNumber,
     blockTimestamp,
+    provider: null,
   }
 }
 

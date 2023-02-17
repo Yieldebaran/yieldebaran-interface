@@ -1,10 +1,10 @@
-import React from "react"
+import React, {PropsWithChildren} from "react"
 import Modal from "react-modal"
 import "./messageDialog.css"
 
 Modal.setAppElement("#root")
 
-interface Props{
+interface Props {
     isOpen: boolean,
     onRequestClose: ()=> void,
     contentLabel: string,
@@ -14,7 +14,7 @@ interface Props{
 }
 const HundredMessage:React.FC<Props> = (props: Props) => {
     return(
-        props.isOpen ? 
+        props.isOpen ?
         <Modal isOpen={props.isOpen}
                 onRequestClose={props.onRequestClose}
                 contentLabel={props.contentLabel}
@@ -32,12 +32,12 @@ const HundredMessage:React.FC<Props> = (props: Props) => {
     )
 }
 
-type TitleProps = {
+interface TitleProps {
     onRequestClose: () => void,
     darkMode: boolean
 }
 
-const HundredMessageTitle:React.FC<TitleProps> = ({onRequestClose, darkMode, children}) => {
+const HundredMessageTitle: React.FC<PropsWithChildren<TitleProps>> = ({onRequestClose, darkMode, children}) => {
     return (
         <div className="hundred-message-title title title18">
             {children}
@@ -49,13 +49,13 @@ const HundredMessageTitle:React.FC<TitleProps> = ({onRequestClose, darkMode, chi
     )
 }
 
-type ItemProps = {
+interface ItemProps {
     disabled?: boolean,
     hover?: boolean,
     onClick?: () => void
 }
 
-const HundredMessageItem: React.FC<ItemProps> = ({disabled, hover, onClick, children}) => {
+const HundredMessageItem: React.FC<PropsWithChildren<ItemProps>> = ({disabled, hover, onClick, children}) => {
     return (
         <div className={`hundred-message-item ${disabled ? "hundred-message-item-disabled" : ""} ${hover && !disabled ? "hundred-message-item-hover" : ""}`} onClick={onClick}>
             {children}
