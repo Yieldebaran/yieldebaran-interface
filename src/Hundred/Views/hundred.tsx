@@ -48,22 +48,6 @@ const Hundred: React.FC = () => {
         appState,
     } = useFetchData()
 
-
-    const setGMessage = (message: string) => {
-        setGMessageText(gaugeMessage(message))
-        setShowGMessage(true)
-    }
-
-    const gaugeMessage = (message: string) => {
-        return (
-            <div>
-                <p>{message} on <a style={{color: "#2853ff"}} href="https://old.hundred.finance" target={"_blank"}
-                                   rel="noreferrer">https://old.hundred.finance</a>.</p>
-                <p>Please unstake from there and stake on the main site.</p>
-            </div>
-        )
-    }
-
     useEffect(() => {
         const net = window.localStorage.getItem("yieldebaran-network")
         const prov = window.localStorage.getItem("yieldebaran-provider")

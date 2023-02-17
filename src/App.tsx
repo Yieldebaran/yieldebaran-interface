@@ -53,7 +53,7 @@ const App: React.FC = () => {
     if(darkmode && darkmode === "dark")
       setDarkMode(true)
     else
-      setDarkMode(true)
+      setDarkMode(false)
   }, [])
 
   useEffect(() => {
@@ -75,11 +75,10 @@ const App: React.FC = () => {
   }, [width, show])
 
   useEffect(() => {
-    if(darkMode){
+    if (darkMode) {
       window.localStorage.setItem("yieldebaran-darkmode", "dark")
       setTheme(darkTheme)
-    }
-    else{
+    } else {
       window.localStorage.setItem("yieldebaran-darkmode", "light")
       setTheme(lightTheme)
     }

@@ -81,7 +81,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
             }
         } catch (error: any) {
             console.log(error)
-            toastErrorMessage(`${error?.message.replace('.', '')} on Stake}`);
+            toastErrorMessage(`${error?.message.replace('.', '')}`);
         }
     }
 
@@ -100,7 +100,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
             }
         } catch (error: any) {
             console.log(error)
-            toastErrorMessage(`${error?.message.replace('.', '')} on Stake}`);
+            toastErrorMessage(`${error?.message.replace('.', '')}`);
         }
     }
 
@@ -118,7 +118,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
             }
         } catch (error: any) {
             console.log(error)
-            toastErrorMessage(`${error?.message.replace('.', '')} on Stake}`);
+            toastErrorMessage(`${error?.message.replace('.', '')}`);
         }
     }
 
@@ -128,7 +128,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
     return (props.selectedPool && mounted ?
             <>
                 <MarketDialogItem
-                    title={"Your deposit"}
+                    title={"Deposited"}
                     value={`${props.selectedPool.accountAllocated.formatted} ${props.selectedPool.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
@@ -150,7 +150,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
-                    title={"48h APY"}
+                    title={"7d APY"}
                     value={String(props.selectedPool.apyAfterFee[1].apy + '%')}
                 />
                 <div className="input-group">

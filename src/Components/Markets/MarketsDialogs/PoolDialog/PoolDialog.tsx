@@ -7,11 +7,12 @@ import ReactToolTip from 'react-tooltip'
 import { Tab, TabContent, TabContentItem, TabHeader, TabHeaderItem } from "../../../TabControl/tabControl"
 import "../marketDialog.css"
 import DepositTab from "./DepositTab";
+import WithdrawTab from "./WithdrawTab";
 interface Props {
     closeSupplyMarketDialog: () => void,
 }
 
-const SupplyMarketDialog:React.FC<Props> = (props: Props) => {
+const PoolDialog:React.FC<Props> = (props: Props) => {
     const {selectedPool, setSelectedPool, appState} = useHundredDataContext()
     const {spinnerVisible, darkMode} = useUiContext()
     const [tabChange, setTabChange] = useState<number>(1)
@@ -41,16 +42,16 @@ const SupplyMarketDialog:React.FC<Props> = (props: Props) => {
         if (selectedPool && mountedSupply.current) {
             const headers = []
             const contents = []
-            headers.push({title: "Supply"})
+            headers.push({title: "Deposit"})
             contents.push(<DepositTab selectedPool={selectedPool}/>)
             // headers.push({title: "Stake"})
             // contents.push(<DirectStakeMarketTab selectedPool={selectedPool}/>)
 
-            headers.push({title: "Fast withdraw"})
-            contents.push(<DepositTab selectedPool={selectedPool}/>)
+            headers.push({title: "Withdraw"})
+            contents.push(<WithdrawTab selectedPool={selectedPool}/>)
             // contents.push(<InstantWithdrawalTab selectedPool={selectedPool}/>)
 
-            headers.push({title: "Withdraw"})
+            headers.push({title: "Fast withdraw"})
             contents.push(<DepositTab selectedPool={selectedPool}/>)
             // contents.push(<WithdrawItem selectedPool={selectedPool}/>)
 
@@ -104,4 +105,4 @@ const SupplyMarketDialog:React.FC<Props> = (props: Props) => {
     )
 }
 
-export default SupplyMarketDialog
+export default PoolDialog

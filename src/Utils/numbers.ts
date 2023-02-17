@@ -19,11 +19,6 @@ export function validateInput(input: string, max: string): string {
     return ""
 }
 
-export function numOrZero(x: string) {
-    if (x.trim() === "" || isNaN(+x) || isNaN(parseFloat(x))) return 0
-    return Number(x)
-}
-
 export function bnFromInput(x: string, d: number): bigint {
     if (x.trim() === "" || isNaN(+x) || isNaN(parseFloat(x))) return 0n
     const dotIndex = x.indexOf('.')

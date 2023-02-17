@@ -4,6 +4,7 @@ import {ethers} from "ethers";
 import {getEapStates} from "../Hundred/Data/fetchEapsData";
 import {FVal, zeroAppState} from "../Types/appDataContext";
 import eapAbi from "../abi/EAP.json";
+import withdrawToolAbi from "../abi/WthdrawTool.json";
 import ethAdapterAbi from "../abi/EthAdapter.json";
 
 export type ApyData = {
@@ -76,7 +77,7 @@ export const loadAppState = async (provider: any, network: Network, userAddress?
     signer = provider.getSigner()
 
     if (network.eaps) {
-        return getEapStates(ethcallProvider, network, [60, 2 * 24 * 3600], userAddress)
+        return getEapStates(ethcallProvider, network, [60, 7 * 24 * 3600], userAddress)
     }
 
     return zeroAppState
@@ -95,6 +96,50 @@ export async function deposit(pool: string, amount: bigint) {
     // @ts-ignore
     const poolContract = new ethers.Contract(pool, eapAbi, signer)
     return poolContract.deposit(amount)
+}
+
+export async function requestWithdrawal(pool: string, address: string, amount: bigint) {
+    if (!signer) {
+        return
+    }
+    console.log('requestWithdrawal', pool, address, amount)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(pool, eapAbi, signer)
+    return poolContract.requestWithdrawal(amount, address)
+}
+
+export async function cancelRequest(withdrawTool: string) {
+    if (!signer) {
+        return
+    }
+    console.log('cancelRequest', withdrawTool)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer)
+    return poolContract.cancelRequest()
+}
+
+export async function claimWithdrawal(withdrawTool: string) {
+    if (!signer) {
+        return
+    }
+    console.log('claimWithdrawal', withdrawTool)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer)
+    return poolContract.claim()
+}
+
+export async function claimWithdrawalEth(withdrawTool: string) {
+    if (!signer) {
+        return
+    }
+    console.log('claimWithdrawalEth', withdrawTool)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer)
+    return poolContract.claimEth()
 }
 
 export async function approve(token: string, spender: string, amount: bigint) {

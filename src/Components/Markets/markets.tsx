@@ -1,7 +1,7 @@
 import React from "react"
 import {MarketContainer, MarketContainerTitle} from "./marketContainer"
 import "./style.css"
-import PoolList from "./SupplyMarkets/poolList"
+import PoolList from "./AvailablePools/poolList"
 import {EapData} from "../../Classes/AppState";
 
 interface Props {

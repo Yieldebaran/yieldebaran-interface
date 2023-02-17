@@ -42,7 +42,7 @@ export const formatter = (decimals: number, roundTo = decimals) => {
 const confValF = formatter(16, 3)
 
 const YEAR = 365n * 24n * 3600n
-export async function getEapStates(ethcallProvider: Provider, network: Network, lastBlocks: number[], account: string): Promise<AppState> {
+export async function getEapStates(ethcallProvider: Provider, network: Network, apyTimePoints: number[], account: string): Promise<AppState> {
   const timestampContract = new Contract(network.timestampContract, abi);
   const blockNumberContract = new Contract(network.blockNumberContract, abi);
   const usdc = network.usdc
@@ -90,6 +90,10 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
   const allocations = eaps.map(() => data.pop()) as string[][]
   const underlyings = eaps.map(() => data.pop()) as string[]
   const withdrawTools = eaps.map(() => data.pop()) as string[]
+  const blockTimestamp = Number(data.pop())
+
+  const apyBlockNumbers = await getClosestBlockNumbers(apyTimePoints.slice(1).map(x => blockTimestamp - x), network)
+  apyBlockNumbers.unshift(blockNumber - apyTimePoints[0]);
 
   const secondCallBatchForCurrentBlock = [...exchangeRateCalls] // touch exchange rates
   eaps.forEach((eap, i) => {
@@ -121,14 +125,13 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
   })
 
   const secondCallResult = await Promise.all([
-    ...lastBlocks.map(x => ethcallProvider.all(secondBatchCall, blockNumber - x)),
+    ...apyBlockNumbers.map(x => ethcallProvider.all(secondBatchCall, x)),
     ethcallProvider.all(secondCallBatchForCurrentBlock, blockNumber),
   ])
 
   const secondDataBatchCurrentBlock = secondCallResult.pop() as any[]
   exchangeRateCalls.map(() => secondDataBatchCurrentBlock.shift())
 
-  const blockTimestamp = Number(data.pop())
   const periods = secondCallResult.map(x => blockTimestamp - Number(x.pop()))
 
   const states: EapData[] = []
@@ -255,6 +258,22 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
     blockNumber,
     blockTimestamp,
   }
+}
+
+async function getClosestBlockNumbers(timestamps: number[], network: Network): Promise<Array<number>> {
+  const { etherscanApiUrl, etherscanApiKey, inception } = network
+  return await Promise.all(
+      timestamps.map((x) => findClosestBlock(x, etherscanApiUrl, etherscanApiKey, inception))
+  )
+}
+
+async function findClosestBlock(timestamp: number, baseUrl: string, apiKey: string, inception: number): Promise<number> {
+  const url = `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before&apikey=${apiKey}`
+  const data = await (await fetch(url)).json();
+  console.log('etherscan response')
+  console.log(data)
+  const res = Number(data.result)
+  return inception > res ? inception : res
 }
 
 export function getPairAddress(tokenA: string, tokenB: string, isStable?: boolean) {
