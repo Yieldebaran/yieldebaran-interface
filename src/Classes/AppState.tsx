@@ -30,6 +30,7 @@ export type EapData = {
     apyAfterFee: ApyData[]
     exchangeRate: bigint
     underlyingWithdrawable: FVal
+    sharesWithdrawable: FVal
     totalUnderlyingBalance: FVal
     totalUnderlyingRequested: FVal
     underlyingUnallocated: FVal
@@ -162,6 +163,28 @@ export async function depositEth(ethAdapter: string, amount: bigint) {
     // @ts-ignore
     const adapterContract = new ethers.Contract(ethAdapter, ethAdapterAbi, signer)
     return adapterContract.depositEth({value: amount})
+}
+
+export async function instantWithdrawal(pool: string, amount: bigint, minFromBalance: bigint, account: string) {
+    console.log('instantWithdrawal', pool, amount, minFromBalance, account)
+    if (!signer) {
+        return
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(pool, eapAbi, signer)
+    return poolContract.instantWithdrawal(amount, minFromBalance, account)
+}
+
+export async function instantWithdrawalEth(pool: string, amount: bigint, minFromBalance: bigint, account: string) {
+    console.log('instantWithdrawal', pool, amount, minFromBalance, account)
+    if (!signer) {
+        return
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(pool, eapAbi, signer)
+    return poolContract.instantWithdrawalEth(amount, minFromBalance, account)
 }
 
 

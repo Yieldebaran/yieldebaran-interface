@@ -145,14 +145,17 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                 }
                 <div className="dialog-line"/>
                 <MarketDialogItem
+                    toolTipContent={`Performance fee ${props.selectedPool.performanceFee.formatted}% applied`}
                     title={"Current APY"}
                     value={props.selectedPool.apyAfterFee[0].apy + '%'}
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
+                    toolTipContent={`Performance fee ${props.selectedPool.performanceFee.formatted}% applied`}
                     title={"7d APY"}
                     value={String(props.selectedPool.apyAfterFee[1].apy + '%')}
                 />
+                <div className="dialog-line"/>
                 <div className="input-group">
                     <div className="input-button-group">
                         <TextBox

@@ -137,6 +137,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                     title={"Available to claim"}
                     value={`${props.selectedPool.lastFulfillmentIndex > props.selectedPool.accountRequestIndex ? props.selectedPool.accountUnderlyingRequested.formatted : 0} ${props.selectedPool.underlyingSymbol}`}
                 />
+                <div className="dialog-line"/>
                 {!isRequested && <div className="input-group">
                     <div className="input-button-group">
                         <TextBox

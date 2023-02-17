@@ -8,6 +8,7 @@ import { Tab, TabContent, TabContentItem, TabHeader, TabHeaderItem } from "../..
 import "../marketDialog.css"
 import DepositTab from "./DepositTab";
 import WithdrawTab from "./WithdrawTab";
+import InstantWithdrawTab from "./InstantWithdrawTab";
 interface Props {
     closeSupplyMarketDialog: () => void,
 }
@@ -52,7 +53,7 @@ const PoolDialog:React.FC<Props> = (props: Props) => {
             // contents.push(<InstantWithdrawalTab selectedPool={selectedPool}/>)
 
             headers.push({title: "Fast withdraw"})
-            contents.push(<DepositTab selectedPool={selectedPool}/>)
+            contents.push(<InstantWithdrawTab selectedPool={selectedPool}/>)
             // contents.push(<WithdrawItem selectedPool={selectedPool}/>)
 
             setTabHeaders(headers)
