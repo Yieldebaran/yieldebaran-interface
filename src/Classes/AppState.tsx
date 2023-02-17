@@ -3,6 +3,8 @@ import { Network } from '../networks'
 import {ethers} from "ethers";
 import {getEapStates} from "../Hundred/Data/fetchEapsData";
 import {FVal, zeroAppState} from "../Types/appDataContext";
+import eapAbi from "../abi/EAP.json";
+import ethAdapterAbi from "../abi/EthAdapter.json";
 
 export type ApyData = {
     apy: number,
@@ -74,7 +76,7 @@ export const loadAppState = async (provider: any, network: Network, userAddress?
     signer = provider.getSigner()
 
     if (network.eaps) {
-        return getEapStates(ethcallProvider, network, [60, 24 * 3600], userAddress)
+        return getEapStates(ethcallProvider, network, [60, 2 * 24 * 3600], userAddress)
     }
 
     return zeroAppState
@@ -84,7 +86,6 @@ function randomHex(size: number) {
     return [...Array(size)].map(() => Math.floor(Math.random() * 16).toString(16)).join('')
 }
 
-
 export async function deposit(pool: string, amount: bigint) {
     console.log('deposit', pool, amount)
     if (!signer) {
@@ -92,8 +93,30 @@ export async function deposit(pool: string, amount: bigint) {
     }
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    // const poolContract = new ethers.Contract(pool, eapAbi, signer)
+    const poolContract = new ethers.Contract(pool, eapAbi, signer)
+    return poolContract.deposit(amount)
+}
 
+export async function approve(token: string, spender: string, amount: bigint) {
+    console.log('approve', token, spender, amount)
+    if (!signer) {
+        return
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const tokenContract = new ethers.Contract(token, eapAbi, signer)
+    return tokenContract.approve(spender, amount)
+}
+
+export async function depositEth(ethAdapter: string, amount: bigint) {
+    console.log('depositEth', ethAdapter, amount)
+    if (!signer) {
+        return
+    }
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const adapterContract = new ethers.Contract(ethAdapter, ethAdapterAbi, signer)
+    return adapterContract.depositEth({value: amount})
 }
 
 

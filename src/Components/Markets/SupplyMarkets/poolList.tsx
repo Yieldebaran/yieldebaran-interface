@@ -46,7 +46,7 @@ const PoolList: React.FC<Props> = (props: Props) => {
                         </Tippy>
                     </th>
 
-                    <th className='market-header-title'>Total deposit</th>
+                    <th className='market-header-title'>Total assets</th>
                     <th className='market-header-title'>Your deposit</th>
                     <th className='market-header-title'>On wallet</th>
                 </tr>

@@ -6,7 +6,8 @@ import { useHundredDataContext } from "../../../../Types/appDataContext";
 import { useUiContext } from "../../../../Types/uiContext";
 import Button from "../../../Button/button";
 import {bnFromInput, validateInput} from "../../../../Utils/numbers";
-import {deposit, EapData} from "../../../../Classes/AppState";
+import {approve, deposit, depositEth, EapData} from "../../../../Classes/AppState";
+import {useGlobalContext} from "../../../../Types/globalContext";
 
 interface Props {
     selectedPool: EapData
@@ -14,6 +15,8 @@ interface Props {
 const DepositTab:React.FC<Props> = (props: Props) => {
     const {appState} = useHundredDataContext()
     const {toastErrorMessage, toastSuccessMessage} = useUiContext()
+
+    const {network} = useGlobalContext()
 
     const mounted = useRef<boolean>(false)
 
@@ -66,18 +69,53 @@ const DepositTab:React.FC<Props> = (props: Props) => {
 
     const handleDeposit = async (amount: bigint) => {
         try {
+            if (mounted) setDepositInput("")
             const tx = await deposit(props.selectedPool.address, amount)
+            const receipt = await tx.wait()
+            console.log(receipt)
+            if (receipt.status === 1) {
+                toastSuccessMessage("Transaction complete, updating contracts")
+                // await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
+            } else if (receipt.message) {
+                toastErrorMessage(`${receipt.message}`);
+            }
+        } catch (error: any) {
+            console.log(error)
+            toastErrorMessage(`${error?.message.replace('.', '')} on Stake}`);
+        }
+    }
 
-            //setSpinnerVisible(false)
-            // const receipt = await tx.wait()
-            // console.log(receipt)
-            // if (receipt.status === 1) {
-            //     toastSuccessMessage("Transaction complete, updating contracts")
-            //     await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
-            //     if (mounted) setDepositInput("")
-            // } else if (receipt.message) {
-            //     toastErrorMessage(`${receipt.message}`);
-            // }
+    const handleApprove = async (amount: bigint) => {
+        try {
+            // if (mounted) setDepositInput("")
+            const tx = await approve(props.selectedPool.underlying, props.selectedPool.address, amount)
+            const receipt = await tx.wait()
+            console.log(receipt)
+            if (receipt.status === 1) {
+                toastSuccessMessage("Transaction complete, updating contracts")
+                // await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
+                // if (mounted) setDepositInput("")
+            } else if (receipt.message) {
+                toastErrorMessage(`${receipt.message}`);
+            }
+        } catch (error: any) {
+            console.log(error)
+            toastErrorMessage(`${error?.message.replace('.', '')} on Stake}`);
+        }
+    }
+
+    const handleDepositEth = async (amount: bigint) => {
+        if (!network) return
+        try {
+            if (mounted) setEthInput("")
+            const tx = await depositEth(network.ethAdapter, amount)
+            const receipt = await tx.wait()
+            console.log(receipt)
+            if (receipt.status === 1) {
+                toastSuccessMessage("Transaction complete, updating contracts")
+            } else if (receipt.message) {
+                toastErrorMessage(`${receipt.message}`);
+            }
         } catch (error: any) {
             console.log(error)
             toastErrorMessage(`${error?.message.replace('.', '')} on Stake}`);
@@ -98,6 +136,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                     title={"Balance"}
                     value={`${props.selectedPool.accountUnderlyingBalance.formatted} ${props.selectedPool.underlyingSymbol}`}
                 />
+                <div className="dialog-line"/>
                 {props.selectedPool.isEth &&
                     <MarketDialogItem
                         title={"Native balance"}
@@ -107,22 +146,18 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Current APY"}
-                    value={String(props.selectedPool.apyAfterFee[0].apy)}
+                    value={props.selectedPool.apyAfterFee[0].apy + '%'}
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
-                    title={"Current APY"}
-                    value={String(props.selectedPool.apyAfterFee[0].apy)}
-                />
-                <div className="dialog-line"/>
-                <MarketDialogItem
-                    title={"24h APY"}
-                    value={String(props.selectedPool.apyAfterFee[1].apy)}
+                    title={"48h APY"}
+                    value={String(props.selectedPool.apyAfterFee[1].apy + '%')}
                 />
                 <div className="input-group">
                     <div className="input-button-group">
                         <TextBox
-                            disabled={depositBN === props.selectedPool.accountUnderlyingBalance.native}
+                            disabled={props.selectedPool.accountUnderlyingBalance.native === 0n}
+                            buttonDisabled={depositBN === props.selectedPool.accountUnderlyingBalance.native}
                             placeholder={props.selectedPool.underlyingSymbol}
                             value={depositInput}
                             setInput={setDepositInput}
@@ -137,14 +172,14 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                                 loading={false} rectangle={true}
                                 onClick={() => handleDeposit(depositBN)}
                             >
-                                Stake
+                                Deposit
                             </Button>
                             :
                             <Button
                                 rectangle={true}
                                 loading={false}
                                 disabled={depositBN === 0n}
-                                onClick={() => handleDeposit(depositBN)}
+                                onClick={() => handleApprove(depositBN)}
                             >
                                 Approve
                             </Button>
@@ -155,7 +190,8 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                     <div className="input-group">
                         <div className="input-button-group">
                             <TextBox
-                                disabled={depositEthBN === appState.accountEthBalance.native}
+                                disabled={appState.accountEthBalance.native === 0n}
+                                buttonDisabled={depositEthBN === appState.accountEthBalance.native}
                                 placeholder={props.selectedPool.underlyingSymbol.substring(1)}
                                 value={ethInput}
                                 setInput={setEthInput}
@@ -165,9 +201,9 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                             />
                             <Button loading={false} rectangle={true}
                                         disabled={ethInput === "" || ethErrorMessage !== ""}
-                                        onClick={() => handleDeposit(depositEthBN)}
+                                        onClick={() => handleDepositEth(depositEthBN)}
                                 >
-                                    Deposit
+                                    Deposit {props.selectedPool.underlyingSymbol.substring(1)}
                             </Button>
                         </div>
                     </div>

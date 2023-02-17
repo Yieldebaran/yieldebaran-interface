@@ -13,7 +13,7 @@ export function validateInput(input: string, max: string): string {
     if (inputNum <= 0) {
         return "Amount must be > 0"
     }
-    if (inputNum > maxNum) {
+    if (bnFromInput(input, 18) > bnFromInput(max, 18)) {
         return `Not enough balance`
     }
     return ""
@@ -28,7 +28,7 @@ export function bnFromInput(x: string, d: number): bigint {
     if (x.trim() === "" || isNaN(+x) || isNaN(parseFloat(x))) return 0n
     const dotIndex = x.indexOf('.')
     if (dotIndex === -1) {
-        return BigInt(x)
+        return BigInt(x) * 10n ** BigInt(d)
     }
     const beforeDot = x.substring(0, dotIndex)
     const afterDot = x.substring(dotIndex + 1).padEnd(d, '0')
