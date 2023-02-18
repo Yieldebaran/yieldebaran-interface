@@ -34,7 +34,7 @@ export const YieldebaranLogo: React.FC<Props> = (props: Props) => {
   <linearGradient id="linearGradient896" x1="404.9" x2="86.12" y1="61.62" y2="124.11" gradientTransform="rotate(-.21 591.87 104.76)" gradientUnits="userSpaceOnUse" xlinkHref="#linear-gradient"/>
   <linearGradient id="linearGradient898" x1="251.94" x2="127.59" y1="128.47" y2="152.84" gradientTransform="rotate(-.21 591.87 104.76)" gradientUnits="userSpaceOnUse" xlinkHref="#linear-gradient-3"/>
  </defs>
- <title>HND Logo 1</title>
+ <title>Yieldebaran Logo 1</title>
  <g transform="translate(.0029211 .00067054)" data-name="Layer 2">
   <g data-name="Layer 1">
    <text id="Yieldebaran" className="cls_8" transform="rotate(-.21)" x="50.56018" y="102.08144">YIELDEBARAN</text>

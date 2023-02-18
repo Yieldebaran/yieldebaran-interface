@@ -55,7 +55,7 @@ export type EapData = {
 }
 
 export type AppState = {
-    states: EapData[],
+    states: { [eap: string]: EapData },
     accountEthBalance: FVal,
     blockNumber: number,
     blockTimestamp: number,

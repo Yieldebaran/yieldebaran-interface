@@ -2,8 +2,8 @@ import { useWeb3React } from "@web3-react/core"
 import { useEffect, useRef, useState } from "react"
 import { useGlobalContext } from "../../Types/globalContext"
 import { ethers } from "ethers"
-import {AppState, EapData, loadAppState} from "../../Classes/AppState";
-import {zeroAppState} from "../../Types/appDataContext";
+import {EapData, loadAppState} from "../../Classes/AppState";
+import {FVal} from "../../Types/appDataContext";
 
 const useFetchData = () => {
     const networkId = useRef<number>()
@@ -11,7 +11,10 @@ const useFetchData = () => {
     const selectedPoolRef = useRef<EapData>()
     const accountRef = useRef<string | null | undefined>()
 
-    const [appState, setAppState] = useState<AppState>(zeroAppState)
+    const [eapStates, setEapStates] = useState<{[eap: string] : EapData}>({})
+    const [blockNumber, setBlockNumber] = useState<number>(0)
+    const [blockTimestamp, setBlockTimestamp] = useState<number>(0)
+    const [accountEthBalance, setAccountEthBalance] = useState<FVal>({ native: 0n, formatted: '0.0'})
     const [selectedPool, setSelectedPool] = useState<EapData>()
 
     const {network} = useGlobalContext()
@@ -26,7 +29,10 @@ const useFetchData = () => {
     }, [account])
 
     useEffect(() => {
-        setAppState(zeroAppState)
+        setEapStates({})
+        setBlockNumber(0)
+        setBlockTimestamp(0)
+        setAccountEthBalance({ native: 0n, formatted: '0.0'})
         setSelectedPool(undefined)
         if (network) {
             if (account && library && network.chainId === chainId) {
@@ -42,10 +48,16 @@ const useFetchData = () => {
     }, [library, network, account])
 
     const fetchAppState = async () => {
+        console.log('updating app data')
         if (network) {
             const net = {...network}
             const appState = await loadAppState(library || new ethers.providers.JsonRpcProvider(net.publicRpc), net, account as string)
-            setAppState(appState)
+            setEapStates(appState.states)
+            setBlockTimestamp(appState.blockTimestamp)
+            setBlockNumber(appState.blockNumber)
+            setAccountEthBalance(appState.accountEthBalance)
+            console.log('app data updated', appState.blockNumber, appState.accountEthBalance)
+            console.log(appState.states)
         }
     }
 
@@ -57,7 +69,10 @@ const useFetchData = () => {
         selectedPool,
         setSelectedPool,
         updateAppState,
-        appState,
+        blockTimestamp,
+        blockNumber,
+        eapStates,
+        accountEthBalance,
     }
 }
 

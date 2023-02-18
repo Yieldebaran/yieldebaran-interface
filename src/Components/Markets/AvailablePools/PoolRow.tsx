@@ -17,7 +17,7 @@ interface Props {
 }
 
 const PoolRow: React.FC<Props> = (props : Props) => {
-    const {appState} = useYieldebaranDataContext()
+    const {accountEthBalance} = useYieldebaranDataContext()
     const {setShowWallets} = useUiContext()
     const {account} = useWeb3React<providers.Web3Provider>()
 
@@ -31,7 +31,7 @@ const PoolRow: React.FC<Props> = (props : Props) => {
         }
     }
 
-    const balance = formatBN(props.pool.accountUnderlyingBalance.native + (props.pool.isEth ? appState.accountEthBalance.native : 0n), 18)
+    const balance = formatBN(props.pool.accountUnderlyingBalance.native + (props.pool.isEth ? accountEthBalance.native : 0n), 18)
 
     return (
         <tr>

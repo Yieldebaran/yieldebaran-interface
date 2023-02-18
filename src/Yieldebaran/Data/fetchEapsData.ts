@@ -134,7 +134,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
 
   const periods = secondCallResult.map(x => blockTimestamp - Number(x.pop()))
 
-  const states: EapData[] = []
+  const states: { [eapAddress: string]: EapData} = {}
 
   let secondDataCursor = 0
   let dataCursor = 0
@@ -222,9 +222,9 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
         period,
       })
     })
-    states.push({
-      isEth: BigInt(underlyings[i]) === BigInt(network.weth),
+    states[eap] = {
       address: eap,
+      isEth: BigInt(underlyings[i]) === BigInt(network.weth),
       exchangeRate,
       underlyingWithdrawable: totalWithdrawable.toFVal(format),
       sharesWithdrawable: (totalWithdrawable * ONE / exchangeRate).toFVal(format),
@@ -251,7 +251,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
       accountUnderlyingRequested,
       withdrawTool: withdrawTools[i],
       allocations: allocationProps,
-    })
+    }
   })
   // console.log(states)
   return {

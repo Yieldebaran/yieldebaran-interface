@@ -13,7 +13,7 @@ interface Props {
     selectedPool: EapData
 }
 const DepositTab:React.FC<Props> = (props: Props) => {
-    const {appState} = useYieldebaranDataContext()
+    const {accountEthBalance, updateAppState} = useYieldebaranDataContext()
     const {toastErrorMessage, toastSuccessMessage} = useUiContext()
 
     const {network} = useGlobalContext()
@@ -22,7 +22,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
 
     const [depositInput, setDepositInput] = useState<string>("")
     const [depositErrorMessage, setDepositErrorMessage] = useState<string>("")
-    const [ethBalance, setEthBalance] = useState<string>(appState.accountEthBalance.formatted)
+    const [ethBalance, setEthBalance] = useState<string>(accountEthBalance.formatted)
 
     const [ethInput, setEthInput] = useState<string>("")
     const [ethErrorMessage, setEthErrorMessage] = useState<string>("")
@@ -44,18 +44,19 @@ const DepositTab:React.FC<Props> = (props: Props) => {
     }, [depositInput])
 
     useEffect(() => {
-        const handleAppDataChange = () => {
-            setEthBalance(appState.accountEthBalance.formatted)
+        const handleEthBalance = () => {
+            console.log('handleEthBalance', accountEthBalance.formatted)
+            setEthBalance(accountEthBalance.formatted)
         }
-        handleAppDataChange()
-    }, [appState])
+        handleEthBalance()
+    }, [accountEthBalance])
 
     useEffect(() => {
-        const handleUnstakeAmountChange = () => {
+        const handleEthAmountChange = () => {
             setEthErrorMessage(validateInput(ethInput, ethBalance))
         }
 
-        handleUnstakeAmountChange()
+        handleEthAmountChange()
         // eslint-disable-next-line
     }, [ethInput, ethBalance])
 
@@ -140,7 +141,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                 {props.selectedPool.isEth &&
                     <MarketDialogItem
                         title={"Native balance"}
-                        value={`${appState.accountEthBalance.formatted} ${props.selectedPool.underlyingSymbol.substring(1)}`}
+                        value={`${accountEthBalance.formatted} ${props.selectedPool.underlyingSymbol.substring(1)}`}
                     />
                 }
                 <div className="dialog-line"/>
@@ -149,7 +150,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                     title={"Current APY"}
                     value={props.selectedPool.apyAfterFee[0].apy + '%'}
                 />
-                <div className="dialog-line"/>
+                <div className="dialog-line" onClick={() => updateAppState()}/>
                 <MarketDialogItem
                     toolTipContent={`Performance fee ${props.selectedPool.performanceFee.formatted}% applied`}
                     title={"7d APY"}
@@ -193,8 +194,8 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                     <div className="input-group">
                         <div className="input-button-group">
                             <TextBox
-                                disabled={appState.accountEthBalance.native === 0n}
-                                buttonDisabled={depositEthBN === appState.accountEthBalance.native}
+                                disabled={accountEthBalance.native === 0n}
+                                buttonDisabled={depositEthBN === accountEthBalance.native}
                                 placeholder={props.selectedPool.underlyingSymbol.substring(1)}
                                 value={ethInput}
                                 setInput={setEthInput}

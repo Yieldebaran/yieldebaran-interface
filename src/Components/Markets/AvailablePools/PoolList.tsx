@@ -12,7 +12,7 @@ interface Props {
 }
 
 const PoolList: React.FC<Props> = (props: Props) => {
-    const {appState} = useYieldebaranDataContext()
+    const {eapStates} = useYieldebaranDataContext()
 
     useEffect(() => {
         ReactTooltip.rebuild();
@@ -58,7 +58,9 @@ const PoolList: React.FC<Props> = (props: Props) => {
                 </thead>
                 {
                     <tbody className="market-table-content">
-                    {appState.states.length > 0 ? [...appState.states]
+                    {Object.keys(eapStates).length === 0
+                        ? null
+                        : Object.values(eapStates)
                         .map((pool, index) => {
                             return (
                                 <PoolRow
@@ -67,7 +69,7 @@ const PoolList: React.FC<Props> = (props: Props) => {
                                     supplyMarketDialog={props.supplyMarketDialog}
                                 />
                             )
-                        }) : null}
+                        })}
                     </tbody>
                 }
             </table>

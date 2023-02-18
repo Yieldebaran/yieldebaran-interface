@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import {AppState, EapData} from "../Classes/AppState";
+import {EapData} from "../Classes/AppState";
 import {formatter} from "../Yieldebaran/Data/fetchEapsData";
 
 export type FVal = {
@@ -21,7 +21,10 @@ BigInt.prototype.toFVal = function formatter(format: (bn: bigint) => string): FV
 }
 
 export type AppDataContext = {
-    appState: AppState,
+    blockTimestamp: number,
+    blockNumber: number,
+    eapStates: {[eap: string]: EapData},
+    accountEthBalance: FVal,
     updateAppState: () => Promise<void>,
     selectedPool: EapData | undefined,
     setSelectedPool: (m: EapData | undefined) => void
@@ -31,12 +34,14 @@ export const zeroAppState = {
     accountEthBalance: 0n.toFVal(formatter(18)),
     blockNumber: 0,
     blockTimestamp: 0,
-    states: [],
-  provider: null,
+    states: {},
 }
 
 export const YieldebaranDataContext = createContext<AppDataContext>({
-    appState: zeroAppState,
+    blockTimestamp: 0,
+    blockNumber: 0,
+    eapStates: {},
+    accountEthBalance: {native: 0n, formatted: '0.0'},
     updateAppState: async () => undefined,
     selectedPool: undefined,
     setSelectedPool: () => undefined,
