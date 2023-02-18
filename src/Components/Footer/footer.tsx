@@ -17,29 +17,19 @@ const Footer : React.FC = () => {
                 </div>
                 <div className="content">
                     <h4>Community</h4>
-                    <a href="https://blog.hundred.finance" target={"_blank"} rel={"noreferrer"}>
+                    <a href="https://linktr.ee/yieldebaran" target={"_blank"} rel={"noreferrer"}>
                         <div className="footer_logo">
                             <Medium/>
                         </div>
-                        <p>Medium</p>
-                    </a>
-                    <a href="https://discord.com/invite/phK668J6dQ" target={"_blank"} rel={"noreferrer"}>
                         <div className="footer_logo">
                             <Discord/>
                         </div>
-                        <p>Discord</p>
-                    </a>
-                    <a href="https://twitter.com/Yieldebaran" target={"_blank"} rel={"noreferrer"}>
                         <div className="footer_logo">
                             <Twitter/>
                         </div>
-                        <p>Twitter</p>
-                    </a>
-                    <a href="https://t.me/joinchat/z0gRXOqZAEQ1ZDRk" target={"_blank"} rel={"noreferrer"}>
                         <div className="footer_logo">
                             <Telegram/>
                         </div>
-                        <p>Telegram</p>
                     </a>
                 </div>
             </div>
