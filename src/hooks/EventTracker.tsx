@@ -7,7 +7,7 @@ import {useYieldebaranDataContext} from "../Types/appDataContext";
 import {useWeb3React} from "@web3-react/core";
 import {EventFilter} from "@ethersproject/contracts";
 
-export const EventTracker: React.FC = () => {
+const EventTracker: React.FC = () => {
   const {network, webSocketProvider} = useGlobalContext();
   const {eapStates, updateAppState, blockNumber} = useYieldebaranDataContext();
   const [eaps, setEaps] = useState(Object.keys(eapStates));

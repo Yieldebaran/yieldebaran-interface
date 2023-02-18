@@ -21,7 +21,7 @@ import { useGlobalContext } from 'src/Types/globalContext'
 import { YieldebaranDataContext } from 'src/Types/appDataContext'
 import { useUiContext } from 'src/Types/uiContext'
 import yieldebaranData from 'src/Yieldebaran/Data/yildebaranData'
-import {EventTracker} from "src/hooks/EventTracker";
+import EventTracker from "src/hooks/EventTracker";
 import {ethers} from "ethers";
 
 const Home: React.FC = () => {
