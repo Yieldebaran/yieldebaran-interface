@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import '../style.css';
-import SupplyMarketRow from './supplyMarketRow';
+import PoolRow from './PoolRow';
 import ReactTooltip from 'react-tooltip';
 import { useHundredDataContext } from '../../../Types/appDataContext';
 import Tippy from '@tippyjs/react';
@@ -61,7 +61,7 @@ const PoolList: React.FC<Props> = (props: Props) => {
                     {appState.states.length > 0 ? [...appState.states]
                         .map((pool, index) => {
                             return (
-                                <SupplyMarketRow
+                                <PoolRow
                                     key={index}
                                     pool={pool}
                                     supplyMarketDialog={props.supplyMarketDialog}

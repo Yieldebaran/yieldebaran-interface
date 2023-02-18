@@ -12,6 +12,7 @@ import { XFI } from './Connectors/xdefi-connector/declarations';
 import Hundred from './Hundred/Views/hundred';
 import { toast, ToastContainer } from 'react-toastify';
 import {useWindowSize} from 'usehooks-ts'
+import {ethers} from "ethers";
 
 declare global {
   interface Window {
@@ -27,6 +28,7 @@ const App: React.FC = () => {
 
 
   const [network, setNetwork] = useState<Network | null>(null)
+  const [webSocketProvider, setWebSocketProvider] = useState<ethers.providers.WebSocketProvider | undefined>(undefined)
   const [darkMode, setDarkMode] = useState<boolean>(false)
   const [spinnerVisible, setSpinnerVisible] = useState<boolean>(false)
   const [isMobile, setIsMobile] = useState<boolean>(false)
@@ -113,7 +115,7 @@ const App: React.FC = () => {
   return (
     theme ?
     <MyGlobalContext.Provider value={({
-        network, setNetwork, address, setAddress
+        network, setNetwork, address, setAddress, setWebSocketProvider, webSocketProvider
     })}>
         <MyUiContext.Provider value={({
             darkMode, setDarkMode,

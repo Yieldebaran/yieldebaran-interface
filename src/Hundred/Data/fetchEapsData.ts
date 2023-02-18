@@ -253,12 +253,12 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
       allocations: allocationProps,
     })
   })
+  // console.log(states)
   return {
     states,
     accountEthBalance: accountEthBalance.toFVal(formatter(18)),
     blockNumber,
     blockTimestamp,
-    provider: null,
   }
 }
 

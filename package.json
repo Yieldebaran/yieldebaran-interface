@@ -37,7 +37,9 @@
     "web-vitals": "^2.1.4"
   },
   "resolutions": {
-    "@types/react-dom": "^17.0.14"
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "17.0.14",
+    "@types/react-modal": "^3.13.1"
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",

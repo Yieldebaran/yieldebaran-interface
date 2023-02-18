@@ -16,7 +16,7 @@ interface Props {
     supplyMarketDialog: (selectedPool: EapData) => void,
 }
 
-const SupplyMarketRow: React.FC<Props> = (props : Props) => {
+const PoolRow: React.FC<Props> = (props : Props) => {
     const {appState} = useHundredDataContext()
     const {setShowWallets} = useUiContext()
     const {account} = useWeb3React<providers.Web3Provider>()
@@ -46,29 +46,29 @@ const SupplyMarketRow: React.FC<Props> = (props : Props) => {
             <td className="apy positive"
                 onClick={handleOpenSupplyMarketDialog}>
                 <div className="supply-apy">
-                    <div className="apy-content">
-                        {props.pool.apyAfterFee[0].apy}%
-                    </div>
+                        <div className="apy-content">
+                            {Number(props.pool.apyAfterFee[0].apy).toFixed(2)}%
+                        </div>
                 </div>
             </td>
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
                     <Tippy content={props.pool.totalUnderlyingBalance.formatted}>
-                        <div>{props.pool.totalUnderlyingBalance.formatted}</div>
+                        <div>{Number(props.pool.totalUnderlyingBalance.formatted).toFixed(3)}</div>
                     </Tippy>
                 }
             </td>
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
                     <Tippy content={props.pool.accountAllocated.formatted}>
-                        <div>{props.pool.accountAllocated.formatted}</div>
+                        <div>{Number(props.pool.accountAllocated.formatted).toFixed(2)}</div>
                     </Tippy>
                 }
             </td>
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
                     <Tippy content={balance}>
-                        <div>{balance}</div>
+                        <div>{Number(balance).toFixed(2)}</div>
                     </Tippy>
                 }
 
@@ -77,4 +77,4 @@ const SupplyMarketRow: React.FC<Props> = (props : Props) => {
     )
 }
 
-export default SupplyMarketRow
+export default PoolRow

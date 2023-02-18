@@ -21,11 +21,13 @@ import { useGlobalContext } from '../../Types/globalContext'
 import { YieldebaranDataContext } from '../../Types/appDataContext'
 import { useUiContext } from '../../Types/uiContext'
 import useFetchData from '../Data/hundredData'
+import {EventTracker} from "../../hooks/useBalance";
+import {ethers} from "ethers";
 
 const Hundred: React.FC = () => {
     const {activate, error, chainId, account, deactivate} = useWeb3React()
     const {darkMode, setOpenNetwork, isMobile, isTablet} = useUiContext()
-    const {network, setNetwork, setAddress} = useGlobalContext()
+    const {network, setNetwork, setAddress, setWebSocketProvider} = useGlobalContext()
 
     const [showError, setShowError] = useState(false)
 
@@ -102,6 +104,7 @@ const Hundred: React.FC = () => {
             const net = NETWORKS[chainId]
             if (net) {
                 setNetwork(net)
+                setWebSocketProvider(new ethers.providers.WebSocketProvider(net.publicWebSocket))
                 return
             }
         }
@@ -141,6 +144,7 @@ const Hundred: React.FC = () => {
                     <Wallets/>
                     <Account/>
                     <NetworksMenu/>
+                    <EventTracker/>
                 </Wrapper>
                 <Footer/>
                 <HundredMessage isOpen={showGMessage} onRequestClose={() => setShowGMessage(false)} contentLabel="Info"

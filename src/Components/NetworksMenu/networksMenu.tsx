@@ -7,10 +7,11 @@ import { useGlobalContext } from "../../Types/globalContext"
 import { useUiContext } from "../../Types/uiContext"
 import Modal from "../Modal/modal"
 import "./networksMenu.css"
+import {ethers} from "ethers";
 
 const NetworkConnect : React.FC = () => {
     const {connector, library} = useWeb3React()
-    const {network, setNetwork} = useGlobalContext()
+    const {network, setNetwork, setWebSocketProvider} = useGlobalContext()
 
     const {openNetwork, setOpenNetwork, setSwitchModal} = useUiContext()
 
@@ -61,6 +62,7 @@ const NetworkConnect : React.FC = () => {
             }
         } else {
             setNetwork(NETWORKS[chain])
+            setWebSocketProvider(new ethers.providers.WebSocketProvider(NETWORKS[chain].publicWebSocket))
             setSwitchModal(false)
             setOpenNetwork(false)
         }
@@ -91,7 +93,6 @@ const NetworkConnect : React.FC = () => {
                     }
                 </div>
             </Modal>
-
         </>
     )
 }

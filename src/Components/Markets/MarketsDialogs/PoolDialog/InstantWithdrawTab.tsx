@@ -116,7 +116,7 @@ const InstantWithdrawTab:React.FC<Props> = (props: Props) => {
                             validation={withdrawalErrorMessage}
                             button={"Max"}
                             onClick={()=>setMaxWithdrawal()}/>
-                    <div>You will get ~{Number(formatBN(calculatedInstantWithdrawal(withdrawalInputBN, props.selectedPool), props.selectedPool.decimals)).toFixed(3)} {props.selectedPool.underlyingSymbol}</div>
+                    <div>You will get ~{Number(formatBN(calculateInstantWithdrawal(withdrawalInputBN, props.selectedPool), props.selectedPool.decimals)).toFixed(3)} {props.selectedPool.underlyingSymbol}</div>
                 </div>
                 <Button
                     disabled={withdrawalInputBN == 0n || withdrawalErrorMessage !== ""}
@@ -133,7 +133,7 @@ const InstantWithdrawTab:React.FC<Props> = (props: Props) => {
     )
 }
 
-function calculatedInstantWithdrawal(shares: bigint, eap: EapData): bigint {
+function calculateInstantWithdrawal(shares: bigint, eap: EapData): bigint {
     if (shares === 0n) return 0n
     const underlyingAmount = shares * eap.exchangeRate / ONE
     const balance = eap.underlyingUnallocated.native
