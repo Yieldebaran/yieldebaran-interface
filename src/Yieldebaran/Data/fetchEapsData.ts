@@ -42,7 +42,7 @@ export const formatter = (decimals: number, roundTo = decimals) => {
 const confValF = formatter(16, 3)
 
 const YEAR = 365n * 24n * 3600n
-export async function getEapStates(ethcallProvider: Provider, network: Network, apyTimePoints: number[], account: string): Promise<AppState> {
+export async function getEapStates(ethcallProvider: Provider, network: Network, apyTimePoints: number[], account: string, blockNumber?: number): Promise<AppState> {
   const timestampContract = new Contract(network.timestampContract, abi);
   const blockNumberContract = new Contract(network.blockNumberContract, abi);
   const usdc = network.usdc
@@ -83,8 +83,8 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
 
   secondBatchCall.push(timestampContract.getBlockTimestamp())
 
-  const data = await ethcallProvider.all(eapCalls, 'latest')
-  const blockNumber = Number(data.pop() as string)
+  const data = await ethcallProvider.all(eapCalls, blockNumber ? blockNumber : 'latest')
+  blockNumber = Number(data.pop() as string)
   const accountEthBalance = BigInt(data.pop() as string)
 
   const allocations = eaps.map(() => data.pop()) as string[][]
@@ -134,7 +134,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
 
   const periods = secondCallResult.map(x => blockTimestamp - Number(x.pop()))
 
-  const states: EapData[] = []
+  const states: { [eapAddress: string]: EapData} = {}
 
   let secondDataCursor = 0
   let dataCursor = 0
@@ -222,9 +222,9 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
         period,
       })
     })
-    states.push({
-      isEth: BigInt(underlyings[i]) === BigInt(network.weth),
+    states[eap] = {
       address: eap,
+      isEth: BigInt(underlyings[i]) === BigInt(network.weth),
       exchangeRate,
       underlyingWithdrawable: totalWithdrawable.toFVal(format),
       sharesWithdrawable: (totalWithdrawable * ONE / exchangeRate).toFVal(format),
@@ -251,7 +251,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
       accountUnderlyingRequested,
       withdrawTool: withdrawTools[i],
       allocations: allocationProps,
-    })
+    }
   })
   // console.log(states)
   return {

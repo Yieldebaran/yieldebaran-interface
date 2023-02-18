@@ -6,14 +6,14 @@ import { useYieldebaranDataContext } from "../../../../Types/appDataContext";
 import { useUiContext } from "../../../../Types/uiContext";
 import Button from "../../../Button/button";
 import {bnFromInput, validateInput} from "../../../../Utils/numbers";
-import {approve, deposit, depositEth, EapData} from "../../../../Classes/AppState";
+import {approve, deposit, depositEth} from "../../../../Classes/AppState";
 import {useGlobalContext} from "../../../../Types/globalContext";
 
 interface Props {
-    selectedPool: EapData
+    selectedPool: string
 }
 const DepositTab:React.FC<Props> = (props: Props) => {
-    const {appState} = useYieldebaranDataContext()
+    const {accountEthBalance, updateAppState, eapStates} = useYieldebaranDataContext()
     const {toastErrorMessage, toastSuccessMessage} = useUiContext()
 
     const {network} = useGlobalContext()
@@ -22,10 +22,13 @@ const DepositTab:React.FC<Props> = (props: Props) => {
 
     const [depositInput, setDepositInput] = useState<string>("")
     const [depositErrorMessage, setDepositErrorMessage] = useState<string>("")
-    const [ethBalance, setEthBalance] = useState<string>(appState.accountEthBalance.formatted)
+    const [ethBalance, setEthBalance] = useState<string>(accountEthBalance.formatted)
 
     const [ethInput, setEthInput] = useState<string>("")
     const [ethErrorMessage, setEthErrorMessage] = useState<string>("")
+
+    const selectedPoolAddress = props.selectedPool
+    const eap = eapStates[selectedPoolAddress]
 
     useEffect(() => {
         mounted.current = true
@@ -37,30 +40,31 @@ const DepositTab:React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         const handleStakeAmountChange = () => {
-            setDepositErrorMessage(validateInput(depositInput, props.selectedPool.accountUnderlyingBalance.formatted))
+            setDepositErrorMessage(validateInput(depositInput, eap.accountUnderlyingBalance.formatted))
         }
 
         handleStakeAmountChange()
     }, [depositInput])
 
     useEffect(() => {
-        const handleAppDataChange = () => {
-            setEthBalance(appState.accountEthBalance.formatted)
+        const handleEthBalance = () => {
+            console.log('handleEthBalance', accountEthBalance.formatted)
+            setEthBalance(accountEthBalance.formatted)
         }
-        handleAppDataChange()
-    }, [appState])
+        handleEthBalance()
+    }, [accountEthBalance])
 
     useEffect(() => {
-        const handleUnstakeAmountChange = () => {
+        const handleEthAmountChange = () => {
             setEthErrorMessage(validateInput(ethInput, ethBalance))
         }
 
-        handleUnstakeAmountChange()
+        handleEthAmountChange()
         // eslint-disable-next-line
     }, [ethInput, ethBalance])
 
     const setMaxDeposit = (): void => {
-        setDepositInput(String(props.selectedPool.accountUnderlyingBalance.formatted))
+        setDepositInput(String(eap.accountUnderlyingBalance.formatted))
     }
 
     const setMaxEthDeposit = (): void => {
@@ -70,7 +74,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
     const handleDeposit = async (amount: bigint) => {
         try {
             if (mounted) setDepositInput("")
-            const tx = await deposit(props.selectedPool.address, amount)
+            const tx = await deposit(eap.address, amount)
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
@@ -85,10 +89,10 @@ const DepositTab:React.FC<Props> = (props: Props) => {
         }
     }
 
-    const handleApprove = async (amount: bigint) => {
+    const handleApprove = async () => {
         try {
             // if (mounted) setDepositInput("")
-            const tx = await approve(props.selectedPool.underlying, props.selectedPool.address, amount)
+            const tx = await approve(eap.underlying, eap.address, 2n ** 256n - 1n)
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
@@ -122,53 +126,53 @@ const DepositTab:React.FC<Props> = (props: Props) => {
         }
     }
 
-    const depositBN = bnFromInput(depositInput, props.selectedPool.decimals)
-    const depositEthBN = bnFromInput(ethInput, props.selectedPool.decimals)
+    const depositBN = bnFromInput(depositInput, eap.decimals)
+    const depositEthBN = bnFromInput(ethInput, eap.decimals)
 
-    return (props.selectedPool && mounted ?
+    return (eap && mounted ?
             <>
                 <MarketDialogItem
                     title={"Deposited"}
-                    value={`${props.selectedPool.accountAllocated.formatted} ${props.selectedPool.underlyingSymbol}`}
+                    value={`${eap.accountAllocated.formatted} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Balance"}
-                    value={`${props.selectedPool.accountUnderlyingBalance.formatted} ${props.selectedPool.underlyingSymbol}`}
+                    value={`${eap.accountUnderlyingBalance.formatted} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
-                {props.selectedPool.isEth &&
+                {eap.isEth &&
                     <MarketDialogItem
                         title={"Native balance"}
-                        value={`${appState.accountEthBalance.formatted} ${props.selectedPool.underlyingSymbol.substring(1)}`}
+                        value={`${accountEthBalance.formatted} ${eap.underlyingSymbol.substring(1)}`}
                     />
                 }
                 <div className="dialog-line"/>
                 <MarketDialogItem
-                    toolTipContent={`Performance fee ${props.selectedPool.performanceFee.formatted}% applied`}
+                    toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
                     title={"Current APY"}
-                    value={props.selectedPool.apyAfterFee[0].apy + '%'}
+                    value={eap.apyAfterFee[0].apy + '%'}
                 />
-                <div className="dialog-line"/>
+                <div className="dialog-line" onClick={() => updateAppState()}/>
                 <MarketDialogItem
-                    toolTipContent={`Performance fee ${props.selectedPool.performanceFee.formatted}% applied`}
+                    toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
                     title={"7d APY"}
-                    value={String(props.selectedPool.apyAfterFee[1].apy + '%')}
+                    value={String(eap.apyAfterFee[1].apy + '%')}
                 />
                 <div className="dialog-line"/>
                 <div className="input-group">
                     <div className="input-button-group">
                         <TextBox
-                            disabled={props.selectedPool.accountUnderlyingBalance.native === 0n}
-                            buttonDisabled={depositBN === props.selectedPool.accountUnderlyingBalance.native}
-                            placeholder={props.selectedPool.underlyingSymbol}
+                            disabled={eap.accountUnderlyingBalance.native === 0n}
+                            buttonDisabled={depositBN === eap.accountUnderlyingBalance.native}
+                            placeholder={eap.underlyingSymbol}
                             value={depositInput}
                             setInput={setDepositInput}
                             validation={depositErrorMessage}
                             button={"Max"}
                             onClick={() => setMaxDeposit()
                         }/>
-                        {props.selectedPool.accountAllowance.native >= depositBN
+                        {eap.accountAllowance.native >= depositBN
                             ?
                             <Button
                                 disabled={depositInput === "" || depositErrorMessage !== ""}
@@ -182,20 +186,20 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                                 rectangle={true}
                                 loading={false}
                                 disabled={depositBN === 0n}
-                                onClick={() => handleApprove(depositBN)}
+                                onClick={() => handleApprove()}
                             >
                                 Approve
                             </Button>
                         }
                     </div>
                 </div>
-                {props.selectedPool.isEth &&
+                {eap.isEth &&
                     <div className="input-group">
                         <div className="input-button-group">
                             <TextBox
-                                disabled={appState.accountEthBalance.native === 0n}
-                                buttonDisabled={depositEthBN === appState.accountEthBalance.native}
-                                placeholder={props.selectedPool.underlyingSymbol.substring(1)}
+                                disabled={accountEthBalance.native === 0n}
+                                buttonDisabled={depositEthBN === accountEthBalance.native}
+                                placeholder={eap.underlyingSymbol.substring(1)}
                                 value={ethInput}
                                 setInput={setEthInput}
                                 validation={ethErrorMessage}
@@ -206,7 +210,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
                                         disabled={ethInput === "" || ethErrorMessage !== ""}
                                         onClick={() => handleDepositEth(depositEthBN)}
                                 >
-                                    Deposit {props.selectedPool.underlyingSymbol.substring(1)}
+                                    Deposit {eap.underlyingSymbol.substring(1)}
                             </Button>
                         </div>
                     </div>

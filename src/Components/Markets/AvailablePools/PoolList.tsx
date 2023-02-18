@@ -5,14 +5,13 @@ import ReactTooltip from 'react-tooltip';
 import { useYieldebaranDataContext } from '../../../Types/appDataContext';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
-import {EapData} from "../../../Classes/AppState"; // optional
 
 interface Props {
-    supplyMarketDialog: (selectedPool: EapData) => void;
+    supplyMarketDialog: (selectedPool: string) => void;
 }
 
 const PoolList: React.FC<Props> = (props: Props) => {
-    const {appState} = useYieldebaranDataContext()
+    const {eapStates} = useYieldebaranDataContext()
 
     useEffect(() => {
         ReactTooltip.rebuild();
@@ -58,7 +57,9 @@ const PoolList: React.FC<Props> = (props: Props) => {
                 </thead>
                 {
                     <tbody className="market-table-content">
-                    {appState.states.length > 0 ? [...appState.states]
+                    {Object.keys(eapStates).length === 0
+                        ? null
+                        : Object.keys(eapStates)
                         .map((pool, index) => {
                             return (
                                 <PoolRow
@@ -67,7 +68,7 @@ const PoolList: React.FC<Props> = (props: Props) => {
                                     supplyMarketDialog={props.supplyMarketDialog}
                                 />
                             )
-                        }) : null}
+                        })}
                     </tbody>
                 }
             </table>

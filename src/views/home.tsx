@@ -21,7 +21,7 @@ import { useGlobalContext } from 'src/Types/globalContext'
 import { YieldebaranDataContext } from 'src/Types/appDataContext'
 import { useUiContext } from 'src/Types/uiContext'
 import yieldebaranData from 'src/Yieldebaran/Data/yildebaranData'
-import {EventTracker} from "src/hooks/useBalance";
+import EventTracker from "src/hooks/EventTracker";
 import {ethers} from "ethers";
 
 const Home: React.FC = () => {
@@ -47,7 +47,10 @@ const Home: React.FC = () => {
         selectedPool,
         setSelectedPool,
         updateAppState,
-        appState,
+        blockTimestamp,
+        blockNumber,
+        eapStates,
+        accountEthBalance,
     } = yieldebaranData()
 
     useEffect(() => {
@@ -130,7 +133,10 @@ const Home: React.FC = () => {
             selectedPool,
             setSelectedPool,
             updateAppState,
-            appState,
+            blockTimestamp,
+            blockNumber,
+            eapStates,
+            accountEthBalance,
         })}>
             <>
                 {!isTablet && !isMobile ?

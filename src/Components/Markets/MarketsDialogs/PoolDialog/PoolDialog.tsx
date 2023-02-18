@@ -14,13 +14,15 @@ interface Props {
 }
 
 const PoolDialog:React.FC<Props> = (props: Props) => {
-    const {selectedPool, setSelectedPool, appState} = useYieldebaranDataContext()
+    const {selectedPool, setSelectedPool, eapStates} = useYieldebaranDataContext()
     const {spinnerVisible, darkMode} = useUiContext()
     const [tabChange, setTabChange] = useState<number>(1)
     const [tabHeaders, setTabHeaders] = useState<any[]>([])
     const [tabContents, setTabContents] = useState<any>([])
 
     const mountedSupply = useRef<boolean>(false)
+
+    const eap: any = selectedPool? eapStates[selectedPool] : { underlyingSymbol: "" }
 
     const dialogContainer = document.getElementById("modal") as Element
 
@@ -70,16 +72,16 @@ const PoolDialog:React.FC<Props> = (props: Props) => {
                 className="supply-box">
                 <img src={closeIcon} alt="Close Icon" className="dialog-close" onClick={() => CloseDialog()}/>
                 <div className="dialog-title">
-                    {selectedPool && appState.states.length && (
+                    {selectedPool && length && (
                         <div className="logo-container">
                             <img
                                 className="rounded-circle"
                                 style={{width: "30px", height: "30px"}}
-                                src={selectedPool.underlyingLogo}
+                                src={eap?.underlyingLogo}
                                 alt=""/>
                         </div>
                     )}
-                    {selectedPool && appState.states.length && `${selectedPool.underlyingSymbol}`}
+                    {eap?.underlyingSymbol}
                 </div>
                 <div className="seperator"/>
                 <Tab>

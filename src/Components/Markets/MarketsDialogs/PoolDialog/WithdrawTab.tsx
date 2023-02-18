@@ -8,21 +8,24 @@ import {bnFromInput, formatBN, validateInput} from "../../../../Utils/numbers";
 import {
     cancelRequest,
     claimWithdrawal, claimWithdrawalEth,
-    EapData,
     requestWithdrawal
 } from "../../../../Classes/AppState";
 import {useGlobalContext} from "../../../../Types/globalContext";
 import {ONE} from "../../../../Yieldebaran/Data/fetchEapsData";
+import {useYieldebaranDataContext} from "../../../../Types/appDataContext";
 
 interface Props {
-    selectedPool: EapData
+    selectedPool: string
 }
 const WithdrawTab:React.FC<Props> = (props: Props) => {
     const {toastErrorMessage, toastSuccessMessage} = useUiContext()
+    const {eapStates} = useYieldebaranDataContext()
 
     const {address} = useGlobalContext()
 
     const mounted = useRef<boolean>(false)
+
+    const eap = eapStates[props.selectedPool]
 
     const [withdrawalInput, setWithdrawalInput] = useState<string>("")
     const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState<string>("")
@@ -37,19 +40,19 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
 
     useEffect(() => {
         const handleStakeAmountChange = () => {
-            setWithdrawalErrorMessage(validateInput(withdrawalInput, props.selectedPool.accountShares.formatted))
+            setWithdrawalErrorMessage(validateInput(withdrawalInput, eap.accountShares.formatted))
         }
 
         handleStakeAmountChange()
     }, [withdrawalInput])
 
     const setMaxWithdrawal = (): void => {
-        setWithdrawalInput(String(props.selectedPool.accountShares.formatted))
+        setWithdrawalInput(String(eap.accountShares.formatted))
     }
 
     const handleRequestWithdrawal = async (amount: bigint) => {
         try {
-            const tx = await requestWithdrawal(props.selectedPool.address, address, amount)
+            const tx = await requestWithdrawal(eap.address, address, amount)
             if (mounted) setWithdrawalInput("")
             const receipt = await tx.wait()
             console.log(receipt)
@@ -66,7 +69,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
 
     const handleCancelRequest = async () => {
         try {
-            const tx = await cancelRequest(props.selectedPool.withdrawTool)
+            const tx = await cancelRequest(eap.withdrawTool)
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
@@ -82,7 +85,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
 
     const handleClaim = async () => {
         try {
-            const tx = await claimWithdrawal(props.selectedPool.withdrawTool)
+            const tx = await claimWithdrawal(eap.withdrawTool)
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
@@ -98,7 +101,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
 
     const handleClaimEth = async () => {
         try {
-            const tx = await claimWithdrawalEth(props.selectedPool.withdrawTool)
+            const tx = await claimWithdrawalEth(eap.withdrawTool)
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
@@ -112,38 +115,38 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
         }
     }
 
-    const withdrawalInputBN = bnFromInput(withdrawalInput, props.selectedPool.decimals)
+    const withdrawalInputBN = bnFromInput(withdrawalInput, eap.decimals)
 
-    const isRequested = props.selectedPool.accountRequestIndex !== 0
+    const isRequested = eap.accountRequestIndex !== 0
 
-    const isFulfilled = props.selectedPool.lastFulfillmentIndex > props.selectedPool.accountRequestIndex
+    const isFulfilled = eap.lastFulfillmentIndex > eap.accountRequestIndex
 
-    return (props.selectedPool && mounted ?
+    return (eap && mounted ?
             <>
                 <div className="supply-note">NOTE: this is a delayed withdrawal, it may take up to 48h</div>
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Shares balance"}
-                    toolTipContent={`~${Number(props.selectedPool.accountAllocated.formatted).toFixed(3)} ${props.selectedPool.underlyingSymbol}`}
-                    value={`${props.selectedPool.accountShares.formatted} y${props.selectedPool.underlyingSymbol}`}
+                    toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
+                    value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Requested to withdraw"}
-                    value={`${props.selectedPool.accountUnderlyingRequested.formatted} ${props.selectedPool.underlyingSymbol}`}
+                    value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Available to claim"}
-                    value={`${props.selectedPool.lastFulfillmentIndex > props.selectedPool.accountRequestIndex ? props.selectedPool.accountUnderlyingRequested.formatted : 0} ${props.selectedPool.underlyingSymbol}`}
+                    value={`${eap.lastFulfillmentIndex > eap.accountRequestIndex ? eap.accountUnderlyingRequested.formatted : 0} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
                 {!isRequested && <div className="input-group">
                     <div className="input-button-group">
                         <TextBox
-                            disabled={props.selectedPool.accountShares.native === 0n}
-                            buttonDisabled={withdrawalInputBN === props.selectedPool.accountShares.native}
-                            placeholder={`y${props.selectedPool.underlyingSymbol}`}
+                            disabled={eap.accountShares.native === 0n}
+                            buttonDisabled={withdrawalInputBN === eap.accountShares.native}
+                            placeholder={`y${eap.underlyingSymbol}`}
                             value={withdrawalInput}
                             setInput={setWithdrawalInput}
                             validation={withdrawalErrorMessage}
@@ -158,7 +161,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                             Request withdrawal
                         </Button>
                     </div>
-                    {<div>~{Number(formatBN(withdrawalInputBN * props.selectedPool.exchangeRate / ONE, props.selectedPool.decimals)).toFixed(3)} {props.selectedPool.underlyingSymbol}</div>}
+                    {<div>~{Number(formatBN(withdrawalInputBN * eap.exchangeRate / ONE, eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>}
                 </div>}
                 {isRequested && !isFulfilled &&
                 <Button disabled={false} onClick={() => handleCancelRequest()}>
@@ -170,11 +173,11 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                     onClick={() => handleClaim()}>
                     Claim {isFulfilled ? "" : "will be available after the next allocation"}
                 </Button>}
-                {isRequested && isFulfilled && props.selectedPool.isEth &&
+                {isRequested && isFulfilled && eap.isEth &&
                 <Button
                     disabled={false}
                     onClick={() => handleClaimEth()}>
-                    Claim as {props.selectedPool.underlyingSymbol.substring(1)}
+                    Claim as {eap.underlyingSymbol.substring(1)}
                 </Button>}
             </>
             : null
