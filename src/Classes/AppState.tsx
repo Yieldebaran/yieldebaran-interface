@@ -66,7 +66,7 @@ export const ethcallProvider = new Provider()
 let initializedChainId = 0
 let signer: any
 
-export const loadAppState = async (provider: any, network: Network, userAddress?: string): Promise<AppState> => {
+export const loadAppState = async (provider: any, network: Network, userAddress?: string, blockNumber?: number): Promise<AppState> => {
     if (initializedChainId !== network.chainId) {
         await ethcallProvider.init(provider as ethers.providers.Provider)
         initializedChainId = network.chainId
@@ -78,7 +78,7 @@ export const loadAppState = async (provider: any, network: Network, userAddress?
     signer = provider.getSigner()
 
     if (network.eaps) {
-        return getEapStates(ethcallProvider, network, [60, 7 * 24 * 3600], userAddress)
+        return getEapStates(ethcallProvider, network, [60, 7 * 24 * 3600], userAddress, blockNumber)
     }
 
     return zeroAppState

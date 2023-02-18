@@ -42,7 +42,7 @@ export const formatter = (decimals: number, roundTo = decimals) => {
 const confValF = formatter(16, 3)
 
 const YEAR = 365n * 24n * 3600n
-export async function getEapStates(ethcallProvider: Provider, network: Network, apyTimePoints: number[], account: string): Promise<AppState> {
+export async function getEapStates(ethcallProvider: Provider, network: Network, apyTimePoints: number[], account: string, blockNumber?: number): Promise<AppState> {
   const timestampContract = new Contract(network.timestampContract, abi);
   const blockNumberContract = new Contract(network.blockNumberContract, abi);
   const usdc = network.usdc
@@ -83,8 +83,8 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
 
   secondBatchCall.push(timestampContract.getBlockTimestamp())
 
-  const data = await ethcallProvider.all(eapCalls, 'latest')
-  const blockNumber = Number(data.pop() as string)
+  const data = await ethcallProvider.all(eapCalls, blockNumber ? blockNumber : 'latest')
+  blockNumber = Number(data.pop() as string)
   const accountEthBalance = BigInt(data.pop() as string)
 
   const allocations = eaps.map(() => data.pop()) as string[][]

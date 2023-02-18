@@ -46,7 +46,8 @@ export const EventTracker: React.FC = () => {
       if (account) {
         filters.push(
             underlyingContract.filters.Transfer(account),
-            underlyingContract.filters.Transfer(undefined, account)
+            underlyingContract.filters.Transfer(undefined, account),
+            underlyingContract.filters.Approval(account, address),
         )
       }
       filters.push(underlyingContract.filters.Transfer(address))
@@ -68,7 +69,7 @@ export const EventTracker: React.FC = () => {
         if (data.blockNumber > lastUpdateBlock) {
           console.log(`received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`)
           lastUpdateBlock = data.blockNumber
-          await updateAppState()
+          await updateAppState(Number(data.blockNumber))
         }
       })
       console.log(f)

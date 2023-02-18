@@ -47,11 +47,11 @@ const useFetchData = () => {
         }
     }, [library, network, account])
 
-    const fetchAppState = async () => {
+    const fetchAppState = async (blockNumber?: number) => {
         console.log('updating app data')
         if (network) {
             const net = {...network}
-            const appState = await loadAppState(library || new ethers.providers.JsonRpcProvider(net.publicRpc), net, account as string)
+            const appState = await loadAppState(library || new ethers.providers.JsonRpcProvider(net.publicRpc), net, account as string, blockNumber)
             setEapStates(appState.states)
             setBlockTimestamp(appState.blockTimestamp)
             setBlockNumber(appState.blockNumber)
@@ -61,8 +61,8 @@ const useFetchData = () => {
         }
     }
 
-    const updateAppState = async (): Promise<void> => {
-        await fetchAppState()
+    const updateAppState = async (blockNumber?: number): Promise<void> => {
+        await fetchAppState(blockNumber)
     }
 
     return {
