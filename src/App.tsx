@@ -9,7 +9,7 @@ import Buffer from "buffer"
 import { MyUiContext } from './Types/uiContext';
 import { MyGlobalContext } from './Types/globalContext';
 import { XFI } from './Connectors/xdefi-connector/declarations';
-import Yieldebaran from './Yieldebaran/Views/yieldebaran';
+import Home from 'src/Yieldebaran/Views/home';
 import { toast, ToastContainer } from 'react-toastify';
 import {useWindowSize} from 'usehooks-ts'
 import {ethers} from "ethers";
@@ -134,7 +134,7 @@ const App: React.FC = () => {
             accountOpen, setAccountOpen
         })}>
           <div id="app" className={`App scroller ${darkMode ? "dark" : "light"}`}>
-            <Yieldebaran/>
+            <Home/>
             <ReactTooltip id="tooltip"/>
             <Spinner/>
           </div>

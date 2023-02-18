@@ -24,7 +24,7 @@ import yieldebaranData from '../Data/yildebaranData'
 import {EventTracker} from "../../hooks/useBalance";
 import {ethers} from "ethers";
 
-const Yieldebaran: React.FC = () => {
+const Home: React.FC = () => {
     const {activate, error, chainId, account, deactivate} = useWeb3React()
     const {darkMode, setOpenNetwork, isMobile, isTablet} = useUiContext()
     const {network, setNetwork, setAddress, setWebSocketProvider} = useGlobalContext()
@@ -162,4 +162,4 @@ const Yieldebaran: React.FC = () => {
     )
 }
 
-export default Yieldebaran
+export default Home
