@@ -70,13 +70,13 @@ const NetworkConnect : React.FC = () => {
 
     return (
         <>
-            <Modal open={openNetwork} close={() => setOpenNetwork(false)} title="Networks">
+            <Modal open={openNetwork} close={() => setOpenNetwork(true)} title="Select network">
                 <div className="networks-view">
                     {
                         Object.values(NETWORKS).map((value, index) => {
                             let disabled = false
                             if (connector?.supportedChainIds)
-                                disabled = !connector.supportedChainIds.includes(value.chainId) ? true : false
+                                disabled = !connector.supportedChainIds.includes(value.chainId)
 
                             return (
                                 <div

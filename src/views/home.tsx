@@ -57,6 +57,10 @@ const Home: React.FC = () => {
         const net = window.localStorage.getItem("yieldebaran-network")
         const prov = window.localStorage.getItem("yieldebaran-provider")
 
+        if (!net || net === `null`) {
+            setOpenNetwork(true)
+        }
+
         let tempNet: Network | null = null
 
         if (net)

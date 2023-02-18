@@ -19,8 +19,6 @@ const Wallets: React.FC = () => {
     const handleConnect = (c: any) => {
         setShowWallets(false)
         const con = GetConnector(c, network ? network.chainId : undefined)
-        console.log(con)
-        //   setActivatingConnector(con)
         try {
             activate(con)
             window.localStorage.setItem("yieldebaran-provider", c)
