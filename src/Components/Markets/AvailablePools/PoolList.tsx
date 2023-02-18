@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import '../style.css';
 import PoolRow from './PoolRow';
 import ReactTooltip from 'react-tooltip';
-import { useHundredDataContext } from '../../../Types/appDataContext';
+import { useYieldebaranDataContext } from '../../../Types/appDataContext';
 import Tippy from '@tippyjs/react';
 import 'tippy.js/dist/tippy.css';
 import {EapData} from "../../../Classes/AppState"; // optional
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const PoolList: React.FC<Props> = (props: Props) => {
-    const {appState} = useHundredDataContext()
+    const {appState} = useYieldebaranDataContext()
 
     useEffect(() => {
         ReactTooltip.rebuild();

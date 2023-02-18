@@ -38,11 +38,7 @@ const TabletMenu: React.FC = () => {
                 </NavBarRight>
             : null}
             <NavBarLinks>
-                 <NavbarLink link="https://dashboard.hundred.finance" target="_blank">Dashboard</NavbarLink>
-                 <NavbarLink link="https://app.multichain.org/#/router" target="_blank">Bridge</NavbarLink>
                  <NavbarLink link="https://docs.hundred.finance" target="_blank">Docs</NavbarLink>
-                 <NavbarLink link="https://vote.hundred.finance" target="_blank">Vote</NavbarLink>
-                 <NavbarLink link="https://lendly.hundred.finance" target="_blank">Lendly</NavbarLink>
              </NavBarLinks>
         </NavbarMobile>
         </>

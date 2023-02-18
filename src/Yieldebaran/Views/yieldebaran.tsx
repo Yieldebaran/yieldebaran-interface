@@ -9,7 +9,7 @@ import Error from '../../Components/Error/error'
 import Footer from '../../Components/Footer/footer'
 import Menu from '../../Components/Menu/menu'
 import TabletMenu from '../../Components/Menu/tabletMenu'
-import HundredMessage from '../../Components/MessageDialog/messageDialog'
+import YieldebaranMessage from '../../Components/MessageDialog/messageDialog'
 import NetworksMenu from '../../Components/NetworksMenu/networksMenu'
 import Wallets from '../../Components/Wallets/wallets'
 import Wrapper from '../../Components/Wrapper/wrapper'
@@ -20,11 +20,11 @@ import NETWORKS, { Network } from '../../networks'
 import { useGlobalContext } from '../../Types/globalContext'
 import { YieldebaranDataContext } from '../../Types/appDataContext'
 import { useUiContext } from '../../Types/uiContext'
-import useFetchData from '../Data/hundredData'
+import yieldebaranData from '../Data/yildebaranData'
 import {EventTracker} from "../../hooks/useBalance";
 import {ethers} from "ethers";
 
-const Hundred: React.FC = () => {
+const Yieldebaran: React.FC = () => {
     const {activate, error, chainId, account, deactivate} = useWeb3React()
     const {darkMode, setOpenNetwork, isMobile, isTablet} = useUiContext()
     const {network, setNetwork, setAddress, setWebSocketProvider} = useGlobalContext()
@@ -48,7 +48,7 @@ const Hundred: React.FC = () => {
         setSelectedPool,
         updateAppState,
         appState,
-    } = useFetchData()
+    } = yieldebaranData()
 
     useEffect(() => {
         const net = window.localStorage.getItem("yieldebaran-network")
@@ -147,9 +147,9 @@ const Hundred: React.FC = () => {
                     <EventTracker/>
                 </Wrapper>
                 <Footer/>
-                <HundredMessage isOpen={showGMessage} onRequestClose={() => setShowGMessage(false)} contentLabel="Info"
-                                className={`${darkMode ? "mymodal-dark" : ""}`}
-                                message={gMessageText}/>
+                <YieldebaranMessage isOpen={showGMessage} onRequestClose={() => setShowGMessage(false)} contentLabel="Info"
+                                    className={`${darkMode ? "mymodal-dark" : ""}`}
+                                    message={gMessageText}/>
                 {error instanceof UnsupportedChainIdError ?
                     <Error open={showError} close={() => setShowError(false)} errorMessage={getErrorMessage(error)}
                            button={<Button onClick={() => openSwitchNetwork()}><span>Please Switch</span></Button>}/>
@@ -162,4 +162,4 @@ const Hundred: React.FC = () => {
     )
 }
 
-export default Hundred
+export default Yieldebaran

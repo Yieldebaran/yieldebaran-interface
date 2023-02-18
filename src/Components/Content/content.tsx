@@ -2,12 +2,12 @@ import React, { useState } from "react"
 import Markets from "../Markets/markets"
 import InteractionDialog from "../Markets/MarketsDialogs/PoolDialog/PoolDialog"
 import { useUiContext } from "../../Types/uiContext"
-import { useHundredDataContext } from "../../Types/appDataContext"
+import { useYieldebaranDataContext } from "../../Types/appDataContext"
 import {EapData} from "../../Classes/AppState";
 
 const Content: React.FC = () => {
     const {spinnerVisible} = useUiContext()
-    const { setSelectedPool } = useHundredDataContext()
+    const { setSelectedPool } = useYieldebaranDataContext()
 
     const [openSupplyMarketDialog, setOpenSupplyDialog] = useState(false)
     

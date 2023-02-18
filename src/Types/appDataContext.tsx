@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import {AppState, EapData} from "../Classes/AppState";
-import {formatter} from "../Hundred/Data/fetchEapsData";
+import {formatter} from "../Yieldebaran/Data/fetchEapsData";
 
 export type FVal = {
     readonly native: bigint,
@@ -42,4 +42,4 @@ export const YieldebaranDataContext = createContext<AppDataContext>({
     setSelectedPool: () => undefined,
 })
 
-export const useHundredDataContext = () : AppDataContext => useContext(YieldebaranDataContext)
+export const useYieldebaranDataContext = () : AppDataContext => useContext(YieldebaranDataContext)

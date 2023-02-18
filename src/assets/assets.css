@@ -40,11 +40,11 @@
 }
 
 .cls_8{
-    font-size:80px;font-family:"Roboto Flex", Inter;font-weight:800;letter-spacing:0.2em;
+    font-size:100px;font-family:"Roboto Flex", Inter;font-weight:900;letter-spacing:0.3em;
 }
 .cls_8,
 .cls_9{
-    fill:var(--hundred-logo-text);
+    fill:var(--yieldebaran-logo-text);
 }
 .cls_9{
     font-size:60px;font-family:Inter-SemiBold, "Roboto Flex";font-weight:600;letter-spacing:0.63em;

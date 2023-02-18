@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react"
 import TextBox from "../../../Textbox/textBox";
 import "../marketDialog.css"
 import MarketDialogItem from "../marketDialogItem";
-import { useHundredDataContext } from "../../../../Types/appDataContext";
+import { useYieldebaranDataContext } from "../../../../Types/appDataContext";
 import { useUiContext } from "../../../../Types/uiContext";
 import Button from "../../../Button/button";
 import {bnFromInput, validateInput} from "../../../../Utils/numbers";
@@ -13,7 +13,7 @@ interface Props {
     selectedPool: EapData
 }
 const DepositTab:React.FC<Props> = (props: Props) => {
-    const {appState} = useHundredDataContext()
+    const {appState} = useYieldebaranDataContext()
     const {toastErrorMessage, toastSuccessMessage} = useUiContext()
 
     const {network} = useGlobalContext()

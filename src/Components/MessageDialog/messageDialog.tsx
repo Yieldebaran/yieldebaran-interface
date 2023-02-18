@@ -12,7 +12,7 @@ interface Props {
     className?: string
     children?: React.ReactElement | React.ReactElement[]
 }
-const HundredMessage:React.FC<Props> = (props: Props) => {
+const YieldebaranMessage:React.FC<Props> = (props: Props) => {
     return(
         props.isOpen ?
         <Modal isOpen={props.isOpen}
@@ -25,8 +25,8 @@ const HundredMessage:React.FC<Props> = (props: Props) => {
                 shouldFocusAfterRender={true}
                 shouldReturnFocusAfterClose={true}
                 closeTimeoutMS={50}>
-                <HundredMessageTitle onRequestClose={props.onRequestClose} darkMode={props.className?.includes("mymodal-dark") ? true : false}>{props.contentLabel}</HundredMessageTitle>
-                <HundredMessageItem>{props.message}</HundredMessageItem>
+                <YieldebaranMessageTitle onRequestClose={props.onRequestClose} darkMode={props.className?.includes("mymodal-dark") ? true : false}>{props.contentLabel}</YieldebaranMessageTitle>
+                <YieldebaranMessageItem>{props.message}</YieldebaranMessageItem>
         </Modal>
         : null
     )
@@ -37,9 +37,9 @@ interface TitleProps {
     darkMode: boolean
 }
 
-const HundredMessageTitle: React.FC<PropsWithChildren<TitleProps>> = ({onRequestClose, darkMode, children}) => {
+const YieldebaranMessageTitle: React.FC<PropsWithChildren<TitleProps>> = ({onRequestClose, darkMode, children}) => {
     return (
-        <div className="hundred-message-title title title18">
+        <div className="yieldebaran-message-title title title18">
             {children}
             <svg className="closeBtn" onClick={onRequestClose} width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M7 7L17 17" stroke={`${darkMode ? "white" : "black"}`} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -55,12 +55,12 @@ interface ItemProps {
     onClick?: () => void
 }
 
-const HundredMessageItem: React.FC<PropsWithChildren<ItemProps>> = ({disabled, hover, onClick, children}) => {
+const YieldebaranMessageItem: React.FC<PropsWithChildren<ItemProps>> = ({disabled, hover, onClick, children}) => {
     return (
-        <div className={`hundred-message-item ${disabled ? "hundred-message-item-disabled" : ""} ${hover && !disabled ? "hundred-message-item-hover" : ""}`} onClick={onClick}>
+        <div className={`yieldebaran-message-item ${disabled ? "yieldebaran-message-item-disabled" : ""} ${hover && !disabled ? "yieldebaran-message-item-hover" : ""}`} onClick={onClick}>
             {children}
         </div>
     )
 }
 
-export default HundredMessage
+export default YieldebaranMessage

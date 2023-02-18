@@ -1,5 +1,4 @@
 import ETHlogo from "./assets/images/ETH-logo.svg"
-//import MATIClogo from "./assets/images/MATIC-logo.png"
 import AAVElogo from "./assets/images/AAVE-logo.svg"
 import DAIlogo from "./assets/images/DAI-logo.svg"
 import LINKlogo from "./assets/images/LINK-logo.svg"
@@ -34,7 +33,6 @@ import ATOMlogo from "./assets/images/ATOM-logo.png"
 import AUTOlogo from "./assets/images/AUTO-logo.png"
 import BANDlogo from "./assets/images/BAND-logo.png"
 import BCHlogo from "./assets/images/BCH-logo.png"
-// import BTCBlogo from "./assets/images/BTCB-logo.png"
 import CAKElogo from "./assets/images/CAKE-logo.png"
 import CREAMlogo from "./assets/images/CREAM-logo.png"
 import DFlogo from "./assets/images/DF-logo.png"
@@ -59,7 +57,6 @@ import ZRXlogo from "./assets/images/ZRX-logo.png"
 import KNClogo from "./assets/images/KNC-logo.png"
 import MANAlogo from "./assets/images/MANA-logo.png"
 import ARBITRUMlogo from "./assets/images/ARBITRUM-logo.png"
-import HUNDREDlogo from "./assets/icons/HND 1.png"
 import ONElogo from "./assets/images/ONE-logo.svg"
 import OPTlogo from "./assets/images/OPT-logo.svg"
 import IOTXlogo from "./assets/images/IOTX-logo.svg"
@@ -147,7 +144,6 @@ const Logos: { [key: string]: string } = {
     "KNC"       : KNClogo,
     "MANA"      : MANAlogo,
     "ARBITRUM"  : ARBITRUMlogo,
-    "HND"       : HUNDREDlogo,
     "ONE"       : ONElogo,
     "tUSDC"     : USDClogo,
     "OPT"       : OPTlogo,

@@ -3,13 +3,13 @@ import {ethers} from 'ethers';
 import {useGlobalContext} from "../Types/globalContext";
 
 import erc20Abi from '../abi/erc20.json';
-import {useHundredDataContext} from "../Types/appDataContext";
+import {useYieldebaranDataContext} from "../Types/appDataContext";
 import {useWeb3React} from "@web3-react/core";
 import {EventFilter} from "@ethersproject/contracts";
 
 export const EventTracker: React.FC = () => {
   const {network, webSocketProvider} = useGlobalContext();
-  const {appState, updateAppState} = useHundredDataContext();
+  const {appState, updateAppState} = useYieldebaranDataContext();
   const [eaps, setEaps] = useState(appState.states.map(x => x.address));
 
   const {account} = useWeb3React();

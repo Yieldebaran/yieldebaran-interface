@@ -12,7 +12,7 @@ import {
     requestWithdrawal
 } from "../../../../Classes/AppState";
 import {useGlobalContext} from "../../../../Types/globalContext";
-import {ONE} from "../../../../Hundred/Data/fetchEapsData";
+import {ONE} from "../../../../Yieldebaran/Data/fetchEapsData";
 
 interface Props {
     selectedPool: EapData

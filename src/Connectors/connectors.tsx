@@ -43,7 +43,7 @@ export const GetConnector = (c: any, chain?: number): any => {
     if (c === connectrorsEnum.Coinbase) {
         return new WalletLinkConnector({
             url: chain ? NETWORKS[chain].publicRpc : NETWORKS[250].publicRpc,
-            appName: 'Hundred Finance Dashboard',
+            appName: 'Yieldebaran app',
             supportedChainIds: supportedChains
         })
     }

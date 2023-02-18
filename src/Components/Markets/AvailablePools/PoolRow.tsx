@@ -8,7 +8,7 @@ import { useUiContext } from "../../../Types/uiContext"
 import { useWeb3React } from "@web3-react/core"
 import { providers } from "ethers"
 import {EapData} from "../../../Classes/AppState";
-import {useHundredDataContext} from "../../../Types/appDataContext";
+import {useYieldebaranDataContext} from "../../../Types/appDataContext";
 import {formatBN} from "../../../Utils/numbers";
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 const PoolRow: React.FC<Props> = (props : Props) => {
-    const {appState} = useHundredDataContext()
+    const {appState} = useYieldebaranDataContext()
     const {setShowWallets} = useUiContext()
     const {account} = useWeb3React<providers.Web3Provider>()
 

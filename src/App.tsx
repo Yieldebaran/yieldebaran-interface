@@ -9,7 +9,7 @@ import Buffer from "buffer"
 import { MyUiContext } from './Types/uiContext';
 import { MyGlobalContext } from './Types/globalContext';
 import { XFI } from './Connectors/xdefi-connector/declarations';
-import Hundred from './Hundred/Views/hundred';
+import Yieldebaran from './Yieldebaran/Views/yieldebaran';
 import { toast, ToastContainer } from 'react-toastify';
 import {useWindowSize} from 'usehooks-ts'
 import {ethers} from "ethers";
@@ -41,7 +41,6 @@ const App: React.FC = () => {
 
   const [openAddress, setOpenAddress] = useState<boolean>(false)
   const [openNetwork, setOpenNetwork] = useState<boolean>(false)
-  const [openHundred, setOpenHundred] = useState<boolean>(false)
   const [switchModal, setSwitchModal] = useState(false)
   const [scale, setScale] = useState(false)
 
@@ -126,7 +125,6 @@ const App: React.FC = () => {
             theme, setTheme,
             openAddress, setOpenAddress,
             openNetwork, setOpenNetwork,
-            openHundred, setOpenHundred,
             toastSuccessMessage: toastSuccess,
             toastErrorMessage: toastError,
             switchModal, setSwitchModal,
@@ -136,7 +134,7 @@ const App: React.FC = () => {
             accountOpen, setAccountOpen
         })}>
           <div id="app" className={`App scroller ${darkMode ? "dark" : "light"}`}>
-            <Hundred/>
+            <Yieldebaran/>
             <ReactTooltip id="tooltip"/>
             <Spinner/>
           </div>

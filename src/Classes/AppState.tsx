@@ -1,7 +1,7 @@
 import { Provider } from 'ethcall'
 import { Network } from '../networks'
 import {ethers} from "ethers";
-import {getEapStates} from "../Hundred/Data/fetchEapsData";
+import {getEapStates} from "../Yieldebaran/Data/fetchEapsData";
 import {FVal, zeroAppState} from "../Types/appDataContext";
 import eapAbi from "../abi/EAP.json";
 import withdrawToolAbi from "../abi/WthdrawTool.json";

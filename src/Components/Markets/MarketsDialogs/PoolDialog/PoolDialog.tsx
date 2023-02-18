@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom"
-import { useHundredDataContext } from "../../../../Types/appDataContext"
+import { useYieldebaranDataContext } from "../../../../Types/appDataContext"
 import { useUiContext } from "../../../../Types/uiContext"
 import closeIcon from "../../../../assets/icons/closeIcon.png"
 import ReactToolTip from 'react-tooltip'
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const PoolDialog:React.FC<Props> = (props: Props) => {
-    const {selectedPool, setSelectedPool, appState} = useHundredDataContext()
+    const {selectedPool, setSelectedPool, appState} = useYieldebaranDataContext()
     const {spinnerVisible, darkMode} = useUiContext()
     const [tabChange, setTabChange] = useState<number>(1)
     const [tabHeaders, setTabHeaders] = useState<any[]>([])

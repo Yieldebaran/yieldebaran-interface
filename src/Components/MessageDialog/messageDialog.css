@@ -39,18 +39,18 @@
     opacity: 0;
   }
 
-  .hundred-message-title{
+  .yieldebaran-message-title{
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
 
-  .hundred-message-title .closeBtn:hover{
+  .yieldebaran-message-title .closeBtn:hover{
     cursor: pointer;
     opacity: 0.7;
   }
 
-  .hundred-message-item{
+  .yieldebaran-message-item {
     padding: 16px;
     font-family: 'Poppins', sans-serif;
     margin: 24px 0 0 0;
@@ -59,12 +59,11 @@
     align-items: center;
     user-select: none;
     font-style: normal;
-  font-weight: normal;
-  text-align: center;
-  font-size: 14px;
-  line-height: 24px;
-  text-align: left;
-  font-feature-settings: 'pnum' on, 'lnum' on, 'calt' off;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: left;
+    font-feature-settings: 'pnum' on, 'lnum' on, 'calt' off;
   }
 
   .title{

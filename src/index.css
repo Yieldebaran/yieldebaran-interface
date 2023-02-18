@@ -69,13 +69,13 @@ html{
   
   --wallet-hover: #384250;
   --logo-background: #fff;
-  --spinner-color: #00ceff; 
+  --spinner-color: #00ceff;
   --moon: #fff;
   --sun: #2c4965;
 
-  --hundred-gradient-1: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
-  --hundred-gradient-2: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
-  --hundred-gradient-3: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
+  --yieldebaran-gradient-1: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
+  --yieldebaran-gradient-2: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
+  --yieldebaran-gradient-3: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
 
   --stop-color-1: #00ceff;
   --stop-color-2: #02c0fb;
@@ -88,7 +88,7 @@ html{
   --stop-color-9: #069ef0;
   --stop-color-10: #069bef;
 
-  --hundred-logo-text: #00ceff;
+  --yieldebaran-logo-text: #00ceff;
 
   color: #fff;
   --text-gray: #b5b5b5;
@@ -146,9 +146,9 @@ html{
   --moon: #bedff5;
   --sun: #09A6E3;
 
-  --hundred-gradient-1: linear-gradient(180deg, #fff 29.09%, #fff 70%);
-  --hundred-gradient-2: linear-gradient(180deg, #09A6E3 42.94%, #069BEF 57.74%);
-  --hundred-gradient-3: linear-gradient(180deg, #09A6E3 42.94%, #069CEF 57.74%);
+  --yieldebaran-gradient-1: linear-gradient(180deg, #fff 29.09%, #fff 70%);
+  --yieldebaran-gradient-2: linear-gradient(180deg, #09A6E3 42.94%, #069BEF 57.74%);
+  --yieldebaran-gradient-3: linear-gradient(180deg, #09A6E3 42.94%, #069CEF 57.74%);
 
   --stop-color-1: #fff;
   --stop-color-2: #fff;
@@ -162,7 +162,7 @@ html{
   --stop-color-10:#fff;
   --stop-color-11: #fff;
   --stop-color-12: #fff;
-  --hundred-logo-text: #fff;
+  --yieldebaran-logo-text: #fff;
 
   color: #fff;
   --text-gray: #b5b5b5;
@@ -175,7 +175,7 @@ html{
   display: block;
   width: 100%;
   height: 1px;
-  background: -o-radial-gradient(0% 0%, 100% 90%, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  background: -o-radial-gradient(0% 0% at 100% 90%, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
   background: radial-gradient(100% 90% at 0% 0%, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 }
 
@@ -185,7 +185,7 @@ h1{
   font-size: 2.1rem;
   line-height: 2.2rem;
   letter-spacing: 0.05em;
-  background: var(--hundred-gradient-3);
+  background: var(--yieldebaran-gradient-3);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -203,7 +203,7 @@ h2{
   align-items: center;
   text-align: center;
   letter-spacing: 0.05em;
-  background: var(--hundred-gradient-1);
+  background: var(--yieldebaran-gradient-1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
