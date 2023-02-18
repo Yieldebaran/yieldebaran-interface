@@ -2,20 +2,20 @@ import { useWeb3React } from "@web3-react/core"
 import { useEffect, useRef, useState } from "react"
 import { useGlobalContext } from "../../Types/globalContext"
 import { ethers } from "ethers"
-import {EapData, loadAppState} from "../../Classes/AppState";
+import {loadAppState, EapData} from "../../Classes/AppState";
 import {FVal} from "../../Types/appDataContext";
 
 const useFetchData = () => {
     const networkId = useRef<number>()
 
-    const selectedPoolRef = useRef<EapData>()
+    const selectedPoolRef = useRef<string>()
     const accountRef = useRef<string | null | undefined>()
 
-    const [eapStates, setEapStates] = useState<{[eap: string] : EapData}>({})
+    const [eapStates, setEapStates] = useState<{[eap: string]: EapData}>({})
     const [blockNumber, setBlockNumber] = useState<number>(0)
     const [blockTimestamp, setBlockTimestamp] = useState<number>(0)
     const [accountEthBalance, setAccountEthBalance] = useState<FVal>({ native: 0n, formatted: '0.0'})
-    const [selectedPool, setSelectedPool] = useState<EapData>()
+    const [selectedPool, setSelectedPool] = useState<string>()
 
     const {network} = useGlobalContext()
     const {library, account, chainId} = useWeb3React()

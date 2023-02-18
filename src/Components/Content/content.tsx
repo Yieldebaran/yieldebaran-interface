@@ -3,7 +3,6 @@ import Markets from "../Markets/markets"
 import InteractionDialog from "../Markets/MarketsDialogs/PoolDialog/PoolDialog"
 import { useUiContext } from "../../Types/uiContext"
 import { useYieldebaranDataContext } from "../../Types/appDataContext"
-import {EapData} from "../../Classes/AppState";
 
 const Content: React.FC = () => {
     const {spinnerVisible} = useUiContext()
@@ -11,7 +10,7 @@ const Content: React.FC = () => {
 
     const [openSupplyMarketDialog, setOpenSupplyDialog] = useState(false)
     
-    const supplyMarketDialog = (pool: EapData) => {
+    const supplyMarketDialog = (pool: string) => {
         setSelectedPool(pool)
         setOpenSupplyDialog(true)
     }

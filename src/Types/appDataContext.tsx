@@ -26,8 +26,8 @@ export type AppDataContext = {
     eapStates: {[eap: string]: EapData},
     accountEthBalance: FVal,
     updateAppState: () => Promise<void>,
-    selectedPool: EapData | undefined,
-    setSelectedPool: (m: EapData | undefined) => void
+    selectedPool: string | undefined,
+    setSelectedPool: (m: string | undefined) => void
 }
 
 export const zeroAppState = {

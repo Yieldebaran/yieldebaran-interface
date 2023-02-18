@@ -2,10 +2,9 @@ import React from "react"
 import {MarketContainer, MarketContainerTitle} from "./marketContainer"
 import "./style.css"
 import PoolList from "./AvailablePools/PoolList"
-import {EapData} from "../../Classes/AppState";
 
 interface Props {
-    supplyMarketDialog: (selectedPool: EapData) => void,
+    supplyMarketDialog: (selectedPool: string) => void,
 }
 const Markets: React.FC<Props> = (props : Props) => {
 
