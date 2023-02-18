@@ -1,11 +1,14 @@
 import Buffer from 'buffer';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
+import { Layout } from 'src/Components/Layout/Layout';
+import EventTracker from 'src/hooks/EventTracker';
 import Home from 'src/views/home';
+import { PoolAddress } from 'src/views/pools/poolAddress';
 import { useWindowSize } from 'usehooks-ts';
 import './App.css';
 import Spinner from './Components/Spinner/spinner';
@@ -150,9 +153,18 @@ const App: React.FC = () => {
           setAccountOpen,
         }}
       >
+        <EventTracker />
         <BrowserRouter>
           <div id="app" className={`App scroller ${darkMode ? 'dark' : 'light'}`}>
-            <Home />
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/pools">
+                  <Route index element={<Navigate to="/" replace />} />
+                  <Route path=":poolAddress" element={<PoolAddress />} />
+                </Route>
+              </Route>
+            </Routes>
             <ReactTooltip id="tooltip" />
             <Spinner />
           </div>

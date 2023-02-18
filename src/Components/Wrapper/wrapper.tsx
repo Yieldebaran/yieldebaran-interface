@@ -1,16 +1,16 @@
-import React, { ReactNode } from "react"
-import "./wrapper.css"
+import React, { ReactNode } from 'react';
+import './wrapper.css';
 
 interface Props {
-    children?: ReactNode
+  children?: ReactNode;
 }
 
-const Wrapper: React.FC<Props> = (props:Props) => {
-    return (
-        <section className={`wrapper `}>
-            {props.children}
-        </section>
-    )
-}
+const Wrapper: React.FC<Props> = (props: Props) => {
+  return (
+    <section className={`wrapper `} style={{ color: '#000' }}>
+      {props.children}
+    </section>
+  );
+};
 
-export default Wrapper
+export default Wrapper;
