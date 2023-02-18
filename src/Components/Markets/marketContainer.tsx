@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react"
 import "./style.css"
 
-interface Props{
+interface Props {
     onClick?: () => void,
     children?: ReactNode
 }
@@ -22,18 +22,9 @@ const MarketContainerTitle : React.FC<Props> = (props : Props) => {
     )
 }
 
-const MarketContainerShowMore : React.FC<Props> = (props : Props) => {
-    return(
-        <div className="market-container-title market-container-show-more" onClick = {props.onClick}>
-            {props.children}
-        </div>
-    )
-}
-
 
 export {
     MarketContainer, 
     MarketContainerTitle,
-    MarketContainerShowMore
 }
 

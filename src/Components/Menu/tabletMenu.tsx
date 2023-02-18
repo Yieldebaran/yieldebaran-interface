@@ -9,8 +9,6 @@ import NavbarMobile from "../Navbar/navbarMobile"
 import NavBarRight from "../Navbar/navBarRight"
 import ThemeSwitch from "../Navbar/themeSwitch"
 import NetworkButton from "./NetworkButton/networkButton"
-import HundredButton from "./HundredButton/hundredButton"
-import AirdropButton from "../AirdropButton/airdropButton"
 import { useUiContext } from "../../Types/uiContext"
 
 const TabletMenu: React.FC = () => {
@@ -24,9 +22,7 @@ const TabletMenu: React.FC = () => {
                     <NavBarRight>
                     {isTablet && !isMobile ?
                         <>
-                            <AirdropButton/>
-                            <HundredButton />
-                            <NetworkButton/> 
+                            <NetworkButton/>
                             <AddressButton />
                         </>
                     : null}
@@ -37,18 +33,12 @@ const TabletMenu: React.FC = () => {
             <NavbarMobile>
             {isMobile ? 
                 <NavBarRight className="navbar-right-content">
-                    <AirdropButton/>
-                    <HundredButton />
-                    <NetworkButton /> 
+                    <NetworkButton />
                     <AddressButton />
                 </NavBarRight>
             : null}
             <NavBarLinks>
-                 <NavbarLink link="https://dashboard.hundred.finance" target="_blank">Dashboard</NavbarLink>
-                 <NavbarLink link="https://app.multichain.org/#/router" target="_blank">Bridge</NavbarLink>
                  <NavbarLink link="https://docs.hundred.finance" target="_blank">Docs</NavbarLink>
-                 <NavbarLink link="https://vote.hundred.finance" target="_blank">Vote</NavbarLink>
-                 <NavbarLink link="https://lendly.hundred.finance" target="_blank">Lendly</NavbarLink>
              </NavBarLinks>
         </NavbarMobile>
         </>

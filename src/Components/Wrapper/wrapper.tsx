@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react"
-import { useUiContext } from "../../Types/uiContext"
 import "./wrapper.css"
 
 interface Props {
@@ -7,9 +6,8 @@ interface Props {
 }
 
 const Wrapper: React.FC<Props> = (props:Props) => {
-    const {sideMenu} = useUiContext()
     return (
-        <section className={`wrapper ${sideMenu ? "wrapper-side" : ""}`}>
+        <section className={`wrapper `}>
             {props.children}
         </section>
     )

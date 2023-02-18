@@ -3,7 +3,7 @@
     position: relative;
     display: flex;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 15rem 2rem;
 }
 
 .markets-wrapper::after{
@@ -16,7 +16,6 @@
     display: inline-block;
     height: 869px;
     min-width: 755px;
-    position: absolute;
     bottom: -200px;
     left: -26px;
     opacity: .4;
@@ -34,7 +33,6 @@
     display: inline-block;
     height: 338px;
     width: 564px;
-    position: absolute;
     right: -60px;
     top: -60px;
     opacity: .3;
@@ -52,7 +50,6 @@
     position: absolute;
     top: 45%;
     left: 100px;
-    height: 0;
     width: 100px;
     height: 100px;
     opacity: .8;
@@ -66,7 +63,6 @@
     position: absolute;
     bottom: 0;
     left: 0px;
-    height: 0;
     width: 124px;
     height: 194px;
     opacity: .8;
@@ -80,7 +76,6 @@
     position: absolute;
     top: 30%;
     right: -10px;
-    height: 0;
     width: 124px;
     height: 194px;
     opacity: .8;
@@ -95,7 +90,6 @@
 }
 
 .markets-content{
-    display: flex;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -137,7 +131,7 @@
     padding: 1rem 0;
     text-align: center;
     text-transform: uppercase;
-    background: var(--hundred-gradient-2);
+    background: var(--yieldebaran-gradient-2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -213,7 +207,7 @@
 .market-table-content tr td{
     padding: 1rem 1rem;
     cursor: pointer;
-    text-align: right;
+    text-align: center;
 }
 
 .market-table-content td{
@@ -236,7 +230,7 @@
 
 .market-table-content tr .supply-apy .apy-content{
     flex: 1;
-    text-align: right;
+    text-align: center;
 }
 
 .market-table-content tr .spinner-container{    
