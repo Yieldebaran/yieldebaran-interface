@@ -9,7 +9,7 @@ import Buffer from "buffer"
 import { MyUiContext } from './Types/uiContext';
 import { MyGlobalContext } from './Types/globalContext';
 import { XFI } from './Connectors/xdefi-connector/declarations';
-import Home from 'src/Yieldebaran/Views/home';
+import Home from 'src/views/home';
 import { toast, ToastContainer } from 'react-toastify';
 import {useWindowSize} from 'usehooks-ts'
 import {ethers} from "ethers";
