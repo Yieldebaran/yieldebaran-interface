@@ -33,6 +33,7 @@ const PoolRow: React.FC<Props> = (props : Props) => {
     }
 
     const balance = formatBN(eap.accountUnderlyingBalance.native + (eap.isEth ? accountEthBalance.native : 0n), 18)
+    const balanceUsd = Math.round(eap.underlyingUsdPrice * Number(Number(eap.accountUnderlyingBalance.formatted) + Number(eap.isEth ? accountEthBalance.formatted : 0) * 100)) / 100
 
     return (
         <tr>
@@ -47,28 +48,30 @@ const PoolRow: React.FC<Props> = (props : Props) => {
             <td className="apy positive"
                 onClick={handleOpenSupplyMarketDialog}>
                 <div className="supply-apy">
+                    <Tippy content={`Based on onchain data for the last ${eap.apyAfterFee[0].period}s`}>
                         <div className="apy-content">
                             {Number(eap.apyAfterFee[0].apy).toFixed(2)}%
                         </div>
+                    </Tippy>
                 </div>
             </td>
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
-                    <Tippy content={eap.totalUnderlyingBalance.formatted}>
+                    <Tippy content={`~$${eap.TVL_USD}`}>
                         <div>{Number(eap.totalUnderlyingBalance.formatted).toFixed(3)}</div>
                     </Tippy>
                 }
             </td>
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
-                    <Tippy content={eap.accountAllocated.formatted}>
-                        <div>{Number(eap.accountAllocated.formatted).toFixed(2)}</div>
+                    <Tippy content={`~$${eap.accountAllocatedUSD}`}>
+                        <div>{Number(eap.accountAllocated.formatted).toFixed(3)}</div>
                     </Tippy>
                 }
             </td>
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
-                    <Tippy content={balance}>
+                    <Tippy content={`~$${balanceUsd}`}>
                         <div>{Number(balance).toFixed(2)}</div>
                     </Tippy>
                 }

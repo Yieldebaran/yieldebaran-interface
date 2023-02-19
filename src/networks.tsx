@@ -47,10 +47,10 @@ const NETWORKS: NetworkData = {
         etherscanApiUrl: "https://api.ftmscan.com/api",
         etherscanApiKey: "2G6J2JBPRTFVQQRIIQ4BXNZD17AIH1CJMK",
         weth: "0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83",
-        eaps: ["0xCD0f76597A0aeB12685936B73eca2D8C744c255F"],
+        eaps: ["0x4dA549Be5164a4Afd95F426e48A4f0D320Fe057e"],
         usdc: "0x04068da6c83afcfa0e13ba15a6696662335d5b75",
-        ethAdapter: "0xC690A3fFC47257be10Ac50F3b96826896C316E37",
-        inception: 55729162,
+        ethAdapter: "0x467EF73129964e8d3C4A638A084Ff33953cA0783",
+        inception: 56108871,
         timestampContract: "0x6e11aaD63d11234024eFB6f7Be345d1d5b8a8f38",
         blockNumberContract: "0x37517C5D880c5c282437a3Da4d627B4457C10BEB",
         networkProperties: {

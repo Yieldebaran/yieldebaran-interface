@@ -14,18 +14,19 @@ const abi = [
   {"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"complexityWithdrawalFeeFactor","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"reserveFactor","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"requestTimeLimit","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"getBlockNumber","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"getBlockTimestamp","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"decimals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"reserves","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"totalUnderlyingRequested","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
-  {"inputs":[],"name":"lastFulfillmentIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[],"name":"fulfillmentIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"withdrawTool","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"underlying","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"getAllocations","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},
   {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"requestIndex","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
+  {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"requestTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"sharesRequested","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"underlyingRequested","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},
   {"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"stateMutability":"view","type":"function"},
@@ -84,6 +85,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
   secondBatchCall.push(timestampContract.getBlockTimestamp())
 
   const data = await ethcallProvider.all(eapCalls, blockNumber ? blockNumber : 'latest')
+  console.log('first query result', data)
   blockNumber = Number(data.pop() as string)
   const accountEthBalance = BigInt(data.pop() as string)
 
@@ -100,11 +102,12 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
     const toolContract = new Contract(withdrawTools[i], abi)
     const underlyingContract = new Contract(underlyings[i], abi)
     secondCallBatchForCurrentBlock.push(
-      toolContract.totalUnderlyingRequested(),
-      toolContract.lastFulfillmentIndex(),
+      toolContract.requestTime(account),
+      toolContract.fulfillmentIndex(),
       toolContract.requestIndex(account),
       toolContract.sharesRequested(account),
       toolContract.underlyingRequested(account),
+      toolContract.requestTimeLimit(),
       underlyingContract.balanceOf(eap),
       underlyingContract.balanceOf(account),
       underlyingContract.allowance(account, eap),
@@ -149,11 +152,12 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
     const reserves = BigInt(data[dataCursor++] as string).toFVal(format)
     const complexityWithdrawalFeeFactor = BigInt(data[dataCursor++] as string).toFVal(confValF)
     const reserveFactor = BigInt(data[dataCursor++] as string).toFVal(confValF)
-    const totalUnderlyingRequested = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format)
+    const accountRequestTime = Number(secondDataBatchCurrentBlock[secondDataCursor++] as string)
     const lastFulfillmentIndex = Number(secondDataBatchCurrentBlock[secondDataCursor++] as string)
     const accountRequestIndex = Number(secondDataBatchCurrentBlock[secondDataCursor++] as string)
     const accountSharesRequested = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format)
     const accountUnderlyingRequested = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format)
+    const requestTimeLimit = Number(secondDataBatchCurrentBlock[secondDataCursor++] as string)
     const underlyingUnallocated = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format)
     const accountUnderlyingBalance = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format)
     const accountAllowance = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format)
@@ -222,6 +226,8 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
         period,
       })
     })
+
+    const accountAllocated = (accountShares.native * exchangeRate / ONE).toFVal(format)
     states[eap] = {
       address: eap,
       isEth: BigInt(underlyings[i]) === BigInt(network.weth),
@@ -230,7 +236,6 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
       sharesWithdrawable: (totalWithdrawable * ONE / exchangeRate).toFVal(format),
       totalUnderlyingBalance,
       apyAfterFee,
-      totalUnderlyingRequested,
       lastFulfillmentIndex,
       underlyingUnallocated,
       decimals,
@@ -241,14 +246,17 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
       performanceFee: reserveFactor,
       reserves,
       underlying: underlyings[i],
-      TVL_USD: Math.round(underlyingUsdPrice * Number(totalUnderlyingBalance.formatted) * 1000) / 1000,
+      TVL_USD: Math.round(underlyingUsdPrice * Number(totalUnderlyingBalance.formatted) * 100) / 100,
+      accountAllocatedUSD: Math.round(underlyingUsdPrice * Number(accountAllocated.formatted) * 100) / 100,
       accountAllowance,
       accountUnderlyingBalance,
       accountShares,
       accountAllocated: (accountShares.native * exchangeRate / ONE).toFVal(format),
+      accountRequestTime,
       accountRequestIndex,
       accountSharesRequested,
       accountUnderlyingRequested,
+      requestTimeLimit,
       withdrawTool: withdrawTools[i],
       allocations: allocationProps,
     }

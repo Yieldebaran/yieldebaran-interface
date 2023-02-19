@@ -55,7 +55,7 @@ const InstantWithdrawTab:React.FC<Props> = (props: Props) => {
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }
@@ -72,7 +72,7 @@ const InstantWithdrawTab:React.FC<Props> = (props: Props) => {
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }

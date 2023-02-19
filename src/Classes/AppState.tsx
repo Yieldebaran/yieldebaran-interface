@@ -32,7 +32,7 @@ export type EapData = {
     underlyingWithdrawable: FVal
     sharesWithdrawable: FVal
     totalUnderlyingBalance: FVal
-    totalUnderlyingRequested: FVal
+    accountRequestTime: number
     underlyingUnallocated: FVal
     lastFulfillmentIndex: number
     accountRequestIndex: number
@@ -42,6 +42,7 @@ export type EapData = {
     underlyingLogo: string
     underlyingUsdPrice: number
     TVL_USD: number
+    requestTimeLimit: number
     instantWithdrawalFee: FVal
     performanceFee: FVal
     reserves: FVal
@@ -50,6 +51,7 @@ export type EapData = {
     accountShares: FVal
     accountAllocated: FVal
     accountSharesRequested: FVal
+    accountAllocatedUSD: number
     accountUnderlyingRequested: FVal
     allocations: AllocationData[]
 }
@@ -130,6 +132,28 @@ export async function claimWithdrawal(withdrawTool: string) {
     // @ts-ignore
     const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer)
     return poolContract.claim()
+}
+
+export async function freeInstantWithdrawal(withdrawTool: string) {
+    if (!signer) {
+        return
+    }
+    console.log('freeInstantWithdrawal', withdrawTool)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer)
+    return poolContract.instantWithdrawal()
+}
+
+export async function freeInstantWithdrawalEth(withdrawTool: string) {
+    if (!signer) {
+        return
+    }
+    console.log('freeInstantWithdrawalEth', withdrawTool)
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer)
+    return poolContract.instantWithdrawalEth()
 }
 
 export async function claimWithdrawalEth(withdrawTool: string) {

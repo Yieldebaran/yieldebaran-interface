@@ -73,12 +73,12 @@ const DepositTab:React.FC<Props> = (props: Props) => {
 
     const handleDeposit = async (amount: bigint) => {
         try {
-            if (mounted) setDepositInput("")
             const tx = await deposit(eap.address, amount)
+            if (mounted) setDepositInput("")
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
                 // await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
@@ -96,7 +96,7 @@ const DepositTab:React.FC<Props> = (props: Props) => {
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
                 // await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
                 // if (mounted) setDepositInput("")
             } else if (receipt.message) {
@@ -111,12 +111,12 @@ const DepositTab:React.FC<Props> = (props: Props) => {
     const handleDepositEth = async (amount: bigint) => {
         if (!network) return
         try {
-            if (mounted) setEthInput("")
             const tx = await depositEth(network.ethAdapter, amount)
+            if (mounted) setEthInput("")
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }

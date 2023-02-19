@@ -7,7 +7,7 @@ import Button from "../../../Button/button";
 import {bnFromInput, formatBN, validateInput} from "../../../../Utils/numbers";
 import {
     cancelRequest,
-    claimWithdrawal, claimWithdrawalEth,
+    claimWithdrawal, claimWithdrawalEth, freeInstantWithdrawal, freeInstantWithdrawalEth,
     requestWithdrawal
 } from "../../../../Classes/AppState";
 import {useGlobalContext} from "../../../../Types/globalContext";
@@ -19,7 +19,7 @@ interface Props {
 }
 const WithdrawTab:React.FC<Props> = (props: Props) => {
     const {toastErrorMessage, toastSuccessMessage} = useUiContext()
-    const {eapStates} = useYieldebaranDataContext()
+    const {eapStates, blockTimestamp} = useYieldebaranDataContext()
 
     const {address} = useGlobalContext()
 
@@ -57,7 +57,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }
@@ -73,7 +73,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }
@@ -83,13 +83,18 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
         }
     }
 
-    const handleClaim = async () => {
+    const handleClaim = async (claim: boolean) => {
         try {
-            const tx = await claimWithdrawal(eap.withdrawTool)
+            let tx
+            if (claim) {
+                tx = await claimWithdrawal(eap.withdrawTool)
+            } else {
+                tx = await freeInstantWithdrawal(eap.withdrawTool)
+            }
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }
@@ -99,13 +104,18 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
         }
     }
 
-    const handleClaimEth = async () => {
+    const handleClaimEth = async (claim: boolean) => {
         try {
-            const tx = await claimWithdrawalEth(eap.withdrawTool)
+            let tx
+            if (claim) {
+                tx = await claimWithdrawalEth(eap.withdrawTool)
+            } else {
+                tx = await freeInstantWithdrawalEth(eap.withdrawTool)
+            }
             const receipt = await tx.wait()
             console.log(receipt)
             if (receipt.status === 1) {
-                toastSuccessMessage("Transaction complete, updating contracts")
+                toastSuccessMessage("Transaction successfully mined")
             } else if (receipt.message) {
                 toastErrorMessage(`${receipt.message}`);
             }
@@ -119,7 +129,11 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
 
     const isRequested = eap.accountRequestIndex !== 0
 
-    const isFulfilled = eap.lastFulfillmentIndex > eap.accountRequestIndex
+    const isFulfilled = eap.lastFulfillmentIndex > eap.accountRequestIndex + 1
+    const cancellable = eap.lastFulfillmentIndex === eap.accountRequestIndex
+
+    const freeWithdrawalDate =  new Date((eap.accountRequestTime + eap.requestTimeLimit) * 1000).toLocaleString()
+    const freeWithdrawal = blockTimestamp >= eap.accountRequestTime + eap.requestTimeLimit
 
     return (eap && mounted ?
             <>
@@ -138,7 +152,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Available to claim"}
-                    value={`${eap.lastFulfillmentIndex > eap.accountRequestIndex ? eap.accountUnderlyingRequested.formatted : 0} ${eap.underlyingSymbol}`}
+                    value={`${eap.lastFulfillmentIndex > eap.accountRequestIndex + 1 ? eap.accountUnderlyingRequested.formatted : 0} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
                 {!isRequested && <div className="input-group">
@@ -163,20 +177,20 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                     </div>
                     {<div>~{Number(formatBN(withdrawalInputBN * eap.exchangeRate / ONE, eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>}
                 </div>}
-                {isRequested && !isFulfilled &&
+                {isRequested && cancellable &&
                 <Button disabled={false} onClick={() => handleCancelRequest()}>
                     Cancel request
                 </Button>}
                 {isRequested &&
                 <Button
-                    disabled={!isFulfilled}
-                    onClick={() => handleClaim()}>
-                    Claim {isFulfilled ? "" : "will be available after the next allocation"}
+                    disabled={!isFulfilled && !freeWithdrawal}
+                    onClick={() => handleClaim(isFulfilled)}>
+                    Claim {isFulfilled ? "" : `after ${freeWithdrawalDate}s`}
                 </Button>}
                 {isRequested && isFulfilled && eap.isEth &&
                 <Button
-                    disabled={false}
-                    onClick={() => handleClaimEth()}>
+                    disabled={!isFulfilled && !freeWithdrawal}
+                    onClick={() => handleClaimEth(isFulfilled)}>
                     Claim as {eap.underlyingSymbol.substring(1)}
                 </Button>}
             </>
