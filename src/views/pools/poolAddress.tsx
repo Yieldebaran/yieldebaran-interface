@@ -10,6 +10,10 @@ export const PoolAddress = () => {
     <Wrapper>
       <MainBlock>
         <p>{JSON.stringify(params)}</p>
+        <div className="tab-header">
+          <div className="tab-header-item active">Hello</div>
+          <div className="tab-header-item">Hello</div>
+        </div>
       </MainBlock>
     </Wrapper>
   );
