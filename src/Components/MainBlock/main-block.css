@@ -1,12 +1,11 @@
 .main-block {
   display: block;
   margin: 0 auto;
-  padding: .5rem;
+  padding: 0.5rem;
   max-width: 1240px;
   width: 100%;
   border: 2px solid transparent;
-  background: var(--markets-background) padding-box,
-  var(--border-line) border-box;
+  background: var(--markets-background) padding-box, var(--border-line) border-box;
   border-radius: 5px;
   margin-bottom: 1rem;
   overflow: hidden;

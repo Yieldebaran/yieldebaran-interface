@@ -173,7 +173,12 @@ export async function depositEth(ethAdapter: string, amount: bigint) {
   return adapterContract.depositEth({ value: amount });
 }
 
-export async function instantWithdrawal(pool: string, amount: bigint, minFromBalance: bigint, account: string) {
+export async function instantWithdrawal(
+  pool: string,
+  amount: bigint,
+  minFromBalance: bigint,
+  account: string,
+) {
   console.log('instantWithdrawal', pool, amount, minFromBalance, account);
   if (!signer) {
     return;
@@ -184,7 +189,12 @@ export async function instantWithdrawal(pool: string, amount: bigint, minFromBal
   return poolContract.instantWithdrawal(amount, minFromBalance, account);
 }
 
-export async function instantWithdrawalEth(pool: string, amount: bigint, minFromBalance: bigint, account: string) {
+export async function instantWithdrawalEth(
+  pool: string,
+  amount: bigint,
+  minFromBalance: bigint,
+  account: string,
+) {
   console.log('instantWithdrawal', pool, amount, minFromBalance, account);
   if (!signer) {
     return;

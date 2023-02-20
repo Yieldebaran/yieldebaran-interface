@@ -22,7 +22,11 @@ const NetworkButton: React.FC = () => {
   };
 
   return netWorkRef.current ? (
-    <Button onClick={() => handleOpenNetworks()} arrow={true} image={<img src={netWorkRef.current?.logo} alt="" />}>
+    <Button
+      onClick={() => handleOpenNetworks()}
+      arrow={true}
+      image={<img src={netWorkRef.current?.logo} alt="" />}
+    >
       {netWorkRef.current?.network}
     </Button>
   ) : (

@@ -13,16 +13,25 @@ export class BigNumber {
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(constructorGuard: any, value: ethers.BigNumber, decimals?: number) {
     if (constructorGuard !== _constructorGuard) {
-      logger.throwError('cannot call constructor directly; use BigNumber.from', Logger.errors.UNSUPPORTED_OPERATION, {
-        operation: 'new (BigNumber)',
-      });
+      logger.throwError(
+        'cannot call constructor directly; use BigNumber.from',
+        Logger.errors.UNSUPPORTED_OPERATION,
+        {
+          operation: 'new (BigNumber)',
+        },
+      );
     }
     this._value = value;
     decimals ? (this._decimals = decimals) : (this._decimals = 0);
     this._display = value.toString();
   }
 
-  private safeOperation = (num1: BigNumber, num2: BigNumber, operation: string, log?: boolean): BigNumber => {
+  private safeOperation = (
+    num1: BigNumber,
+    num2: BigNumber,
+    operation: string,
+    log?: boolean,
+  ): BigNumber => {
     const decimals = num1._decimals > num2._decimals ? this._decimals : num2._decimals;
     const tempNum1 = BigNumber.parseValueSafe(
       num1.toString(),
@@ -149,7 +158,8 @@ export class BigNumber {
 
   toRound = (places: number, seperated?: boolean, fixed?: boolean): string => {
     const num = +ethers.utils.formatUnits(this._value, this._decimals);
-    const rounded = Math.round((num + Number.EPSILON) * Math.pow(10, places)) / Math.pow(10, places);
+    const rounded =
+      Math.round((num + Number.EPSILON) * Math.pow(10, places)) / Math.pow(10, places);
     if (seperated) {
       if (fixed) return this.valueSeperated((+rounded.noExponents()).toFixed(places));
       return this.valueSeperated(rounded.noExponents());
@@ -180,7 +190,11 @@ export class BigNumber {
   static parseValue = (value: string, decimals?: number): BigNumber => {
     if (value === 'NaN') return BigNumber.from('0');
     if (+value === Infinity)
-      return new BigNumber(_constructorGuard, ethers.BigNumber.from(Number.MAX_VALUE.noExponents()), decimals);
+      return new BigNumber(
+        _constructorGuard,
+        ethers.BigNumber.from(Number.MAX_VALUE.noExponents()),
+        decimals,
+      );
     const temp = value.split('.');
     if (!decimals) {
       temp.length === 2 ? (decimals = temp[1].length) : (decimals = 0);
@@ -196,7 +210,9 @@ export class BigNumber {
       temp.length === 2 ? (decimals = temp[1].length) : (decimals = 0);
     }
     if (temp.length === 2 && temp[1] === '') value = temp[0];
-    console.log(`--------------------\nValue: ${value}\nDecimals: ${decimals}\n--------------------\n\n`);
+    console.log(
+      `--------------------\nValue: ${value}\nDecimals: ${decimals}\n--------------------\n\n`,
+    );
     const num = utils.parseUnits(value, decimals);
     return new BigNumber(_constructorGuard, num, decimals);
   };
@@ -204,7 +220,10 @@ export class BigNumber {
   static parseValueSafe = (value: string, decimals: number, round?: boolean): BigNumber => {
     const temp = BigNumber.parseValue(value);
     if (temp._decimals > decimals)
-      return BigNumber.parseValue(round ? temp.toRound(decimals) : temp.toFixed(decimals), decimals);
+      return BigNumber.parseValue(
+        round ? temp.toRound(decimals) : temp.toFixed(decimals),
+        decimals,
+      );
     return BigNumber.parseValue(value, decimals);
   };
 

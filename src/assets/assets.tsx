@@ -117,7 +117,13 @@ export const YieldebaranLogo: React.FC<Props> = (props: Props) => {
       <title>Yieldebaran Logo 1</title>
       <g transform="translate(.0029211 .00067054)" data-name="Layer 2">
         <g data-name="Layer 1">
-          <text id="Yieldebaran" className="cls_8" transform="rotate(-.21)" x="50.56018" y="102.08144">
+          <text
+            id="Yieldebaran"
+            className="cls_8"
+            transform="rotate(-.21)"
+            x="50.56018"
+            y="102.08144"
+          >
             YIELDEBARAN
           </text>
           <g id="Finance">
@@ -133,7 +139,11 @@ export const YieldebaranLogo: React.FC<Props> = (props: Props) => {
 
 export const VeTokenomics = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 234.6 296.29">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 234.6 296.29"
+    >
       <defs>
         <linearGradient
           id="ve-linear-gradient"
@@ -185,7 +195,11 @@ export const VeTokenomics = () => {
 
 export const Blockchain = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 283.63 286.86">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 283.63 286.86"
+    >
       <defs>
         <linearGradient
           id="bc-linear-gradient"
@@ -293,11 +307,26 @@ export const Blockchain = () => {
       <g id="Layer_2" data-name="Layer 2">
         <g id="Layer_1-2" data-name="Layer 1">
           <g id="Multichain">
-            <polygon className="bc_cls_1" points="85 29.78 143.96 0 202.04 29.78 143.52 59.26 85 29.78" />
-            <polygon className="bc_cls_2" points="84.89 45.15 136.78 70.93 136.78 134.91 84.89 106.91 84.89 45.15" />
-            <polygon className="bc_cls_3" points="202.04 45.04 150.15 70.81 150.15 134.8 202.04 106.8 202.04 45.04" />
-            <polygon className="bc_cls_4" points="0.11 181.73 59.07 151.95 117.15 181.73 58.63 211.21 0.11 181.73" />
-            <polygon className="bc_cls_5" points="0 197.1 51.89 222.88 51.89 286.86 0 258.86 0 197.1" />
+            <polygon
+              className="bc_cls_1"
+              points="85 29.78 143.96 0 202.04 29.78 143.52 59.26 85 29.78"
+            />
+            <polygon
+              className="bc_cls_2"
+              points="84.89 45.15 136.78 70.93 136.78 134.91 84.89 106.91 84.89 45.15"
+            />
+            <polygon
+              className="bc_cls_3"
+              points="202.04 45.04 150.15 70.81 150.15 134.8 202.04 106.8 202.04 45.04"
+            />
+            <polygon
+              className="bc_cls_4"
+              points="0.11 181.73 59.07 151.95 117.15 181.73 58.63 211.21 0.11 181.73"
+            />
+            <polygon
+              className="bc_cls_5"
+              points="0 197.1 51.89 222.88 51.89 286.86 0 258.86 0 197.1"
+            />
             <polygon
               className="bc_cls_6"
               points="117.15 196.99 65.26 222.77 65.26 286.75 117.15 258.75 117.15 196.99"
@@ -340,7 +369,11 @@ export const Blockchain = () => {
 
 export const Launch = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 235.63 234.92">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 235.63 234.92"
+    >
       <defs>
         <linearGradient
           id="la-linear-gradient"
@@ -399,9 +432,19 @@ export const Launch = () => {
 
 export const Discord = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 327.8 253.75">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 327.8 253.75"
+    >
       <defs>
-        <linearGradient id="dis-linear-gradient" y1="126.88" x2="327.8" y2="126.88" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="dis-linear-gradient"
+          y1="126.88"
+          x2="327.8"
+          y2="126.88"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0" className="stop_color7" />
           <stop offset="1" className="stop_color10" />
         </linearGradient>
@@ -421,13 +464,29 @@ export const Discord = () => {
 
 export const Immunefi = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 308.2 265.26">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 308.2 265.26"
+    >
       <defs>
-        <linearGradient id="im-linear-gradient" y1="188.54" x2="308.2" y2="188.54" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="im-linear-gradient"
+          y1="188.54"
+          x2="308.2"
+          y2="188.54"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0" className="stop_color7" />
           <stop offset="1" className="stop_color10" />
         </linearGradient>
-        <linearGradient id="im-linear-gradient-2" y1="76.71" x2="308.2" y2="76.71" xlinkHref="#im-linear-gradient" />
+        <linearGradient
+          id="im-linear-gradient-2"
+          y1="76.71"
+          x2="308.2"
+          y2="76.71"
+          xlinkHref="#im-linear-gradient"
+        />
       </defs>
       <title>Immunefi</title>
       <g id="Layer_2" data-name="Layer 2">
@@ -448,7 +507,11 @@ export const Immunefi = () => {
 
 export const Medium = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 393.54 333.94">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 393.54 333.94"
+    >
       <defs>
         <linearGradient
           id="me-linear-gradient"
@@ -513,9 +576,19 @@ export const Medium = () => {
 
 export const Twitter = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 367.16 300.61">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 367.16 300.61"
+    >
       <defs>
-        <linearGradient id="tw-linear-gradient" y1="150.3" x2="367.16" y2="150.3" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="tw-linear-gradient"
+          y1="150.3"
+          x2="367.16"
+          y2="150.3"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0" className="stop_color7" />
           <stop offset="1" className="stop_color10" />
         </linearGradient>
@@ -535,9 +608,19 @@ export const Twitter = () => {
 
 export const Telegram = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 355.26 297.94">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      viewBox="0 0 355.26 297.94"
+    >
       <defs>
-        <linearGradient id="tel-linear-gradient" y1="148.97" x2="355.26" y2="148.97" gradientUnits="userSpaceOnUse">
+        <linearGradient
+          id="tel-linear-gradient"
+          y1="148.97"
+          x2="355.26"
+          y2="148.97"
+          gradientUnits="userSpaceOnUse"
+        >
           <stop offset="0" className="stop_color7" />
           <stop offset="1" className="stop_color10" />
         </linearGradient>

@@ -14,7 +14,11 @@ import NETWORKS from '../networks';
 
 import { MetamaskConnector, MetamaskNotFounfError } from './metamask-connector';
 
-import { xDefiConnector, XDEFIWalletNotDefaultError, XDEFIWalletNotFoundError } from './xdefi-connector';
+import {
+  xDefiConnector,
+  XDEFIWalletNotDefaultError,
+  XDEFIWalletNotFoundError,
+} from './xdefi-connector';
 
 export enum connectrorsEnum {
   Metamask,
@@ -55,7 +59,8 @@ export const GetConnector = (c: any, chain?: number): any => {
       supportedChainIds: supportedChains,
     });
   }
-  if (c === connectrorsEnum.xDefi) return new xDefiConnector({ supportedChainIds: supportedChains });
+  if (c === connectrorsEnum.xDefi)
+    return new xDefiConnector({ supportedChainIds: supportedChains });
   return new MetamaskConnector({ supportedChainIds: supportedChains });
 };
 

@@ -11,7 +11,10 @@ const NavBarButton: React.FC = () => {
   };
 
   return (
-    <div className={`navbar-button ${mobileMenuOpen ? 'navbar-button-clicked' : ''}`} onClick={() => handleClick()}>
+    <div
+      className={`navbar-button ${mobileMenuOpen ? 'navbar-button-clicked' : ''}`}
+      onClick={() => handleClick()}
+    >
       <span className="bar bar1"></span>
       <span className="bar bar2"></span>
       <span className="bar bar3"></span>

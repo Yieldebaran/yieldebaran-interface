@@ -1,3 +1,1 @@
-export const useAppChain = () => {
-
-}
+export const useAppChain = () => {};

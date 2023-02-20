@@ -11,7 +11,10 @@ const ThemeSwitch: React.FC = () => {
     setDarkMode(!darkMode);
   };
   return (
-    <div className={`theme-switch ${darkMode ? 'theme-switch-dark-mode' : ''}`} onClick={handleSwitchTheme}>
+    <div
+      className={`theme-switch ${darkMode ? 'theme-switch-dark-mode' : ''}`}
+      onClick={handleSwitchTheme}
+    >
       <Moon />
       <Sun />
     </div>

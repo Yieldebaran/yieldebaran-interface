@@ -15,7 +15,15 @@ interface Props {
   children?: any;
 }
 
-const Modal: React.FC<Props> = ({ open, close, title, titleImg, maxheight, error, children }: Props) => {
+const Modal: React.FC<Props> = ({
+  open,
+  close,
+  title,
+  titleImg,
+  maxheight,
+  error,
+  children,
+}: Props) => {
   const { darkMode } = useUiContext();
   const modalContainer = document.getElementById('modal') as Element;
 

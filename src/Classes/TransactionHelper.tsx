@@ -16,7 +16,9 @@ export const ExecuteWithExtraGasLimit = async (
     return await tx.wait();
   }
 
-  return await contract[functionName](...args, { gasLimit: txGas.add(txGas.mul(gasIncreasePercentage).div(100)) });
+  return await contract[functionName](...args, {
+    gasLimit: txGas.add(txGas.mul(gasIncreasePercentage).div(100)),
+  });
 };
 
 export const ExecutePayableWithExtraGasLimit = async (

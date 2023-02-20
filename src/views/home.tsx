@@ -25,7 +25,9 @@ const Content: React.FC = () => {
   return (
     <div className="content">
       <Markets supplyMarketDialog={supplyMarketDialog} />
-      {openSupplyMarketDialog ? <PoolDialog closeSupplyMarketDialog={closeSupplyMarketDialog} /> : null}
+      {openSupplyMarketDialog ? (
+        <PoolDialog closeSupplyMarketDialog={closeSupplyMarketDialog} />
+      ) : null}
     </div>
   );
 };

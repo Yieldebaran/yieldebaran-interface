@@ -37,7 +37,10 @@ const PoolRow: React.FC<Props> = (props: Props) => {
     }
   };
 
-  const balance = formatBN(eap.accountUnderlyingBalance.native + (eap.isEth ? accountEthBalance.native : 0n), 18);
+  const balance = formatBN(
+    eap.accountUnderlyingBalance.native + (eap.isEth ? accountEthBalance.native : 0n),
+    18,
+  );
 
   return (
     <tr onClick={handleOpenSupplyMarketDialog}>

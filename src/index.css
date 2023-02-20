@@ -47,12 +47,18 @@ html {
   --button-hover-background: linear-gradient(#222932, #222932);
   --button-hover-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
 
-  --general-details-seperator: radial-gradient(100% 8999999.9% at 0% 0%, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%)
-  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  --general-details-seperator: radial-gradient(
+      100% 8999999.9% at 0% 0%,
+      #047ed1 0%,
+      #3dd8ff 48.56%,
+      #047ed1 100%
+    )
+    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 
   --tab-active: rgba(56, 66, 80, 1);
 
-  --textbox-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%), linear-gradient(0deg, #193142, #193142);
+  --textbox-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%),
+    linear-gradient(0deg, #193142, #193142);
   --textbox-background: linear-gradient(#193142, #193142);
   --textbox-color: #b5b5b5;
 
@@ -121,7 +127,7 @@ html {
   --button-hover-border: linear-gradient(#09a6e3, #09a6e3);
 
   --general-details-seperator: radial-gradient(#ffffff 0%, #ffffff 100%)
-  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 
   --tab-active: rgba(56, 66, 80, 0.2);
 
@@ -180,9 +186,9 @@ html {
   width: 100%;
   height: 1px;
   background: -o-radial-gradient(0% 0% at 100% 90%, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%)
-  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
   background: radial-gradient(100% 90% at 0% 0%, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%)
-  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+    /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 }
 
 h1 {

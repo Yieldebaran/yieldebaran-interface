@@ -7,7 +7,9 @@ interface Props {
 }
 
 const NavBarRight: React.FC<Props> = (props: Props) => {
-  return <div className={`navbar-right ${props.className ? props.className : ''}`}>{props.children}</div>;
+  return (
+    <div className={`navbar-right ${props.className ? props.className : ''}`}>{props.children}</div>
+  );
 };
 
 export default NavBarRight;

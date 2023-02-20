@@ -5,7 +5,13 @@ import ReactToolTip from 'react-tooltip';
 import closeIcon from '../../../../assets/icons/closeIcon.png';
 import { useYieldebaranDataContext } from '../../../../Types/appDataContext';
 import { useUiContext } from '../../../../Types/uiContext';
-import { Tab, TabContent, TabContentItem, TabHeader, TabHeaderItem } from '../../../TabControl/tabControl';
+import {
+  Tab,
+  TabContent,
+  TabContentItem,
+  TabHeader,
+  TabHeaderItem,
+} from '../../../TabControl/tabControl';
 
 import '../marketDialog.css';
 import DepositTab from './DepositTab';
@@ -71,7 +77,12 @@ const PoolDialog: React.FC<Props> = (props: Props) => {
         <ReactToolTip id="borrow-dialog-tooltip" effect="solid" />
         <div className="dialog-background" onClick={() => CloseDialog()}></div>
         <div className="supply-box">
-          <img src={closeIcon} alt="Close Icon" className="dialog-close" onClick={() => CloseDialog()} />
+          <img
+            src={closeIcon}
+            alt="Close Icon"
+            className="dialog-close"
+            onClick={() => CloseDialog()}
+          />
           <div className="dialog-title">
             {selectedPool && (
               <div className="logo-container">

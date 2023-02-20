@@ -49,7 +49,12 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
     setWithdrawalInput(String(sharesWithdrawable.formatted));
   };
 
-  const handleInstantWithdrawal = async (pool: string, amount: bigint, minFromBalance: bigint, account: string) => {
+  const handleInstantWithdrawal = async (
+    pool: string,
+    amount: bigint,
+    minFromBalance: bigint,
+    account: string,
+  ) => {
     try {
       const tx = await instantWithdrawal(pool, amount, minFromBalance, account);
       setWithdrawalInput('');
@@ -66,7 +71,12 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
     }
   };
 
-  const handleInstantWithdrawalEth = async (pool: string, amount: bigint, minFromBalance: bigint, account: string) => {
+  const handleInstantWithdrawalEth = async (
+    pool: string,
+    amount: bigint,
+    minFromBalance: bigint,
+    account: string,
+  ) => {
     try {
       const tx = await instantWithdrawalEth(pool, amount, minFromBalance, account);
       setWithdrawalInput('');
@@ -86,19 +96,27 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
   const withdrawalInputBN = bnFromInput(withdrawalInput, eap.decimals);
 
   const sharesWithdrawable =
-    eap.sharesWithdrawable.native > eap.accountShares.native ? eap.accountShares : eap.sharesWithdrawable;
+    eap.sharesWithdrawable.native > eap.accountShares.native
+      ? eap.accountShares
+      : eap.sharesWithdrawable;
   const underlyingWithdrawable = (sharesWithdrawable.native * eap.exchangeRate) / ONE;
 
   const minFromBalance =
-    eap.underlyingUnallocated.native > withdrawalInputBN ? withdrawalInputBN : eap.underlyingUnallocated.native;
+    eap.underlyingUnallocated.native > withdrawalInputBN
+      ? withdrawalInputBN
+      : eap.underlyingUnallocated.native;
 
   return eap && mounted ? (
     <>
-      <div className="supply-note">NOTE: instant withdrawal applies {eap.instantWithdrawalFee.formatted}% fee</div>
+      <div className="supply-note">
+        NOTE: instant withdrawal applies {eap.instantWithdrawalFee.formatted}% fee
+      </div>
       <div className="dialog-line" />
       <MarketDialogItem
         title={'Shares balance'}
-        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
+        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${
+          eap.underlyingSymbol
+        }`}
         value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
       />
       {eap.underlyingUnallocated.native !== 0n && <div className="dialog-line" />}
@@ -111,7 +129,9 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
       <div className="dialog-line" />
       <MarketDialogItem
         title={'Withdrawable'}
-        toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${eap.underlyingSymbol}`}
+        toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${
+          eap.underlyingSymbol
+        }`}
         value={`${sharesWithdrawable.formatted} y${eap.underlyingSymbol}`}
       />
       <div className="dialog-line" />
@@ -126,20 +146,27 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
           onClick={() => setMaxWithdrawal()}
         />
         <div>
-          You will get ~{Number(formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals)).toFixed(3)}{' '}
+          You will get ~
+          {Number(
+            formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals),
+          ).toFixed(3)}{' '}
           {eap.underlyingSymbol}
         </div>
       </div>
       <Button
         disabled={withdrawalInputBN == 0n || withdrawalErrorMessage !== ''}
-        onClick={() => handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)}
+        onClick={() =>
+          handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)
+        }
       >
         Withdraw
       </Button>
       {eap.isEth && (
         <Button
           disabled={withdrawalInputBN == 0n || withdrawalErrorMessage !== ''}
-          onClick={() => handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)}
+          onClick={() =>
+            handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)
+          }
         >
           Withdraw as {eap.underlyingSymbol.substring(1)}
         </Button>

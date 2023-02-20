@@ -79,7 +79,13 @@ const PoolList: React.FC<Props> = (props: Props) => {
             {Object.keys(eapStates).length === 0
               ? null
               : Object.keys(eapStates).map((pool, index) => {
-                  return <PoolRow key={index} pool={pool} supplyMarketDialog={props.supplyMarketDialog} />;
+                  return (
+                    <PoolRow
+                      key={index}
+                      pool={pool}
+                      supplyMarketDialog={props.supplyMarketDialog}
+                    />
+                  );
                 })}
           </tbody>
         }

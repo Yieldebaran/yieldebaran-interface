@@ -7,7 +7,7 @@
 }
 
 .markets-wrapper::after {
-  content: "";
+  content: '';
   position: absolute;
   background-image: url(../../assets/Abstract_Lines/Abstract_Line_5.svg);
   background-size: 755px 869px;
@@ -18,13 +18,13 @@
   min-width: 755px;
   bottom: -200px;
   left: -26px;
-  opacity: .4;
+  opacity: 0.4;
   overflow: hidden;
   z-index: 0;
 }
 
 .markets-wrapper::before {
-  content: "";
+  content: '';
   position: absolute;
   background-image: url(../../assets/Abstract_Lines/Abstract_Line_2.svg);
   background-size: 564px 338px;
@@ -35,10 +35,10 @@
   width: 564px;
   right: -60px;
   top: -60px;
-  opacity: .3;
-  -webkit-transition: all .5s ease-in-out;
-  -o-transition: all .5s ease-in-out;
-  transition: all .5s ease-in-out;
+  opacity: 0.3;
+  -webkit-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   overflow: hidden;
   z-index: 0;
 }
@@ -52,7 +52,7 @@
   left: 100px;
   width: 100px;
   height: 100px;
-  opacity: .8;
+  opacity: 0.8;
   z-index: 0;
 }
 
@@ -65,7 +65,7 @@
   left: 0px;
   width: 124px;
   height: 194px;
-  opacity: .8;
+  opacity: 0.8;
   z-index: 0;
 }
 
@@ -78,7 +78,7 @@
   right: -10px;
   width: 124px;
   height: 194px;
-  opacity: .8;
+  opacity: 0.8;
   z-index: 0;
 }
 
@@ -111,10 +111,9 @@
 
 .markets .market-container {
   border: 2px solid transparent;
-  background: var(--main-block) padding-box,
-  var(--border-line) border-box;
+  background: var(--main-block) padding-box, var(--border-line) border-box;
   border-radius: 5px;
-  padding: .5rem;
+  padding: 0.5rem;
   margin-bottom: 1rem;
   overflow: hidden;
   width: 100%;
@@ -176,7 +175,6 @@
   transform: translateY(-50%);
 }
 
-
 .asset-logo {
   border-radius: 50%;
   width: 25px;
@@ -217,14 +215,14 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: .5rem;
+  gap: 0.5rem;
 }
 
 .market-table-content tr .supply-apy {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: .2rem;
+  gap: 0.2rem;
 }
 
 .market-table-content tr .supply-apy .apy-content {
@@ -244,11 +242,9 @@
 .market-table-content tr .spinner-container .spinner-row {
   width: 20px;
   height: 20px;
-
 }
 
 @media only screen and (min-width: 1190px) {
-
 }
 
 @media only screen and (min-width: 730px) {
@@ -259,7 +255,6 @@
   .markets .assets-functions {
     flex-direction: row;
     justify-content: space-between;
-
   }
 
   .markets .assets-functions .assets-buttons {
@@ -296,5 +291,3 @@
   width: 4rem;
   float: left;
 }
-
-

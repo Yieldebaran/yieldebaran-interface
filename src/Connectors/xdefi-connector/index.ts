@@ -44,7 +44,9 @@ export class xDefiConnector extends AbstractConnector {
   constructor(kwargs: any) {
     if (window.ethereum && window.ethereum.__XDEFI) {
       const chains = Object.keys(window.ethereum.rpc);
-      const supportedChains = kwargs.supportedChainIds?.filter((c: any) => chains.includes(c.toString()));
+      const supportedChains = kwargs.supportedChainIds?.filter((c: any) =>
+        chains.includes(c.toString()),
+      );
       kwargs.supportedChainIds = supportedChains;
     }
     super(kwargs);
@@ -160,7 +162,10 @@ export class xDefiConnector extends AbstractConnector {
       try {
         chainId = parseSendReturn((window.xfi.ethereum.send as SendOld)({ method: 'net_version' }));
       } catch {
-        warning(false, 'net_version v2 was unsuccessful, falling back to manual matches and static properties');
+        warning(
+          false,
+          'net_version v2 was unsuccessful, falling back to manual matches and static properties',
+        );
       }
     }
 
@@ -195,14 +200,18 @@ export class xDefiConnector extends AbstractConnector {
 
     if (!account) {
       try {
-        account = await window.xfi.ethereum.enable().then((sendReturn: any) => parseSendReturn(sendReturn)[0]);
+        account = await window.xfi.ethereum
+          .enable()
+          .then((sendReturn: any) => parseSendReturn(sendReturn)[0]);
       } catch {
         warning(false, 'enable was unsuccessful, falling back to eth_accounts v2');
       }
     }
 
     if (!account) {
-      account = parseSendReturn((window.xfi.ethereum.send as SendOld)({ method: 'eth_accounts' }))[0];
+      account = parseSendReturn(
+        (window.xfi.ethereum.send as SendOld)({ method: 'eth_accounts' }),
+      )[0];
     }
 
     return account;

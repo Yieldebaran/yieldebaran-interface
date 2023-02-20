@@ -9,7 +9,11 @@ export const eX = (bigNumber: BigNumber, decimals: number): string => {
   return '0';
 };
 
-export const toDecimalPlaces = (bigNumber: ethers.BigNumber, decimals: number, places: number): string => {
+export const toDecimalPlaces = (
+  bigNumber: ethers.BigNumber,
+  decimals: number,
+  places: number,
+): string => {
   if (!decimals) decimals = 0;
   if (bigNumber) {
     return decimalPlaces(ethers.utils.formatUnits(bigNumber, decimals), places);
@@ -40,7 +44,10 @@ export const decimalPlaces = (number: string, places: number): string => {
 
 export const getShortenAddress = (address: string, substring?: number): string => {
   const firstCharacters = address.substring(0, substring ? substring + 2 : 4);
-  const lastCharacters = address.substring(address.length - (substring ? substring : 2), address.length);
+  const lastCharacters = address.substring(
+    address.length - (substring ? substring : 2),
+    address.length,
+  );
   return `${firstCharacters}...${lastCharacters}`;
 };
 

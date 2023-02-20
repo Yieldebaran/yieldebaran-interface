@@ -10,7 +10,9 @@ interface Props {
 const NavbarMobile: React.FC<Props> = ({ children }: Props) => {
   const { mobileMenuOpen } = useUiContext();
   return (
-    <div className={`navbar-mobile-content ${mobileMenuOpen ? 'navbar-mobile-content-open' : ''}`}>{children}</div>
+    <div className={`navbar-mobile-content ${mobileMenuOpen ? 'navbar-mobile-content-open' : ''}`}>
+      {children}
+    </div>
   );
 };
 

@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { cancelRequest, claimWithdrawal, claimWithdrawalEth, requestWithdrawal } from '../../../../Classes/AppState';
+import {
+  cancelRequest,
+  claimWithdrawal,
+  claimWithdrawalEth,
+  requestWithdrawal,
+} from '../../../../Classes/AppState';
 import { useYieldebaranDataContext } from '../../../../Types/appDataContext';
 import { useGlobalContext } from '../../../../Types/globalContext';
 import { useUiContext } from '../../../../Types/uiContext';
@@ -126,7 +131,9 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
       <div className="dialog-line" />
       <MarketDialogItem
         title={'Shares balance'}
-        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
+        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${
+          eap.underlyingSymbol
+        }`}
         value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
       />
       <div className="dialog-line" />
@@ -137,9 +144,11 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
       <div className="dialog-line" />
       <MarketDialogItem
         title={'Available to claim'}
-        value={`${eap.lastFulfillmentIndex > eap.accountRequestIndex ? eap.accountUnderlyingRequested.formatted : 0} ${
-          eap.underlyingSymbol
-        }`}
+        value={`${
+          eap.lastFulfillmentIndex > eap.accountRequestIndex
+            ? eap.accountUnderlyingRequested.formatted
+            : 0
+        } ${eap.underlyingSymbol}`}
       />
       <div className="dialog-line" />
       {!isRequested && (
@@ -166,7 +175,10 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
           </div>
           {
             <div>
-              ~{Number(formatBN((withdrawalInputBN * eap.exchangeRate) / ONE, eap.decimals)).toFixed(3)}{' '}
+              ~
+              {Number(formatBN((withdrawalInputBN * eap.exchangeRate) / ONE, eap.decimals)).toFixed(
+                3,
+              )}{' '}
               {eap.underlyingSymbol}
             </div>
           }

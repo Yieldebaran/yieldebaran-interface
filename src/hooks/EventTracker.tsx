@@ -68,7 +68,9 @@ const EventTracker: React.FC = () => {
         console.log(data);
         if (!data) return;
         if (data.blockNumber > lastUpdateBlock) {
-          console.log(`received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`);
+          console.log(
+            `received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`,
+          );
           lastUpdateBlock = data.blockNumber;
           await updateAppState(Number(data.blockNumber));
         }

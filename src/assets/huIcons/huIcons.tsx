@@ -35,7 +35,13 @@ const HuLogo: React.FC<Props> = (props: Props) => {
   };
 
   return (
-    <svg id="Layer_3" data-name="Layer 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" style={style}>
+    <svg
+      id="Layer_3"
+      data-name="Layer 3"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1000 1000"
+      style={style}
+    >
       <line style={cls1} className="cls-1" x1="45.85" y1="239.67" x2="45.85" y2="626.81" />
       <path
         style={cls2}
@@ -248,7 +254,10 @@ const HuArrow: React.FC<Props> = (props: Props) => {
       height={props.height ? props.height : '50'}
       viewBox="0 0 13.229166 13.229167"
     >
-      <path style={style} d="M 6.6145829,2.3129704 13.183342,0.09378244 6.6145836,13.229876 0.09307221,0.09378184 Z" />
+      <path
+        style={style}
+        d="M 6.6145829,2.3129704 13.183342,0.09378244 6.6145836,13.229876 0.09307221,0.09378184 Z"
+      />
     </svg>
   );
 };
@@ -399,7 +408,13 @@ const ImmunefiLogo: React.FC<Props> = (props: Props) => {
       />
     </svg>
   ) : (
-    <svg width="121" height="26" viewBox="0 0 121 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="121"
+      height="26"
+      viewBox="0 0 121 26"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         style={style}
         fillRule="evenodd"
@@ -530,4 +545,15 @@ const MoneyBagIcon: React.FC<Props> = (props: Props) => {
   );
 };
 
-export { HuLogo, HuLogo1, HuLogoSpinner, HuArrow, Spinner, Sun, Moon, ImmunefiLogo, DoneIcon, MoneyBagIcon };
+export {
+  HuLogo,
+  HuLogo1,
+  HuLogoSpinner,
+  HuArrow,
+  Spinner,
+  Sun,
+  Moon,
+  ImmunefiLogo,
+  DoneIcon,
+  MoneyBagIcon,
+};

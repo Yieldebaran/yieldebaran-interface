@@ -33,7 +33,9 @@ const App: React.FC = () => {
   const [address, setAddress] = useState<string>('');
 
   const [network, setNetwork] = useState<Network | null>(null);
-  const [webSocketProvider, setWebSocketProvider] = useState<ethers.providers.WebSocketProvider | undefined>(undefined);
+  const [webSocketProvider, setWebSocketProvider] = useState<
+    ethers.providers.WebSocketProvider | undefined
+  >(undefined);
   const [darkMode, setDarkMode] = useState<boolean>(false);
   const [spinnerVisible, setSpinnerVisible] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);

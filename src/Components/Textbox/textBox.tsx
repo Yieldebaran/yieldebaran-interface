@@ -66,9 +66,9 @@ const TextBox: React.FC<Props> = (props: Props) => {
 
   return (
     <div
-      className={`textbox ${props.validation.trim() === '' && props.validationCollapse ? 'validation-collapse' : ''} ${
-        props.disabled ? 'textbox-disabled' : ''
-      }`}
+      className={`textbox ${
+        props.validation.trim() === '' && props.validationCollapse ? 'validation-collapse' : ''
+      } ${props.disabled ? 'textbox-disabled' : ''}`}
     >
       <div className={props.button || props.symbol ? 'textbox-button' : ''}>
         <input
@@ -93,14 +93,18 @@ const TextBox: React.FC<Props> = (props: Props) => {
             <span
               data-tip={props.buttonTooltip}
               data-for="borrow-dialog-tooltip"
-              className={`input-button ${props.disabled || props.buttonDisabled ? 'input-button-disabled' : ''}`}
+              className={`input-button ${
+                props.disabled || props.buttonDisabled ? 'input-button-disabled' : ''
+              }`}
               onClick={buttonClick}
             >
               {props.button}
             </span>
           ) : (
             <span
-              className={`input-button ${props.disabled || props.buttonDisabled ? 'input-button-disabled' : ''}`}
+              className={`input-button ${
+                props.disabled || props.buttonDisabled ? 'input-button-disabled' : ''
+              }`}
               onClick={buttonClick}
             >
               {props.button}
@@ -109,7 +113,11 @@ const TextBox: React.FC<Props> = (props: Props) => {
         ) : (
           ''
         )}
-        {props.symbol ? <span className="input-button input-button-disabled">{props.symbol}</span> : ''}
+        {props.symbol ? (
+          <span className="input-button input-button-disabled">{props.symbol}</span>
+        ) : (
+          ''
+        )}
       </div>
       <span className={'validation'}>{props.validation}</span>
     </div>

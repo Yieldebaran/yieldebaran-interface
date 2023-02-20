@@ -17,7 +17,11 @@ import Wallets from 'src/Components/Wallets/wallets';
 import Wrapper from 'src/Components/Wrapper/wrapper';
 import { GetConnector, getErrorMessage } from 'src/Connectors/connectors';
 import { MetamaskConnector, MetamaskNotFounfError } from 'src/Connectors/metamask-connector';
-import { xDefiConnector, XDEFIWalletNotDefaultError, XDEFIWalletNotFoundError } from 'src/Connectors/xdefi-connector';
+import {
+  xDefiConnector,
+  XDEFIWalletNotDefaultError,
+  XDEFIWalletNotFoundError,
+} from 'src/Connectors/xdefi-connector';
 import NETWORKS, { Network } from 'src/networks';
 import { YieldebaranDataContext } from 'src/Types/appDataContext';
 import { useGlobalContext } from 'src/Types/globalContext';
@@ -43,8 +47,15 @@ export const Layout = () => {
     return () => console.log('Unmounted');
   }, [network, account]);
 
-  const { selectedPool, setSelectedPool, updateAppState, blockTimestamp, blockNumber, eapStates, accountEthBalance } =
-    yieldebaranData();
+  const {
+    selectedPool,
+    setSelectedPool,
+    updateAppState,
+    blockTimestamp,
+    blockNumber,
+    eapStates,
+    accountEthBalance,
+  } = yieldebaranData();
 
   useEffect(() => {
     const net = window.localStorage.getItem('yieldebaran-network');
@@ -56,8 +67,10 @@ export const Layout = () => {
 
     if (prov) {
       const con = GetConnector(+prov, tempNet ? tempNet.chainId : undefined);
-      if (con instanceof xDefiConnector && window.ethereum && window.ethereum.__XDEFI) activate(con);
-      else if (con instanceof MetamaskConnector && window.ethereum && !window.ethereum.__XDEFI) activate(con);
+      if (con instanceof xDefiConnector && window.ethereum && window.ethereum.__XDEFI)
+        activate(con);
+      else if (con instanceof MetamaskConnector && window.ethereum && !window.ethereum.__XDEFI)
+        activate(con);
       else activate(con);
     }
 
@@ -158,7 +171,11 @@ export const Layout = () => {
         ) : error instanceof XDEFIWalletNotFoundError ||
           error instanceof XDEFIWalletNotDefaultError ||
           error instanceof MetamaskNotFounfError ? (
-          <Error open={showError} close={() => setShowError(false)} errorMessage={getErrorMessage(error)} />
+          <Error
+            open={showError}
+            close={() => setShowError(false)}
+            errorMessage={getErrorMessage(error)}
+          />
         ) : null}
       </>
     </YieldebaranDataContext.Provider>

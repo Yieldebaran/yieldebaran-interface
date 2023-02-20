@@ -134,9 +134,15 @@ const DepositTab: React.FC<Props> = (props: Props) => {
 
   return eap && mounted ? (
     <>
-      <MarketDialogItem title={'Deposited'} value={`${eap.accountAllocated.formatted} ${eap.underlyingSymbol}`} />
+      <MarketDialogItem
+        title={'Deposited'}
+        value={`${eap.accountAllocated.formatted} ${eap.underlyingSymbol}`}
+      />
       <div className="dialog-line" />
-      <MarketDialogItem title={'Balance'} value={`${eap.accountUnderlyingBalance.formatted} ${eap.underlyingSymbol}`} />
+      <MarketDialogItem
+        title={'Balance'}
+        value={`${eap.accountUnderlyingBalance.formatted} ${eap.underlyingSymbol}`}
+      />
       <div className="dialog-line" />
       {eap.isEth && (
         <MarketDialogItem
@@ -179,7 +185,12 @@ const DepositTab: React.FC<Props> = (props: Props) => {
               Deposit
             </Button>
           ) : (
-            <Button rectangle={true} loading={false} disabled={depositBN === 0n} onClick={() => handleApprove()}>
+            <Button
+              rectangle={true}
+              loading={false}
+              disabled={depositBN === 0n}
+              onClick={() => handleApprove()}
+            >
               Approve
             </Button>
           )}

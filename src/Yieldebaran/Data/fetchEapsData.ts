@@ -293,21 +293,37 @@ export async function getEapStates(
     const reserves = BigInt(data[dataCursor++] as string).toFVal(format);
     const complexityWithdrawalFeeFactor = BigInt(data[dataCursor++] as string).toFVal(confValF);
     const reserveFactor = BigInt(data[dataCursor++] as string).toFVal(confValF);
-    const totalUnderlyingRequested = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
+    const totalUnderlyingRequested = BigInt(
+      secondDataBatchCurrentBlock[secondDataCursor++] as string,
+    ).toFVal(format);
     const lastFulfillmentIndex = Number(secondDataBatchCurrentBlock[secondDataCursor++] as string);
     const accountRequestIndex = Number(secondDataBatchCurrentBlock[secondDataCursor++] as string);
-    const accountSharesRequested = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
-    const accountUnderlyingRequested = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
-    const underlyingUnallocated = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
-    const accountUnderlyingBalance = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
-    const accountAllowance = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
+    const accountSharesRequested = BigInt(
+      secondDataBatchCurrentBlock[secondDataCursor++] as string,
+    ).toFVal(format);
+    const accountUnderlyingRequested = BigInt(
+      secondDataBatchCurrentBlock[secondDataCursor++] as string,
+    ).toFVal(format);
+    const underlyingUnallocated = BigInt(
+      secondDataBatchCurrentBlock[secondDataCursor++] as string,
+    ).toFVal(format);
+    const accountUnderlyingBalance = BigInt(
+      secondDataBatchCurrentBlock[secondDataCursor++] as string,
+    ).toFVal(format);
+    const accountAllowance = BigInt(
+      secondDataBatchCurrentBlock[secondDataCursor++] as string,
+    ).toFVal(format);
     const underlyingSymbol = secondDataBatchCurrentBlock[secondDataCursor++] as string;
 
     let underlyingUsdPrice;
 
     if (BigInt(underlyings[i]) !== BigInt(usdc)) {
-      const reserve0 = BigInt((secondDataBatchCurrentBlock[secondDataCursor] as any)._reserve0 as string);
-      const reserve1 = BigInt((secondDataBatchCurrentBlock[secondDataCursor++] as any)._reserve1 as string);
+      const reserve0 = BigInt(
+        (secondDataBatchCurrentBlock[secondDataCursor] as any)._reserve0 as string,
+      );
+      const reserve1 = BigInt(
+        (secondDataBatchCurrentBlock[secondDataCursor++] as any)._reserve1 as string,
+      );
       let reserveUsdc;
       let reserveUnderlying;
       if (BigInt(underlyings[i]) > BigInt(usdc)) {
@@ -315,25 +331,38 @@ export async function getEapStates(
       } else {
         [reserveUsdc, reserveUnderlying] = [reserve1, reserve0];
       }
-      underlyingUsdPrice = Number((reserveUsdc * 10n ** BigInt(decimals - 3)) / reserveUnderlying) / 1e3;
+      underlyingUsdPrice =
+        Number((reserveUsdc * 10n ** BigInt(decimals - 3)) / reserveUnderlying) / 1e3;
     } else {
       underlyingUsdPrice = 1;
     }
 
-    const totalUnderlyingBalance = ((totalSupply.native * exchangeRate) / ONE + reserves.native).toFVal(format);
+    const totalUnderlyingBalance = (
+      (totalSupply.native * exchangeRate) / ONE +
+      reserves.native
+    ).toFVal(format);
 
     let totalWithdrawable = 0n;
     const allocationProps = [];
     allocations[i].forEach((alloc) => {
-      const sharesBalance = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(formatter(18));
-      const underlyingAvailable = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string).toFVal(format);
+      const sharesBalance = BigInt(
+        secondDataBatchCurrentBlock[secondDataCursor++] as string,
+      ).toFVal(formatter(18));
+      const underlyingAvailable = BigInt(
+        secondDataBatchCurrentBlock[secondDataCursor++] as string,
+      ).toFVal(format);
       const exchangeRate = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string);
       const underlyingAllocated = ((sharesBalance.native * exchangeRate) / ONE).toFVal(format);
       const underlyingWithdrawable =
-        underlyingAvailable.native > underlyingAllocated.native ? underlyingAllocated : underlyingAvailable;
+        underlyingAvailable.native > underlyingAllocated.native
+          ? underlyingAllocated
+          : underlyingAvailable;
       const fullyAvailable = underlyingAllocated === underlyingWithdrawable;
       const allocationPercent =
-        Math.round((Number(underlyingAllocated.formatted) * 10000) / Number(totalUnderlyingBalance.formatted)) / 100;
+        Math.round(
+          (Number(underlyingAllocated.formatted) * 10000) /
+            Number(totalUnderlyingBalance.formatted),
+        ) / 100;
       allocationProps.push({
         address: alloc,
         exchangeRate,
@@ -356,14 +385,19 @@ export async function getEapStates(
       underlyingWithdrawable: underlyingUnallocated,
       fullyAvailable: true,
       allocationPercent:
-        Math.round((Number(underlyingUnallocated.formatted) * 10000) / Number(totalUnderlyingBalance.formatted)) / 100,
+        Math.round(
+          (Number(underlyingUnallocated.formatted) * 10000) /
+            Number(totalUnderlyingBalance.formatted),
+        ) / 100,
     });
     totalWithdrawable += underlyingUnallocated.native;
 
     const apyAfterFee: ApyData[] = [];
     periods.forEach((period, periodIdx) => {
       const pastER = BigInt(secondCallResult[periodIdx][i] as string);
-      const apy = Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) / 1000;
+      const apy =
+        Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
+        1000;
       apyAfterFee.push({
         apy,
         period,
@@ -388,7 +422,8 @@ export async function getEapStates(
       performanceFee: reserveFactor,
       reserves,
       underlying: underlyings[i],
-      TVL_USD: Math.round(underlyingUsdPrice * Number(totalUnderlyingBalance.formatted) * 1000) / 1000,
+      TVL_USD:
+        Math.round(underlyingUsdPrice * Number(totalUnderlyingBalance.formatted) * 1000) / 1000,
       accountAllowance,
       accountUnderlyingBalance,
       accountShares,
@@ -409,9 +444,14 @@ export async function getEapStates(
   };
 }
 
-async function getClosestBlockNumbers(timestamps: number[], network: Network): Promise<Array<number>> {
+async function getClosestBlockNumbers(
+  timestamps: number[],
+  network: Network,
+): Promise<Array<number>> {
   const { etherscanApiUrl, etherscanApiKey, inception } = network;
-  return await Promise.all(timestamps.map((x) => findClosestBlock(x, etherscanApiUrl, etherscanApiKey, inception)));
+  return await Promise.all(
+    timestamps.map((x) => findClosestBlock(x, etherscanApiUrl, etherscanApiKey, inception)),
+  );
 }
 
 async function findClosestBlock(
@@ -435,7 +475,13 @@ export function getPairAddress(tokenA: string, tokenB: string, isStable?: boolea
   return getPair(tokenA, tokenB, codeHash, factory, isStable);
 }
 
-export function getPair(tokenA: string, tokenB: string, codeHash: string, factory: string, isStable?: boolean) {
+export function getPair(
+  tokenA: string,
+  tokenB: string,
+  codeHash: string,
+  factory: string,
+  isStable?: boolean,
+) {
   const [token0, token1] = BigInt(tokenA) < BigInt(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA];
   const idTypes = ['address', 'address'];
   const idValues: any[] = [token0, token1];
@@ -446,7 +492,10 @@ export function getPair(tokenA: string, tokenB: string, codeHash: string, factor
   const idHash = ethers.utils.solidityKeccak256(idTypes, idValues);
   return ethers.utils.getAddress(
     `0x${ethers.utils
-      .solidityKeccak256(['bytes1', 'address', 'bytes32', 'bytes32'], ['0xff', factory, idHash, codeHash])
+      .solidityKeccak256(
+        ['bytes1', 'address', 'bytes32', 'bytes32'],
+        ['0xff', factory, idHash, codeHash],
+      )
       .substring(26)}`,
   );
 }

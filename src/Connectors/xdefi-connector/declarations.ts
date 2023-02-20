@@ -1,12 +1,12 @@
 export interface Ethereum {
-  send: unknown
-  enable: () => Promise<string[]>
-  on?: (method: string, listener: (...args: any[]) => void) => void
-  removeListener?: (method: string, listener: (...args: any[]) => void) => void
+  send: unknown;
+  enable: () => Promise<string[]>;
+  on?: (method: string, listener: (...args: any[]) => void) => void;
+  removeListener?: (method: string, listener: (...args: any[]) => void) => void;
 }
 
 export interface XFI {
-  ethereum?: Ethereum
+  ethereum?: Ethereum;
 }
 
-export declare const __DEV__: boolean
+export declare const __DEV__: boolean;

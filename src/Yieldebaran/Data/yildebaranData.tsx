@@ -15,7 +15,10 @@ const useFetchData = () => {
   const [eapStates, setEapStates] = useState<{ [eap: string]: EapData }>({});
   const [blockNumber, setBlockNumber] = useState<number>(0);
   const [blockTimestamp, setBlockTimestamp] = useState<number>(0);
-  const [accountEthBalance, setAccountEthBalance] = useState<FVal>({ native: 0n, formatted: '0.0' });
+  const [accountEthBalance, setAccountEthBalance] = useState<FVal>({
+    native: 0n,
+    formatted: '0.0',
+  });
   const [selectedPool, setSelectedPool] = useState<string>();
 
   const { network } = useGlobalContext();

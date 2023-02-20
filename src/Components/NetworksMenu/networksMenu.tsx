@@ -80,11 +80,15 @@ const NetworkConnect: React.FC = () => {
 
             return (
               <div
-                className={`network-item ${value.chainId === network?.chainId ? 'network-selected' : ''} ${
-                  disabled ? 'network-item-disabled' : ''
-                }`}
+                className={`network-item ${
+                  value.chainId === network?.chainId ? 'network-selected' : ''
+                } ${disabled ? 'network-item-disabled' : ''}`}
                 key={index}
-                onClick={() => (value.chainId === network?.chainId || disabled ? null : switchNetwork(value.chainId))}
+                onClick={() =>
+                  value.chainId === network?.chainId || disabled
+                    ? null
+                    : switchNetwork(value.chainId)
+                }
               >
                 <div className="network-logo">
                   <img src={value.logo} alt="" />
