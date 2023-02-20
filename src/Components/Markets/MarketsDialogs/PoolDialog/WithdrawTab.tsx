@@ -185,7 +185,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                 <Button
                     disabled={!isFulfilled && !freeWithdrawal}
                     onClick={() => handleClaim(isFulfilled)}>
-                    Claim {isFulfilled ? "" : `after ${freeWithdrawalDate}s`}
+                    Claim {isFulfilled ? "" : `after ${freeWithdrawalDate}`}
                 </Button>}
                 {isRequested && isFulfilled && eap.isEth &&
                 <Button

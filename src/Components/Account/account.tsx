@@ -1,6 +1,6 @@
 import { useWeb3React } from "@web3-react/core"
 import { ethers } from "ethers"
-import React, { useEffect } from "react"
+import React  from "react"
 import { getShortenAddress } from "../../helpers"
 import { useGlobalContext } from "../../Types/globalContext"
 import { useUiContext } from "../../Types/uiContext"
@@ -11,7 +11,7 @@ import "./account.css"
 const Account: React.FC = () => {
     const {accountOpen, setAccountOpen} = useUiContext()
     const {address, setAddress, network} = useGlobalContext()
-    const { connector, deactivate, account} = useWeb3React<ethers.providers.Web3Provider>()
+    const { connector, deactivate } = useWeb3React<ethers.providers.Web3Provider>()
 
     const handleDisconnect = () => {
         try{
@@ -25,11 +25,6 @@ const Account: React.FC = () => {
         setAccountOpen(false)
         setAddress("")
     }
-
-    useEffect(() => {
-        if (account)
-            setAddress("0xd491447348c474af15c40839d3e0056a80fec352")
-    }, [account])
 
     return (
         <Modal open={accountOpen} close={() => setAccountOpen(false)} title="Address" maxheight="220px">

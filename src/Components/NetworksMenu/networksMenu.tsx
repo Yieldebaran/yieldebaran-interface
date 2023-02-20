@@ -70,7 +70,7 @@ const NetworkConnect : React.FC = () => {
 
     return (
         <>
-            <Modal open={openNetwork} close={() => setOpenNetwork(true)} title="Select network">
+            <Modal open={openNetwork} close={() => setOpenNetwork(false)} title="Select network">
                 <div className="networks-view">
                     {
                         Object.values(NETWORKS).map((value, index) => {
