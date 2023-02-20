@@ -154,7 +154,7 @@ const Logos: { [key: string]: string } = {
     "SPELL"     : SPELLlogo,
     "DODO"      : DODOlogo,
     "FTM"       : FTMlogo,
-    "WFTM"       : FTMlogo,
+    "WFTM"      : FTMlogo,
     "fUSDT"     : USDTlogo,
     "BTC"       : WBTClogo,
     "MOVR"      : MOVRlogo,

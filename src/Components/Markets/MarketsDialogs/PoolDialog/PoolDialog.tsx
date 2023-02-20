@@ -47,16 +47,12 @@ const PoolDialog:React.FC<Props> = (props: Props) => {
             const contents = []
             headers.push({title: "Deposit"})
             contents.push(<DepositTab selectedPool={selectedPool}/>)
-            // headers.push({title: "Stake"})
-            // contents.push(<DirectStakeMarketTab selectedPool={selectedPool}/>)
 
             headers.push({title: "Withdraw"})
             contents.push(<WithdrawTab selectedPool={selectedPool}/>)
-            // contents.push(<InstantWithdrawalTab selectedPool={selectedPool}/>)
 
             headers.push({title: "Fast withdraw"})
             contents.push(<InstantWithdrawTab selectedPool={selectedPool}/>)
-            // contents.push(<WithdrawItem selectedPool={selectedPool}/>)
 
             setTabHeaders(headers)
             setTabContents(contents)
@@ -72,11 +68,11 @@ const PoolDialog:React.FC<Props> = (props: Props) => {
                 className="supply-box">
                 <img src={closeIcon} alt="Close Icon" className="dialog-close" onClick={() => CloseDialog()}/>
                 <div className="dialog-title">
-                    {selectedPool && length && (
+                    {selectedPool && (
                         <div className="logo-container">
                             <img
                                 className="rounded-circle"
-                                style={{width: "30px", height: "30px"}}
+                                style={{width: "30px", height: "30px", marginRight: "5px"}}
                                 src={eap?.underlyingLogo}
                                 alt=""/>
                         </div>

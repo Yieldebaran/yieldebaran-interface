@@ -16,7 +16,7 @@ const NetworkButton : React.FC = () => {
         const temp = {...network} as Network
         if (temp)
             netWorkRef.current = temp
-        if (lastOpenNetwork && !openNetwork && !network) {
+        if (lastOpenNetwork && !openNetwork && (!network || String(network) === 'null')) {
             setOpenNetwork(true)
         }
         setLastOpenNetwork(openNetwork)

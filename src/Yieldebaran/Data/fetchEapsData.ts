@@ -85,7 +85,7 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
   secondBatchCall.push(timestampContract.getBlockTimestamp())
 
   const data = await ethcallProvider.all(eapCalls, blockNumber ? blockNumber : 'latest')
-  console.log('first query result', data)
+  // console.log('first query result', data)
   blockNumber = Number(data.pop() as string)
   const accountEthBalance = BigInt(data.pop() as string)
 
@@ -95,6 +95,8 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
   const blockTimestamp = Number(data.pop())
 
   const apyBlockNumbers = await getClosestBlockNumbers(apyTimePoints.slice(1).map(x => blockTimestamp - x), network)
+
+  // period for current `apy` doesn't matter
   apyBlockNumbers.unshift(blockNumber - apyTimePoints[0]);
 
   const secondCallBatchForCurrentBlock = [...exchangeRateCalls] // touch exchange rates
@@ -227,6 +229,8 @@ export async function getEapStates(ethcallProvider: Provider, network: Network, 
       })
     })
 
+    // console.log(Logos[underlyingSymbol])
+
     const accountAllocated = (accountShares.native * exchangeRate / ONE).toFVal(format)
     states[eap] = {
       address: eap,
@@ -280,7 +284,7 @@ async function getClosestBlockNumbers(timestamps: number[], network: Network): P
 async function findClosestBlock(timestamp: number, baseUrl: string, apiKey: string, inception: number): Promise<number> {
   const url = `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before&apikey=${apiKey}`
   const data = await (await fetch(url)).json();
-  console.log('etherscan response')
+  console.log('etherscan getBlockNoByTime response')
   console.log(data)
   const res = Number(data.result)
   return inception > res ? inception : res

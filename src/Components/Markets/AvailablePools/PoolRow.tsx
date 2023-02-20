@@ -72,7 +72,7 @@ const PoolRow: React.FC<Props> = (props : Props) => {
             <td onClick={handleOpenSupplyMarketDialog}>
                 {
                     <Tippy content={`~$${balanceUsd}`}>
-                        <div>{Number(balance).toFixed(2)}</div>
+                        <div>{Number(balance).toFixed(3)}</div>
                     </Tippy>
                 }
 
