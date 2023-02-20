@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import ReactToolTip from 'react-tooltip';
+
 import closeIcon from '../../../../assets/icons/closeIcon.png';
 import { useYieldebaranDataContext } from '../../../../Types/appDataContext';
 import { useUiContext } from '../../../../Types/uiContext';
 import { Tab, TabContent, TabContentItem, TabHeader, TabHeaderItem } from '../../../TabControl/tabControl';
+
 import '../marketDialog.css';
 import DepositTab from './DepositTab';
 import InstantWithdrawTab from './InstantWithdrawTab';
@@ -71,7 +73,7 @@ const PoolDialog: React.FC<Props> = (props: Props) => {
         <div className="supply-box">
           <img src={closeIcon} alt="Close Icon" className="dialog-close" onClick={() => CloseDialog()} />
           <div className="dialog-title">
-            {selectedPool && length && (
+            {selectedPool && (
               <div className="logo-container">
                 <img
                   className="rounded-circle"

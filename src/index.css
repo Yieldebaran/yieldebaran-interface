@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100;8..144,200;8..144,300;8..144,400;8..144,500;8..144,600;8..144,700;8..144,800&display=swap');
 
-*, *::after, *::before {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
@@ -8,7 +10,6 @@
 :root {
   --max-width: 100%;
   font-size: 10px;
-
 }
 
 html,
@@ -33,29 +34,30 @@ html {
   --switch-theme-background: transparent;
   --hamburger-menu: #fff;
 
-  --modal-layout: rgba(19, 19, 19, .85);
+  --modal-layout: rgba(19, 19, 19, 0.85);
   --modal-background: linear-gradient(#222932, #222932);
-  --modal-line: linear-gradient(180deg, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%);
+  --modal-line: linear-gradient(180deg, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%);
   --modal-shadow: 0px 8px 6px rgba(0, 0, 0, 0.25);
-  --modal-border: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --modal-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
 
   --text-color: #fff;
   --text-color2: #fff;
-  --button-border: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --button-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
   --button-background: linear-gradient(#222932, #222932);
   --button-hover-background: linear-gradient(#222932, #222932);
-  --button-hover-border: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --button-hover-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
 
-  --general-details-seperator: radial-gradient(100% 8999999.9% at 0% 0%, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  --general-details-seperator: radial-gradient(100% 8999999.9% at 0% 0%, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%)
+  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 
   --tab-active: rgba(56, 66, 80, 1);
 
-  --textbox-border: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%), linear-gradient(0deg, #193142, #193142);
+  --textbox-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%), linear-gradient(0deg, #193142, #193142);
   --textbox-background: linear-gradient(#193142, #193142);
   --textbox-color: #b5b5b5;
 
   --link-color: #09a6e3;
-  --border-line: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --border-line: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
   --border-background: linear-gradient(#1c2026, #1c2026);
   --markets-background: linear-gradient(#1c2026, #1c2026);
   --markets-title-color: linear-gradient(#b5b5b5, #b5b5b5);
@@ -64,9 +66,9 @@ html {
   --main-block: linear-gradient(#1c2026, #1c2026);
 
   --slider-background: #193142;
-  --range-background: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --range-background: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
   --range-thumb-background: linear-gradient(#193142, #193142);
-  --range-thumb-border: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --range-thumb-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
   --range-thumb-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
 
   --wallet-hover: #384250;
@@ -75,9 +77,9 @@ html {
   --moon: #fff;
   --sun: #2c4965;
 
-  --yieldebaran-gradient-1: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
-  --yieldebaran-gradient-2: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
-  --yieldebaran-gradient-3: linear-gradient(180deg, #00CEFF 29.09%, #069BEF 70%);
+  --yieldebaran-gradient-1: linear-gradient(180deg, #00ceff 29.09%, #069bef 70%);
+  --yieldebaran-gradient-2: linear-gradient(180deg, #00ceff 29.09%, #069bef 70%);
+  --yieldebaran-gradient-3: linear-gradient(180deg, #00ceff 29.09%, #069bef 70%);
 
   --stop-color-1: #00ceff;
   --stop-color-2: #02c0fb;
@@ -95,51 +97,51 @@ html {
   color: #fff;
   --text-gray: #b5b5b5;
   --logo-background: #ececec;
-
 }
 
 .light {
-  --background-color: #FFFFFF;
-  --navbar-background: #09A6E3;
+  --background-color: #ffffff;
+  --navbar-background: #09a6e3;
   --switch-theme-border: rgba(9, 166, 227, 1);
   --switch-theme-background: #fff;
   --hamburger-menu: #fff;
 
-  --modal-layout: rgba(19, 19, 19, .85);
+  --modal-layout: rgba(19, 19, 19, 0.85);
   --modal-background: linear-gradient(#fff, #fff);
-  --modal-border: linear-gradient(180deg, #09A6E3 0%, #015CB1 100%);
+  --modal-border: linear-gradient(180deg, #09a6e3 0%, #015cb1 100%);
 
-  --modal-line: linear-gradient(180deg, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%);
+  --modal-line: linear-gradient(180deg, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%);
   --modal-shadow: 0px 8px 6px rgba(0, 0, 0, 0.25);
 
   --text-color: #222932;
   --text-color2: #fff;
   --button-border: linear-gradient(180deg, #fff 0%, #fff 100%);
-  --button-background: linear-gradient(#09A6E3, #09A6E3);
-  --button-hover-background: linear-gradient(#EBF8FF, #EBF8FF);
-  --button-hover-border: linear-gradient(#09A6E3, #09A6E3);
+  --button-background: linear-gradient(#09a6e3, #09a6e3);
+  --button-hover-background: linear-gradient(#ebf8ff, #ebf8ff);
+  --button-hover-border: linear-gradient(#09a6e3, #09a6e3);
 
-  --general-details-seperator: radial-gradient(#FFFFFF 0%, #FFFFFF 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  --general-details-seperator: radial-gradient(#ffffff 0%, #ffffff 100%)
+  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 
-  --tab-active: rgba(56, 66, 80, .2);
+  --tab-active: rgba(56, 66, 80, 0.2);
 
-  --textbox-border: linear-gradient(180deg, #00CEFF 0%, #015CB1 100%);
-  --textbox-background: linear-gradient(#EBF8FF, #EBF8FF);
-  --textbox-color: #09A6E3;
+  --textbox-border: linear-gradient(180deg, #00ceff 0%, #015cb1 100%);
+  --textbox-background: linear-gradient(#ebf8ff, #ebf8ff);
+  --textbox-color: #09a6e3;
 
   --link-color: #09a6e3;
-  --border-line: linear-gradient(180deg, #00CEFF 0%, #015CB1 100%);
-  --border-background: linear-gradient(180deg, #09A6E3 75.63%, #09A6E3 170.31%);
-  --markets-background: linear-gradient(#EBF8FF, #EBF8FF);
-  --markets-title-color: linear-gradient(#09A6E3, #09A6E3);
+  --border-line: linear-gradient(180deg, #00ceff 0%, #015cb1 100%);
+  --border-background: linear-gradient(180deg, #09a6e3 75.63%, #09a6e3 170.31%);
+  --markets-background: linear-gradient(#ebf8ff, #ebf8ff);
+  --markets-title-color: linear-gradient(#09a6e3, #09a6e3);
   --markets-color: rgba(34, 41, 50, 1);
 
-  --main-block: linear-gradient(#EBF8FF, #EBF8FF);
+  --main-block: linear-gradient(#ebf8ff, #ebf8ff);
 
-  --slider-background: #EBF8FF;
-  --range-background: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
-  --range-thumb-background: linear-gradient(#EBF8FF, #EBF8FF);
-  --range-thumb-border: linear-gradient(180deg, #00CEFF 0%, #069BEF 100%);
+  --slider-background: #ebf8ff;
+  --range-background: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
+  --range-thumb-background: linear-gradient(#ebf8ff, #ebf8ff);
+  --range-thumb-border: linear-gradient(180deg, #00ceff 0%, #069bef 100%);
   --range-thumb-shadow: 0px 1px 1px rgba(0, 0, 0, 0);
 
   --wallet-hover: #09a6e3;
@@ -147,11 +149,11 @@ html {
   --logo-background: #fff;
   --spinner-color: #00ceff;
   --moon: #bedff5;
-  --sun: #09A6E3;
+  --sun: #09a6e3;
 
   --yieldebaran-gradient-1: linear-gradient(180deg, #fff 29.09%, #fff 70%);
-  --yieldebaran-gradient-2: linear-gradient(180deg, #09A6E3 42.94%, #069BEF 57.74%);
-  --yieldebaran-gradient-3: linear-gradient(180deg, #09A6E3 42.94%, #069CEF 57.74%);
+  --yieldebaran-gradient-2: linear-gradient(180deg, #09a6e3 42.94%, #069bef 57.74%);
+  --yieldebaran-gradient-3: linear-gradient(180deg, #09a6e3 42.94%, #069cef 57.74%);
 
   --stop-color-1: #fff;
   --stop-color-2: #fff;
@@ -171,15 +173,16 @@ html {
   --text-gray: #b5b5b5;
 
   --logo-background: #fff;
-
 }
 
 .line {
   display: block;
   width: 100%;
   height: 1px;
-  background: -o-radial-gradient(0% 0% at 100% 90%, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
-  background: radial-gradient(100% 90% at 0% 0%, #047ED1 0%, #3DD8FF 48.56%, #047ED1 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  background: -o-radial-gradient(0% 0% at 100% 90%, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%)
+  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
+  background: radial-gradient(100% 90% at 0% 0%, #047ed1 0%, #3dd8ff 48.56%, #047ed1 100%)
+  /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */;
 }
 
 h1 {
@@ -278,7 +281,7 @@ h3 {
 .seperator {
   height: 1px;
   background: var(--modal-line);
-  margin: .5rem 0;
+  margin: 0.5rem 0;
 }
 
 @media only screen and (min-width: 720px) {

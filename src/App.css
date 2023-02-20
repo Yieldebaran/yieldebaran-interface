@@ -9,10 +9,10 @@
   flex-direction: column;
 }
 
-.wrapper{
+.wrapper {
   flex: 1;
 }
 
-.Toastify__toast-body{
+.Toastify__toast-body {
   white-space: pre-line;
 }

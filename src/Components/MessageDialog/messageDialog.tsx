@@ -82,7 +82,12 @@ interface ItemProps {
   onClick?: () => void;
 }
 
-const YieldebaranMessageItem: React.FC<PropsWithChildren<ItemProps>> = ({ disabled, hover, onClick, children }) => {
+const YieldebaranMessageItem: React.FC<PropsWithChildren<ItemProps>> = ({
+  disabled,
+  hover,
+  onClick,
+  children,
+}) => {
   return (
     <div
       className={`yieldebaran-message-item ${disabled ? 'yieldebaran-message-item-disabled' : ''} ${

@@ -1,4 +1,5 @@
 import Buffer from 'buffer';
+
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
@@ -10,6 +11,7 @@ import EventTracker from 'src/hooks/EventTracker';
 import Home from 'src/views/home';
 import { PoolAddress } from 'src/views/pools/poolAddress';
 import { useWindowSize } from 'usehooks-ts';
+
 import './App.css';
 import Spinner from './Components/Spinner/spinner';
 import { XFI } from './Connectors/xdefi-connector/declarations';
