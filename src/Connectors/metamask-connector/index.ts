@@ -51,8 +51,8 @@ export class MetamaskConnector extends AbstractConnector {
 
   private handleChainChanged(chainId: string | number): void {
 
-    if (!this.supportedChainIds?.includes(Number(chainId))) {
-      // console.log('unsupported chain')
+    if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(chainId))) {
+      // console.log('handleChainChanged, unsupported chain')
       this.setOpenNetwork(true)
     }
     this.chainIdSelected = Number(chainId)
@@ -91,11 +91,11 @@ export class MetamaskConnector extends AbstractConnector {
     // if (__DEV__) {
     //   console.log("Handling 'networkChanged' event with payload", networkId)
     // }
-    console.log(this.supportedChainIds)
-    console.log('on connect', data)
+    // console.log(this.supportedChainIds)
+    // console.log('on connect', data)
 
-    if (!this.supportedChainIds?.includes(Number(data.chainId))) {
-      // console.log('unsupported chain')
+    if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(data.chainId))) {
+      // console.log('handleConnect, unsupported chain')
       this.setOpenNetwork(true)
     }
 
@@ -143,7 +143,8 @@ export class MetamaskConnector extends AbstractConnector {
       account = parseSendReturn(await window.ethereum.enable())[0]
     }
 
-    if (!this.supportedChainIds?.includes(Number(this.chainIdSelected))) {
+    if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(this.chainIdSelected))) {
+      // console.log('activate, unsupported chain')
       this.setOpenNetwork(true)
     }
 
