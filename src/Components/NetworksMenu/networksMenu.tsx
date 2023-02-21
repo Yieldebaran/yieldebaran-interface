@@ -11,7 +11,7 @@ import {ethers} from "ethers";
 
 const NetworkConnect : React.FC = () => {
     const {connector, library} = useWeb3React()
-    const {network, setNetwork, setWebSocketProvider} = useGlobalContext()
+    const {setNetwork, setWebSocketProvider} = useGlobalContext()
 
     const {openNetwork, setOpenNetwork, setSwitchModal} = useUiContext()
 
@@ -75,14 +75,15 @@ const NetworkConnect : React.FC = () => {
                     {
                         Object.values(NETWORKS).map((value, index) => {
                             let disabled = false
-                            if (connector?.supportedChainIds)
+                            if (connector?.supportedChainIds) {
                                 disabled = !connector.supportedChainIds.includes(value.chainId)
+                            }
 
                             return (
                                 <div
-                                    className={`network-item ${value.chainId === network?.chainId ? "network-selected" : ""} ${disabled ? "network-item-disabled" : ""}`}
+                                    className={`network-item ${disabled ? "network-item-disabled" : ""}`}
                                     key={index}
-                                    onClick={() => value.chainId === network?.chainId || disabled ? null : switchNetwork(value.chainId)}>
+                                    onClick={() => disabled ? null : switchNetwork(value.chainId)}>
                                     <div className="network-logo">
                                         <img src={value.logo} alt=""/>
                                     </div>

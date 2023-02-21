@@ -12,15 +12,16 @@ import { useGlobalContext } from "../../Types/globalContext"
 import "./wallets.css"
 
 const Wallets: React.FC = () => {
-    const {showWallets, setShowWallets} = useUiContext()
+    const {showWallets, setShowWallets, setOpenNetwork} = useUiContext()
     const {network} = useGlobalContext()
     const {activate} = useWeb3React<providers.Web3Provider>()
 
-    const handleConnect = (c: any) => {
+    const handleConnect = async (c: any) => {
         setShowWallets(false)
-        const con = GetConnector(c, network ? network.chainId : undefined)
+        const con = GetConnector(c, setOpenNetwork, network ? network.chainId : undefined)
         try {
-            activate(con)
+            // console.log("yieldebaran-provider", c)
+            await activate(con)
             window.localStorage.setItem("yieldebaran-provider", c)
         } catch (err) {
             console.log(err)

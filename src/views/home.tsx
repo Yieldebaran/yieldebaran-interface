@@ -56,8 +56,10 @@ const Home: React.FC = () => {
     useEffect(() => {
         const net = window.localStorage.getItem("yieldebaran-network")
         const prov = window.localStorage.getItem("yieldebaran-provider")
+        // console.log(prov)
 
         if (!net || net === `null`) {
+            // console.log('no network detected, open network modal')
             setOpenNetwork(true)
         }
 
@@ -67,7 +69,7 @@ const Home: React.FC = () => {
             tempNet = JSON.parse(net) as Network
 
         if (prov) {
-            const con = GetConnector(+prov, tempNet ? tempNet.chainId : undefined)
+            const con = GetConnector(+prov, setOpenNetwork, tempNet ? tempNet.chainId : undefined)
             if (con instanceof xDefiConnector && window.ethereum && window.ethereum.__XDEFI)
                 activate(con)
             else if (con instanceof MetamaskConnector && window.ethereum && !window.ethereum.__XDEFI)
@@ -118,11 +120,14 @@ const Home: React.FC = () => {
     }, [chainId])
 
     useEffect(() => {
-        if (error) {
-            console.log(error)
-            setShowError(true)
-            deactivate()
+        if (!error) return
+        if (String(error).includes("Unsupported chain id")) {
+            // setOpenNetwork(true)
+            return
         }
+        console.log(error)
+        setShowError(true)
+        deactivate()
     }, [error])
 
     useEffect(() => {

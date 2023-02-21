@@ -33,16 +33,26 @@ export class MetamaskNotFounfError extends Error {
 }
 
 export class MetamaskConnector extends AbstractConnector {
-  constructor(kwargs: any) {
+
+  private setOpenNetwork: (flag: boolean) => void
+
+  constructor(kwargs: any, setOpenNetwork: (flag: boolean) => void) {
     super(kwargs)
 
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this)
     this.handleChainChanged = this.handleChainChanged.bind(this)
+    this.handleConnect = this.handleConnect.bind(this)
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this)
     this.handleClose = this.handleClose.bind(this)
+    this.setOpenNetwork = setOpenNetwork
   }
 
   private handleChainChanged(chainId: string | number): void {
+
+    if (!this.supportedChainIds?.includes(Number(chainId))) {
+      // console.log('unsupported chain')
+      this.setOpenNetwork(true)
+    }
     // if (__DEV__) {
     //   console.log("Handling 'chainChanged' event with payload", chainId)
     // }
@@ -74,6 +84,21 @@ export class MetamaskConnector extends AbstractConnector {
     this.emitUpdate({ chainId: networkId, provider: window.ethereum })
   }
 
+  private handleConnect(data: any): void {
+    // if (__DEV__) {
+    //   console.log("Handling 'networkChanged' event with payload", networkId)
+    // }
+    // console.log(this.supportedChainIds)
+    // console.log('on connect', data)
+
+    if (!this.supportedChainIds?.includes(Number(data.chainId))) {
+      // console.log('unsupported chain')
+      this.setOpenNetwork(true)
+    }
+
+    this.emitUpdate({ chainId: data.chainId, provider: window.ethereum })
+  }
+
   public async activate(): Promise<any> {
     if (!window.ethereum) {
       throw new NoEthereumProviderError()
@@ -88,6 +113,7 @@ export class MetamaskConnector extends AbstractConnector {
       window.ethereum.on('accountsChanged', this.handleAccountsChanged)
       window.ethereum.on('close', this.handleClose)
       window.ethereum.on('networkChanged', this.handleNetworkChanged)
+      window.ethereum.on('connect', this.handleConnect)
     }
 
     if ((window.ethereum as any).isMetaMask) {
@@ -97,9 +123,8 @@ export class MetamaskConnector extends AbstractConnector {
     // try to activate + get account via eth_requestAccounts
     let account
     try {
-      account = await (window.ethereum.send as Send)('eth_requestAccounts').then(
-        sendReturn => parseSendReturn(sendReturn)[0]
-      )
+      const accounts = await (window.ethereum.send as Send)('eth_requestAccounts')
+      account = parseSendReturn(accounts)[0]
     } catch (error) {
       if ((error as any).code === 4001) {
         throw new UserRejectedRequestError()
@@ -110,7 +135,7 @@ export class MetamaskConnector extends AbstractConnector {
     // if unsuccessful, try enable
     if (!account) {
       // if enable is successful but doesn't return accounts, fall back to getAccount (not happy i have to do this...)
-      account = await window.ethereum.enable().then((sendReturn: any) => sendReturn && parseSendReturn(sendReturn)[0])
+      account = parseSendReturn(await window.ethereum.enable())[0]
     }
 
     return { provider: window.ethereum, ...(account ? { account } : {}) }
@@ -195,6 +220,7 @@ export class MetamaskConnector extends AbstractConnector {
       window.ethereum.removeListener('chainChanged', this.handleChainChanged)
       window.ethereum.removeListener('accountsChanged', this.handleAccountsChanged)
       window.ethereum.removeListener('close', this.handleClose)
+      window.ethereum.removeListener('connect', this.handleClose)
       window.ethereum.removeListener('networkChanged', this.handleNetworkChanged)
     }
   }
@@ -206,11 +232,7 @@ export class MetamaskConnector extends AbstractConnector {
 
     try {
       return await (window.ethereum.send as Send)('eth_accounts').then(sendReturn => {
-        if (parseSendReturn(sendReturn).length > 0) {
-          return true
-        } else {
-          return false
-        }
+        return parseSendReturn(sendReturn).length > 0;
       })
     } catch {
       return false

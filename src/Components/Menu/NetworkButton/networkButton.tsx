@@ -17,7 +17,8 @@ const NetworkButton : React.FC = () => {
         if (temp)
             netWorkRef.current = temp
         if (lastOpenNetwork && !openNetwork && (!network || String(network) === 'null')) {
-            setOpenNetwork(true)
+            // console.log('no network detected, show network modal')
+            // setOpenNetwork(true)
         }
         setLastOpenNetwork(openNetwork)
     }, [network, openNetwork])

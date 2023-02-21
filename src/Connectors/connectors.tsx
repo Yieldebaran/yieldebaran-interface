@@ -29,7 +29,7 @@ let walletConnect = new WalletConnectConnector({
     qrcode: true
 })
 
-export const GetConnector = (c: any, chain?: number): any => {
+export const GetConnector = (c: any, setOpenNetwork:(flag: boolean) => void, chain?: number): any => {
     if (c === connectrorsEnum.WalletConnect) {
         if (chain)
             walletConnect = new WalletConnectConnector({
@@ -49,7 +49,7 @@ export const GetConnector = (c: any, chain?: number): any => {
     }
     if (c === connectrorsEnum.xDefi)
         return new xDefiConnector({supportedChainIds: supportedChains})
-    return new MetamaskConnector({supportedChainIds: supportedChains})
+    return new MetamaskConnector({supportedChainIds: supportedChains}, setOpenNetwork)
 }
 
 export const getErrorMessage = (error: Error | undefined) => {
