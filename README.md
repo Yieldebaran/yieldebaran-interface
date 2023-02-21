@@ -13,3 +13,9 @@ Changes introduced:
 - Introduced github pages to support live deployment hosted by github.io on [yieldebaran.xyz](https://yieldebaran.xyz)
 
 Corresponding contracts repo [yieldebaran-contracts](https://github.com/yieldebaran/yieldebaran-contracts)
+
+## Running locally 
+
+```bash
+yarn && yarn start
+```
