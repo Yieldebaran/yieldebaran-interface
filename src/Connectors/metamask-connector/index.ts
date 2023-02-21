@@ -35,6 +35,7 @@ export class MetamaskNotFounfError extends Error {
 export class MetamaskConnector extends AbstractConnector {
 
   private setOpenNetwork: (flag: boolean) => void
+  private chainIdSelected: number | null
 
   constructor(kwargs: any, setOpenNetwork: (flag: boolean) => void) {
     super(kwargs)
@@ -45,6 +46,7 @@ export class MetamaskConnector extends AbstractConnector {
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this)
     this.handleClose = this.handleClose.bind(this)
     this.setOpenNetwork = setOpenNetwork
+    this.chainIdSelected = null
   }
 
   private handleChainChanged(chainId: string | number): void {
@@ -53,6 +55,7 @@ export class MetamaskConnector extends AbstractConnector {
       // console.log('unsupported chain')
       this.setOpenNetwork(true)
     }
+    this.chainIdSelected = Number(chainId)
     // if (__DEV__) {
     //   console.log("Handling 'chainChanged' event with payload", chainId)
     // }
@@ -88,13 +91,15 @@ export class MetamaskConnector extends AbstractConnector {
     // if (__DEV__) {
     //   console.log("Handling 'networkChanged' event with payload", networkId)
     // }
-    // console.log(this.supportedChainIds)
-    // console.log('on connect', data)
+    console.log(this.supportedChainIds)
+    console.log('on connect', data)
 
     if (!this.supportedChainIds?.includes(Number(data.chainId))) {
       // console.log('unsupported chain')
       this.setOpenNetwork(true)
     }
+
+    this.chainIdSelected = Number(data.chainId)
 
     this.emitUpdate({ chainId: data.chainId, provider: window.ethereum })
   }
@@ -136,6 +141,10 @@ export class MetamaskConnector extends AbstractConnector {
     if (!account) {
       // if enable is successful but doesn't return accounts, fall back to getAccount (not happy i have to do this...)
       account = parseSendReturn(await window.ethereum.enable())[0]
+    }
+
+    if (!this.supportedChainIds?.includes(Number(this.chainIdSelected))) {
+      this.setOpenNetwork(true)
     }
 
     return { provider: window.ethereum, ...(account ? { account } : {}) }
