@@ -31,9 +31,9 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
 
   const mounted = useRef<boolean>(false);
 
-  const eap = props.eap;
+  const eap = props.eap || {};
 
-  console.log('dkjfskjf', eap);
+  console.log('dkjfskjf', eapStates);
 
   const [withdrawalInput, setWithdrawalInput] = useState<string>('');
   const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState<string>('');

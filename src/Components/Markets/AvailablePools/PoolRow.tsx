@@ -26,9 +26,9 @@ const PoolRow: React.FC<Props> = (props: Props) => {
   const eap = eapStates[props.pool];
 
   const handleOpenSupplyMarketDialog = () => {
-    // console.log(props);
-    // navigate(`/pools/${props.pool}`);
-    // return;
+    console.log(props);
+    navigate(`/pools/${props.pool}`);
+    return;
     console.log('skfjakf', account);
     if (!account) {
       setShowWallets(true);

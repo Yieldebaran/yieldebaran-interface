@@ -38,7 +38,6 @@ const useFetchData = () => {
     setBlockNumber(0);
     setBlockTimestamp(0);
     setAccountEthBalance({ native: 0n, formatted: '0.0' });
-    setSelectedPool(undefined);
     if (network) {
       if (account && library && network.chainId === chainId) {
         networkId.current = { ...network }.chainId;
