@@ -56,13 +56,13 @@ const PoolDialog: React.FC<Props> = (props: Props) => {
       const headers = [];
       const contents = [];
       headers.push({ title: 'Deposit' });
-      contents.push(<DepositTab eap={eap} selectedPool={selectedPool} />);
+      contents.push(<DepositTab selectedPool={selectedPool} />);
 
-            headers.push({title: 'Withdrawal'})
-            contents.push(<WithdrawTab selectedPool={selectedPool}/>)
+      headers.push({ title: 'Withdrawal' });
+      contents.push(<WithdrawTab selectedPool={selectedPool} />);
 
-            headers.push({title: 'Quick withdrawal'})
-            contents.push(<InstantWithdrawTab selectedPool={selectedPool}/>)
+      headers.push({ title: 'Quick withdrawal' });
+      contents.push(<InstantWithdrawTab selectedPool={selectedPool} />);
 
       setTabHeaders(headers);
       setTabContents(contents);
