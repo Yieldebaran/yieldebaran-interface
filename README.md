@@ -1,6 +1,6 @@
 # yieldebaran-interface
 
-This repo contains React-based web interface for Yieldebaran Effectively Rebalancing Protocol
+This repo contains React-based web interface for Yieldebaran Efficiently Rebalancing Protocol
 
 Initially forked from hundred-interface, they let me use it after I [asked nicely](https://discordapp.com/channels/756024964448256011/756444602315309136/1075981517903376414).
 

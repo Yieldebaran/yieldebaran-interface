@@ -21,7 +21,6 @@ import MarketDialogItem from '../marketDialogItem';
 
 interface Props {
   selectedPool: string;
-  eap: any;
 }
 const WithdrawTab: React.FC<Props> = (props: Props) => {
   const { toastErrorMessage, toastSuccessMessage } = useUiContext();
@@ -31,9 +30,7 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
 
   const mounted = useRef<boolean>(false);
 
-  const eap = props.eap;
-
-  console.log('dkjfskjf', eap);
+  const eap = eapStates[props.selectedPool]
 
   const [withdrawalInput, setWithdrawalInput] = useState<string>('');
   const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState<string>('');
@@ -52,7 +49,7 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
     };
 
     handleStakeAmountChange();
-  }, [withdrawalInput]);
+  }, [withdrawalInput, eap]);
 
   const setMaxWithdrawal = (): void => {
     setWithdrawalInput(String(eap.accountShares.formatted));
@@ -145,85 +142,67 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
   ).toLocaleString();
   const freeWithdrawal = blockTimestamp >= eap.accountRequestTime + eap.requestTimeLimit;
 
-  return eap && mounted ? (
-    <>
-      <div className="supply-note">NOTE: this is a delayed withdrawal, it may take up to 48h</div>
-      <div className="dialog-line" />
-      <MarketDialogItem
-        title={'Shares balance'}
-        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${
-          eap.underlyingSymbol
-        }`}
-        value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      <MarketDialogItem
-        title={'Requested to withdraw'}
-        value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      <MarketDialogItem
-        title={'Available to claim'}
-        value={`${
-          eap.lastFulfillmentIndex > eap.accountRequestIndex + 1
-            ? eap.accountUnderlyingRequested.formatted
-            : 0
-        } ${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      {!isRequested && (
-        <div className="input-group">
-          <div className="input-button-group">
-            <TextBox
-              disabled={eap.accountShares.native === 0n}
-              buttonDisabled={withdrawalInputBN === eap.accountShares.native}
-              placeholder={`y${eap.underlyingSymbol}`}
-              value={withdrawalInput}
-              setInput={setWithdrawalInput}
-              validation={withdrawalErrorMessage}
-              button={'Max'}
-              onClick={() => setMaxWithdrawal()}
-            />
-            <Button
-              disabled={withdrawalInput === '' || withdrawalErrorMessage !== ''}
-              loading={false}
-              rectangle={true}
-              onClick={() => handleRequestWithdrawal(withdrawalInputBN)}
-            >
-              Request withdrawal
-            </Button>
-          </div>
-          {
-            <div>
-              ~
-              {Number(formatBN((withdrawalInputBN * eap.exchangeRate) / ONE, eap.decimals)).toFixed(
-                3,
-              )}{' '}
-              {eap.underlyingSymbol}
-            </div>
-          }
-        </div>
-      )}
-      {isRequested && cancellable && (
-        <Button disabled={false} onClick={() => handleCancelRequest()}>
-          Cancel request
-        </Button>
-      )}
-      {isRequested && (
-        <Button disabled={!isFulfilled && !freeWithdrawal} onClick={() => handleClaim(isFulfilled)}>
-          Claim {isFulfilled ? '' : `after ${freeWithdrawalDate}`}
-        </Button>
-      )}
-      {isRequested && isFulfilled && eap.isEth && (
-        <Button
-          disabled={!isFulfilled && !freeWithdrawal}
-          onClick={() => handleClaimEth(isFulfilled)}
-        >
-          Claim as {eap.underlyingSymbol.substring(1)}
-        </Button>
-      )}
-    </>
-  ) : null;
-};
+    return (eap && mounted ?
+            <>
+                <div className="supply-note">This is a delayed withdrawal, it may take up to 48h</div>
+                <div className="dialog-line"/>
+                <MarketDialogItem
+                    title={'Shares balance'}
+                    toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
+                    value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
+                />
+                <div className="dialog-line"/>
+                <MarketDialogItem
+                    title={'Withdrawal amount'}
+                    value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
+                />
+                <div className="dialog-line"/>
+                <MarketDialogItem
+                    title={'Available to withdraw'}
+                    value={`${eap.lastFulfillmentIndex > eap.accountRequestIndex + 1 ? eap.accountUnderlyingRequested.formatted : 0} ${eap.underlyingSymbol}`}
+                />
+                <div className="dialog-line"/>
+                {!isRequested && <div className="input-group">
+                    <div className="input-button-group">
+                        <TextBox
+                            disabled={eap.accountShares.native === 0n}
+                            buttonDisabled={withdrawalInputBN === eap.accountShares.native}
+                            placeholder={`y${eap.underlyingSymbol}`}
+                            value={withdrawalInput}
+                            setInput={setWithdrawalInput}
+                            validation={withdrawalErrorMessage}
+                            button={'Max'}
+                            onClick={() => setMaxWithdrawal()
+                        }/>
+                        <Button
+                            disabled={withdrawalInput === '' || withdrawalErrorMessage !== ''}
+                            loading={false} rectangle={true}
+                            onClick={() => handleRequestWithdrawal(withdrawalInputBN)}
+                        >
+                            Withdraw
+                        </Button>
+                    </div>
+                    {<div className="estimated-amount">~{Number(formatBN(withdrawalInputBN * eap.exchangeRate / ONE, eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>}
+                </div>}
+                {isRequested && cancellable &&
+                <Button disabled={false} onClick={() => handleCancelRequest()}>
+                    Cancel withdrawal
+                </Button>}
+                {isRequested &&
+                <Button
+                    disabled={!isFulfilled && !freeWithdrawal}
+                    onClick={() => handleClaim(isFulfilled)}>
+                    {isFulfilled ? 'Claim funds' : `Funds available from ${freeWithdrawalDate}`}
+                </Button>}
+                {isRequested && isFulfilled && eap.isEth &&
+                <Button
+                    disabled={!isFulfilled && !freeWithdrawal}
+                    onClick={() => handleClaimEth(isFulfilled)}>
+                    Claim funds as {eap.underlyingSymbol.substring(1)}
+                </Button>}
+            </>
+            : null
+    )
+}
 
 export default WithdrawTab;

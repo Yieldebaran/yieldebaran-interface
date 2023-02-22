@@ -52,12 +52,13 @@ export const Layout = () => {
   } = yieldebaranData();
 
   useEffect(() => {
-    console.log('renderdf');
+    // console.log('renderdf');
   }, []);
 
   useEffect(() => {
     const net = window.localStorage.getItem('yieldebaran-network');
     const prov = window.localStorage.getItem('yieldebaran-provider');
+    // console.log('net', net);
 
     if (!net || net === 'null') {
       setModal({ key: 'selectChain' });
@@ -78,7 +79,7 @@ export const Layout = () => {
   }, []);
 
   useEffect(() => {
-    console.log('yieldebaran-network set', network);
+    // console.log('yieldebaran-network set', network);
     window.localStorage.setItem('yieldebaran-network', JSON.stringify(network));
   }, [network]);
 
