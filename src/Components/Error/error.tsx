@@ -1,28 +1,26 @@
-import React from "react"
-import Modal from "../Modal/modal"
-import "./error.css"
+import React from 'react';
 
-interface Props{
-    open: boolean,
-    close: () => void,
-    errorMessage?: string,
-    button?: any
+import Modal from '../Modal/modal';
+import './error.css';
+
+interface Props {
+  open: boolean;
+  close: () => void;
+  errorMessage?: string;
+  button?: any;
 }
 
+const Error: React.FC<Props> = ({ open, close, errorMessage, button }: Props) => {
+  return (
+    <Modal open={open} close={close} title="Error" error={true}>
+      <div className="error">
+        <div className="error-message">
+          <span>{errorMessage}</span>
+        </div>
+        {button ? button : null}
+      </div>
+    </Modal>
+  );
+};
 
-const Error: React.FC<Props> = ({open, close, errorMessage, button}: Props) => {
-    return (
-        
-        <Modal open={open} close={close} title="Error" error={true}>
-                <div className="error">
-                    <div className="error-message">
-                        
-                        <span>{errorMessage}</span>
-                    </div>
-                    {button ? button : null}
-                </div>
-        </Modal>
-)
-}
-
-export default Error
+export default Error;
