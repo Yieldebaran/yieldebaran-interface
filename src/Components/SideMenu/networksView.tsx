@@ -1,15 +1,16 @@
 import { useWeb3React } from '@web3-react/core';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
+import { ethers } from 'ethers';
 import React from 'react';
+import { CHAIN_LIST } from 'src/constants/chain';
+import { ChainId } from 'src/constants/chainId';
 
 import { toHex } from '../../helpers';
-import NETWORKS from '../../networks';
 import { useGlobalContext } from '../../Types/globalContext';
 import { useUiContext } from '../../Types/uiContext';
 import Modal from '../Modal/modal';
 
 import './networksView.css';
-import { ethers } from 'ethers';
 
 const NetworksView: React.FC = () => {
   const { connector, library } = useWeb3React();
@@ -17,7 +18,7 @@ const NetworksView: React.FC = () => {
 
   const { setOpenNetwork, setSwitchModal, switchModal } = useUiContext();
 
-  const switchNetwork = async (chain: number) => {
+  const switchNetwork = async (chain: ChainId) => {
     if (connector instanceof WalletConnectConnector) {
       setSwitchModal(true);
     }
@@ -45,13 +46,13 @@ const NetworksView: React.FC = () => {
             if (library)
               await library.provider.request({
                 method: 'wallet_addEthereumChain',
-                params: [NETWORKS[chain].networkProperties],
+                params: [CHAIN_LIST[chain].networkProperties],
               });
             else {
               const prov = await connector.getProvider();
               await prov.request({
                 method: 'wallet_addEthereumChain',
-                params: [NETWORKS[chain].networkProperties],
+                params: [CHAIN_LIST[chain].networkProperties],
               });
             }
             setSwitchModal(false);
@@ -62,8 +63,10 @@ const NetworksView: React.FC = () => {
         }
       }
     } else {
-      setNetwork(NETWORKS[chain]);
-      setWebSocketProvider(new ethers.providers.WebSocketProvider(NETWORKS[chain].publicWebSocket));
+      setNetwork(CHAIN_LIST[chain]);
+      setWebSocketProvider(
+        new ethers.providers.WebSocketProvider(CHAIN_LIST[chain].publicWebSocket),
+      );
     }
   };
 
@@ -71,10 +74,10 @@ const NetworksView: React.FC = () => {
     <>
       <div className="networks-view">
         <div className="networks-caption">Networks</div>
-        {Object.values(NETWORKS).map((value, index) => {
+        {Object.values(CHAIN_LIST).map((value, index) => {
           let disabled = false;
           if (connector?.supportedChainIds)
-            disabled = !connector.supportedChainIds.includes(value.chainId) ? true : false;
+            disabled = !connector.supportedChainIds.includes(value.chainId);
 
           return (
             <div

@@ -2,12 +2,12 @@ import { Provider } from 'ethcall';
 
 import { ethers } from 'ethers';
 
-import { Network } from '../networks';
-import { getEapStates } from '../Yieldebaran/Data/fetchEapsData';
-import { FVal, zeroAppState } from '../Types/appDataContext';
+import { ChainConfig } from 'src/constants/chain';
 import eapAbi from '../abi/EAP.json';
-import withdrawToolAbi from '../abi/WthdrawTool.json';
 import ethAdapterAbi from '../abi/EthAdapter.json';
+import withdrawToolAbi from '../abi/WthdrawTool.json';
+import { FVal, zeroAppState } from '../Types/appDataContext';
+import { getEapStates } from '../Yieldebaran/Data/fetchEapsData';
 
 export type ApyData = {
   apy: number;
@@ -72,7 +72,7 @@ let signer: any;
 
 export const loadAppState = async (
   provider: any,
-  network: Network,
+  network: ChainConfig,
   userAddress?: string,
   blockNumber?: number,
 ): Promise<AppState> => {

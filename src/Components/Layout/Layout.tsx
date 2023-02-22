@@ -2,14 +2,12 @@ import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import Account from 'src/Components/Account/account';
 import Button from 'src/Components/Button/button';
 import Error from 'src/Components/Error/error';
 import Footer from 'src/Components/Footer/footer';
 import Menu from 'src/Components/Menu/menu';
 import TabletMenu from 'src/Components/Menu/tabletMenu';
-import YieldebaranMessage from 'src/Components/MessageDialog/messageDialog';
 import NetworksMenu from 'src/Components/NetworksMenu/networksMenu';
 import Wallets from 'src/Components/Wallets/wallets';
 import { GetConnector, getErrorMessage } from 'src/Connectors/connectors';
@@ -19,21 +17,19 @@ import {
   XDEFIWalletNotDefaultError,
   XDEFIWalletNotFoundError,
 } from 'src/Connectors/xdefi-connector';
-import NETWORKS, { Network } from 'src/networks';
+import { ChainConfig } from 'src/constants/chain';
 import { YieldebaranDataContext } from 'src/Types/appDataContext';
 import { useGlobalContext } from 'src/Types/globalContext';
 import { useUiContext } from 'src/Types/uiContext';
+import { getChainConfig } from 'src/utils/chain';
 import yieldebaranData from 'src/Yieldebaran/Data/yildebaranData';
 
 export const Layout = () => {
   const { activate, error, chainId, account, deactivate } = useWeb3React();
-  const { darkMode, setOpenNetwork, isMobile, isTablet } = useUiContext();
+  const { setOpenNetwork, isMobile, isTablet } = useUiContext();
   const { network, setNetwork, setAddress, setWebSocketProvider } = useGlobalContext();
 
   const [showError, setShowError] = useState(false);
-
-  const [showGMessage, setShowGMessage] = useState<boolean>(false);
-  const [gMessageText, setGMessageText] = useState<JSX.Element>();
 
   const openSwitchNetwork = () => {
     setShowError(false);
@@ -61,7 +57,6 @@ export const Layout = () => {
   useEffect(() => {
     const net = window.localStorage.getItem('yieldebaran-network');
     const prov = window.localStorage.getItem('yieldebaran-provider');
-    console.log('net', net);
 
     if (!net || net === 'null') {
       console.log('net', net);
@@ -69,9 +64,9 @@ export const Layout = () => {
       setOpenNetwork(true);
     }
 
-    let tempNet: Network | null = null;
+    let tempNet: ChainConfig | null = null;
 
-    if (net) tempNet = JSON.parse(net) as Network;
+    if (net) tempNet = JSON.parse(net) as ChainConfig;
 
     if (prov) {
       const con = GetConnector(+prov, setOpenNetwork, tempNet ? tempNet.chainId : undefined);
@@ -81,8 +76,6 @@ export const Layout = () => {
         activate(con);
       else activate(con);
     }
-
-    //setSpinnerVisible(false)
   }, []);
 
   useEffect(() => {
@@ -90,23 +83,9 @@ export const Layout = () => {
     window.localStorage.setItem('yieldebaran-network', JSON.stringify(network));
   }, [network]);
 
-  const myErrorHandler = (error: Error, info: { componentStack: string }) => {
-    console.log(error);
-    console.log(info);
-    toast.error('An error has occurred, please check console log.', {
-      position: 'top-right',
-      autoClose: 10000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   useEffect(() => {
     if (chainId) {
-      const net = NETWORKS[chainId];
+      const net = getChainConfig(chainId);
       if (net) {
         setNetwork(net);
         setWebSocketProvider(new ethers.providers.WebSocketProvider(net.publicWebSocket));
@@ -118,10 +97,9 @@ export const Layout = () => {
   useEffect(() => {
     if (!error) return;
     if (String(error).includes('Unsupported chain id')) {
-      // setOpenNetwork(true)
       return;
     }
-    console.log(error);
+
     setShowError(true);
     deactivate();
   }, [error]);
@@ -152,13 +130,6 @@ export const Layout = () => {
           <Outlet />
         </div>
         <Footer />
-        <YieldebaranMessage
-          isOpen={showGMessage}
-          onRequestClose={() => setShowGMessage(false)}
-          contentLabel="Info"
-          className={`${darkMode ? 'mymodal-dark' : ''}`}
-          message={gMessageText}
-        />
         {error instanceof UnsupportedChainIdError ? (
           <Error
             open={showError}

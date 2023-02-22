@@ -1,10 +1,11 @@
 import { useWeb3React } from '@web3-react/core';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
-import React from 'react';
 import { ethers } from 'ethers';
+import React from 'react';
+import { CHAIN_LIST } from 'src/constants/chain';
+import { ChainId } from 'src/constants/chainId';
 
 import { toHex } from 'src/helpers';
-import NETWORKS from 'src/networks';
 import { useGlobalContext } from 'src/Types/globalContext';
 
 import { useUiContext } from 'src/Types/uiContext';
@@ -18,7 +19,7 @@ const NetworkConnect: React.FC = () => {
 
   const { openNetwork, setOpenNetwork, setSwitchModal } = useUiContext();
 
-  const switchNetwork = async (chain: number) => {
+  const switchNetwork = async (chain: ChainId) => {
     if (connector instanceof WalletConnectConnector) {
       setSwitchModal(true);
     }
@@ -46,13 +47,13 @@ const NetworkConnect: React.FC = () => {
             if (library)
               await library.provider.request({
                 method: 'wallet_addEthereumChain',
-                params: [NETWORKS[chain].networkProperties],
+                params: [CHAIN_LIST[chain].networkProperties],
               });
             else {
               const prov = await connector.getProvider();
               await prov.request({
                 method: 'wallet_addEthereumChain',
-                params: [NETWORKS[chain].networkProperties],
+                params: [CHAIN_LIST[chain].networkProperties],
               });
             }
             setSwitchModal(false);
@@ -63,8 +64,10 @@ const NetworkConnect: React.FC = () => {
         }
       }
     } else {
-      setNetwork(NETWORKS[chain]);
-      setWebSocketProvider(new ethers.providers.WebSocketProvider(NETWORKS[chain].publicWebSocket));
+      setNetwork(CHAIN_LIST[chain]);
+      setWebSocketProvider(
+        new ethers.providers.WebSocketProvider(CHAIN_LIST[chain].publicWebSocket),
+      );
       setSwitchModal(false);
       setOpenNetwork(false);
     }
@@ -74,7 +77,7 @@ const NetworkConnect: React.FC = () => {
     <>
       <Modal open={openNetwork} close={() => setOpenNetwork(false)} title="Select network">
         <div className="networks-view">
-          {Object.values(NETWORKS).map((value, index) => {
+          {Object.values(CHAIN_LIST).map((value, index) => {
             let disabled = false;
             if (connector?.supportedChainIds) {
               disabled = !connector.supportedChainIds.includes(value.chainId);

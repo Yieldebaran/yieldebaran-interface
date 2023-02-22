@@ -8,6 +8,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import { Layout } from 'src/Components/Layout/Layout';
+import { ChainConfig } from 'src/constants/chain';
 
 import Home from 'src/views/home';
 import { PoolAddress } from 'src/views/pools/poolAddress';
@@ -18,7 +19,6 @@ import './App.css';
 
 import Spinner from './Components/Spinner/spinner';
 import { XFI } from './Connectors/xdefi-connector/declarations';
-import { Network } from './networks';
 import { darkTheme, lightTheme, Theme } from './theme';
 import { MyGlobalContext } from './Types/globalContext';
 
@@ -36,7 +36,7 @@ global.Buffer = window.Buffer || Buffer.Buffer;
 const App: React.FC = () => {
   const [address, setAddress] = useState<string>('');
 
-  const [network, setNetwork] = useState<Network | null>(null);
+  const [network, setNetwork] = useState<ChainConfig | null>(null);
   const [webSocketProvider, setWebSocketProvider] = useState<
     ethers.providers.WebSocketProvider | undefined
   >(undefined);

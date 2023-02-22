@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { Network } from '../../../networks';
+import { ChainConfig } from 'src/constants/chain';
 import { useGlobalContext } from '../../../Types/globalContext';
 import { useUiContext } from '../../../Types/uiContext';
 import Button from '../../Button/button';
@@ -9,11 +9,11 @@ const NetworkButton: React.FC = () => {
   const { setOpenNetwork, setMobileMenuOpen, openNetwork } = useUiContext();
   const { network } = useGlobalContext();
   const [lastOpenNetwork, setLastOpenNetwork] = useState(false);
-  const netWorkRef = useRef<Network | null>(null);
+  const netWorkRef = useRef<ChainConfig | null>(null);
   netWorkRef.current = network;
 
   useEffect(() => {
-    const temp = { ...network } as Network;
+    const temp = { ...network } as ChainConfig;
     if (temp) netWorkRef.current = temp;
     if (lastOpenNetwork && !openNetwork && (!network || String(network) === 'null')) {
       // console.log('no network detected, show network modal')
