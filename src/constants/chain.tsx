@@ -1,5 +1,8 @@
-import { ChainId } from 'src/constants/chainId';
 import Logos from 'src/logos';
+
+export enum ChainId {
+  FTM = 250,
+}
 
 export type ChainConfig = {
   chainId: ChainId;

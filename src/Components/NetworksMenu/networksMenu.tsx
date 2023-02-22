@@ -2,8 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { ethers } from 'ethers';
 import React from 'react';
-import { CHAIN_LIST } from 'src/constants/chain';
-import { ChainId } from 'src/constants/chainId';
+import { CHAIN_LIST, ChainId } from 'src/constants/chain';
 
 import { toHex } from 'src/helpers';
 import { useGlobalContext } from 'src/Types/globalContext';

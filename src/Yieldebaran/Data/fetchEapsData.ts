@@ -1,11 +1,11 @@
 import { Call, Contract, Provider } from 'ethcall';
 
 import { ethers } from 'ethers';
-import { ChainConfig } from 'src/constants/chain';
 
-import { AppState, ApyData, EapData } from '../../Classes/AppState';
+import { AppState, ApyData, EapData } from 'src/Classes/AppState';
+import { ChainConfig } from 'src/constants/chain';
+import { formatBN } from 'src/Utils/numbers';
 import Logos from '../../logos';
-import { formatBN } from '../../Utils/numbers';
 
 export const ONE = 10n ** 18n;
 

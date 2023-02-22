@@ -10,8 +10,7 @@ import {
 } from '@web3-react/walletconnect-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 
-import { CHAIN_LIST } from 'src/constants/chain';
-import { ChainId } from 'src/constants/chainId';
+import { CHAIN_LIST, ChainId } from 'src/constants/chain';
 
 import { MetamaskConnector, MetamaskNotFounfError } from './metamask-connector';
 
