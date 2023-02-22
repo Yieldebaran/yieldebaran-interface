@@ -2,6 +2,7 @@ import { useWeb3React } from '@web3-react/core';
 
 import { providers } from 'ethers';
 import React from 'react';
+import { useSetModal } from 'src/providers/StoreProvider';
 
 import cbw from '../../assets/icons/cbw.png';
 import mm from '../../assets/icons/mm.png';
@@ -16,13 +17,14 @@ import Modal from '../Modal/modal';
 import './wallets.css';
 
 const Wallets: React.FC = () => {
-  const { showWallets, setShowWallets, setOpenNetwork } = useUiContext();
+  const { showWallets, setShowWallets } = useUiContext();
   const { network } = useGlobalContext();
   const { activate } = useWeb3React<providers.Web3Provider>();
+  const setModal = useSetModal();
 
   const handleConnect = async (c: any) => {
     setShowWallets(false);
-    const con = GetConnector(c, setOpenNetwork, network ? network.chainId : undefined);
+    const con = GetConnector(c, setModal, network ? network.chainId : undefined);
     try {
       // console.log("yieldebaran-provider", c)
       await activate(con);

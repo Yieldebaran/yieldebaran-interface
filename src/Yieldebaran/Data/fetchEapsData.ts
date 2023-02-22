@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { AppState, ApyData, EapData } from 'src/Classes/AppState';
 import { ChainConfig } from 'src/constants/chain';
 import { formatBN } from 'src/Utils/numbers';
+
 import Logos from '../../logos';
 
 export const ONE = 10n ** 18n;

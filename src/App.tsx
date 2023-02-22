@@ -8,7 +8,9 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import { Layout } from 'src/Components/Layout/Layout';
+import { Modals } from 'src/Components/modals/Modals';
 import { ChainConfig } from 'src/constants/chain';
+import { StoreProvider } from 'src/providers/StoreProvider';
 
 import Home from 'src/views/home';
 import { PoolAddress } from 'src/views/pools/poolAddress';
@@ -51,7 +53,6 @@ const App: React.FC = () => {
   const [accountOpen, setAccountOpen] = useState<boolean>(false);
 
   const [openAddress, setOpenAddress] = useState<boolean>(false);
-  const [openNetwork, setOpenNetwork] = useState<boolean>(false);
   const [switchModal, setSwitchModal] = useState(false);
   const [scale, setScale] = useState(false);
 
@@ -146,8 +147,6 @@ const App: React.FC = () => {
             setTheme,
             openAddress,
             setOpenAddress,
-            openNetwork,
-            setOpenNetwork,
             toastSuccessMessage: toastSuccess,
             toastErrorMessage: toastError,
             switchModal,
@@ -162,20 +161,23 @@ const App: React.FC = () => {
             setAccountOpen,
           }}
         >
-          <BrowserRouter>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Home />} />
-                <Route path="/pools">
-                  <Route index element={<Navigate to="/" replace />} />
-                  <Route path=":poolAddress" element={<PoolAddress />} />
+          <StoreProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/pools">
+                    <Route index element={<Navigate to="/" replace />} />
+                    <Route path=":poolAddress" element={<PoolAddress />} />
+                  </Route>
                 </Route>
-              </Route>
-            </Routes>
-            <ReactTooltip id="tooltip" />
-            <Spinner />
-          </BrowserRouter>
-          <ToastContainer />
+              </Routes>
+              <ReactTooltip id="tooltip" />
+              <Spinner />
+              <Modals />
+            </BrowserRouter>
+            <ToastContainer />
+          </StoreProvider>
         </MyUiContext.Provider>
       </MyGlobalContext.Provider>
     </div>

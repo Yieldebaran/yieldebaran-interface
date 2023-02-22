@@ -8,7 +8,6 @@ import Error from 'src/Components/Error/error';
 import Footer from 'src/Components/Footer/footer';
 import Menu from 'src/Components/Menu/menu';
 import TabletMenu from 'src/Components/Menu/tabletMenu';
-import NetworksMenu from 'src/Components/NetworksMenu/networksMenu';
 import Wallets from 'src/Components/Wallets/wallets';
 import { GetConnector, getErrorMessage } from 'src/Connectors/connectors';
 import { MetamaskConnector, MetamaskNotFounfError } from 'src/Connectors/metamask-connector';
@@ -18,6 +17,7 @@ import {
   XDEFIWalletNotFoundError,
 } from 'src/Connectors/xdefi-connector';
 import { ChainConfig } from 'src/constants/chain';
+import { useSetModal } from 'src/providers/StoreProvider';
 import { YieldebaranDataContext } from 'src/Types/appDataContext';
 import { useGlobalContext } from 'src/Types/globalContext';
 import { useUiContext } from 'src/Types/uiContext';
@@ -26,14 +26,15 @@ import yieldebaranData from 'src/Yieldebaran/Data/yildebaranData';
 
 export const Layout = () => {
   const { activate, error, chainId, account, deactivate } = useWeb3React();
-  const { setOpenNetwork, isMobile, isTablet } = useUiContext();
+  const { isMobile, isTablet } = useUiContext();
   const { network, setNetwork, setAddress, setWebSocketProvider } = useGlobalContext();
+  const setModal = useSetModal();
 
   const [showError, setShowError] = useState(false);
 
   const openSwitchNetwork = () => {
     setShowError(false);
-    setOpenNetwork(true);
+    setModal({ key: 'selectChain' });
   };
 
   useEffect(() => {
@@ -59,9 +60,7 @@ export const Layout = () => {
     const prov = window.localStorage.getItem('yieldebaran-provider');
 
     if (!net || net === 'null') {
-      console.log('net', net);
-      console.log('hello223 no network detected, open network modal');
-      setOpenNetwork(true);
+      setModal({ key: 'selectChain' });
     }
 
     let tempNet: ChainConfig | null = null;
@@ -69,7 +68,7 @@ export const Layout = () => {
     if (net) tempNet = JSON.parse(net) as ChainConfig;
 
     if (prov) {
-      const con = GetConnector(+prov, setOpenNetwork, tempNet ? tempNet.chainId : undefined);
+      const con = GetConnector(+prov, setModal, tempNet ? tempNet.chainId : undefined);
       if (con instanceof xDefiConnector && window.ethereum && window.ethereum.__XDEFI)
         activate(con);
       else if (con instanceof MetamaskConnector && window.ethereum && !window.ethereum.__XDEFI)
@@ -126,7 +125,6 @@ export const Layout = () => {
         <div className="main-content">
           <Wallets />
           <Account />
-          <NetworksMenu />
           <Outlet />
         </div>
         <Footer />

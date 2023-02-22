@@ -1,27 +1,24 @@
 import { useWeb3React } from '@web3-react/core';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import { ethers } from 'ethers';
 import React from 'react';
+import Modal from 'src/Components/Modal/modal';
 import { CHAIN_LIST, ChainId } from 'src/constants/chain';
-
 import { toHex } from 'src/helpers';
+import { useSetModal } from 'src/providers/StoreProvider';
 import { useGlobalContext } from 'src/Types/globalContext';
 
-import { useUiContext } from 'src/Types/uiContext';
-
-import Modal from '../Modal/modal';
 import './networksMenu.css';
 
-const NetworkConnect: React.FC = () => {
-  const { connector, library } = useWeb3React();
+export const SelectChainModal: React.FC = () => {
   const { setNetwork, setWebSocketProvider } = useGlobalContext();
+  const { connector, library } = useWeb3React();
+  const setModal = useSetModal();
 
-  const { openNetwork, setOpenNetwork, setSwitchModal } = useUiContext();
+  function handleClose() {
+    setModal(null);
+  }
 
-  const switchNetwork = async (chain: ChainId) => {
-    if (connector instanceof WalletConnectConnector) {
-      setSwitchModal(true);
-    }
+  async function switchNetwork(chain: ChainId) {
     if (connector) {
       try {
         if (library)
@@ -37,10 +34,8 @@ const NetworkConnect: React.FC = () => {
               params: [{ chainId: toHex(chain) }],
             });
         }
-        setSwitchModal(false);
-        setOpenNetwork(false);
+        handleClose();
       } catch (switchError: any) {
-        console.log(switchError);
         if (switchError.code === 4902) {
           try {
             if (library)
@@ -55,8 +50,7 @@ const NetworkConnect: React.FC = () => {
                 params: [CHAIN_LIST[chain].networkProperties],
               });
             }
-            setSwitchModal(false);
-            setOpenNetwork(false);
+            handleClose();
           } catch (error) {
             console.log('Error', error);
           }
@@ -67,14 +61,13 @@ const NetworkConnect: React.FC = () => {
       setWebSocketProvider(
         new ethers.providers.WebSocketProvider(CHAIN_LIST[chain].publicWebSocket),
       );
-      setSwitchModal(false);
-      setOpenNetwork(false);
+      handleClose();
     }
-  };
+  }
 
   return (
     <>
-      <Modal open={openNetwork} close={() => setOpenNetwork(false)} title="Select network">
+      <Modal open={true} close={handleClose} title="Select network">
         <div className="networks-view">
           {Object.values(CHAIN_LIST).map((value, index) => {
             let disabled = false;
@@ -100,5 +93,3 @@ const NetworkConnect: React.FC = () => {
     </>
   );
 };
-
-export default NetworkConnect;

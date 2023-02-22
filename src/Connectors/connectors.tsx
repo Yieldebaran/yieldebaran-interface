@@ -11,6 +11,7 @@ import {
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 
 import { CHAIN_LIST, ChainId } from 'src/constants/chain';
+import { ModalSettings } from 'src/providers/store/modal';
 
 import { MetamaskConnector, MetamaskNotFounfError } from './metamask-connector';
 
@@ -43,7 +44,7 @@ let walletConnect = new WalletConnectConnector({
 
 export const GetConnector = (
   c: any,
-  setOpenNetwork: (flag: boolean) => void,
+  setOpenNetwork: (newModal: ModalSettings | null) => void,
   chain?: ChainId,
 ): any => {
   if (c === connectrorsEnum.WalletConnect) {

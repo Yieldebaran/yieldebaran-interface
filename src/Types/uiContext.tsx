@@ -17,8 +17,6 @@ export type UiContext = {
   setTheme: (t: Theme) => void;
   openAddress: boolean;
   setOpenAddress: (a: boolean) => void;
-  openNetwork: boolean;
-  setOpenNetwork: (n: boolean) => void;
   toastSuccessMessage: (m: string, autoClose?: boolean, closeDelay?: number) => void;
   toastErrorMessage: (message: string, autoClose?: boolean, closeDelay?: number) => void;
   switchModal: boolean;
@@ -48,8 +46,6 @@ export const MyUiContext = createContext<UiContext>({
   setTheme: () => undefined,
   openAddress: false,
   setOpenAddress: () => undefined,
-  openNetwork: false,
-  setOpenNetwork: () => undefined,
   toastSuccessMessage: () => undefined,
   toastErrorMessage: () => undefined,
   switchModal: false,
