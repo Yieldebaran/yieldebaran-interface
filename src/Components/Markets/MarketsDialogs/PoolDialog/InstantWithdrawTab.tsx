@@ -91,7 +91,7 @@ const InstantWithdrawTab:React.FC<Props> = (props: Props) => {
 
     return (eap && mounted ?
             <>
-                <div className="supply-note">NOTE: instant withdrawal applies {eap.instantWithdrawalFee.formatted}% fee</div>
+                <div className="supply-note">Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee</div>
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Shares balance"}
@@ -101,13 +101,14 @@ const InstantWithdrawTab:React.FC<Props> = (props: Props) => {
                 {eap.underlyingUnallocated.native !== 0n &&<div className="dialog-line"/>}
                 {eap.underlyingUnallocated.native !== 0n &&
                 <MarketDialogItem
-                    title={"No fee amount"}
+                    toolTipContent={"When there are some unallocated funds (e. g. new deposits) it can be withdrawn without fee"}
+                    title={"No-fee withdrawal"}
                     value={`${eap.underlyingUnallocated.formatted} ${eap.underlyingSymbol}`}
                 />}
                 <div className="dialog-line"/>
                 <MarketDialogItem
-                    title={"Withdrawable"}
-                    toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${eap.underlyingSymbol}`}
+                    title={"Total withdrawable"}
+                    toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${eap.underlyingSymbol}. Sometimes when markets are highly utilized not funds are available for instant withdrawals. But it's temporary.`}
                     value={`${sharesWithdrawable.formatted} y${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>

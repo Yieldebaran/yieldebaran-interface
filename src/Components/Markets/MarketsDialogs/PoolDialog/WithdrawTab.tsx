@@ -137,7 +137,7 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
 
     return (eap && mounted ?
             <>
-                <div className="supply-note">NOTE: this is a delayed withdrawal, it may take up to 48h</div>
+                <div className="supply-note">This is a delayed withdrawal, it may take up to 48h</div>
                 <div className="dialog-line"/>
                 <MarketDialogItem
                     title={"Shares balance"}
@@ -146,12 +146,12 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
-                    title={"Requested to withdraw"}
+                    title={"Withdrawal amount"}
                     value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
                 <MarketDialogItem
-                    title={"Available to claim"}
+                    title={"Available to withdraw"}
                     value={`${eap.lastFulfillmentIndex > eap.accountRequestIndex + 1 ? eap.accountUnderlyingRequested.formatted : 0} ${eap.underlyingSymbol}`}
                 />
                 <div className="dialog-line"/>
@@ -172,20 +172,20 @@ const WithdrawTab:React.FC<Props> = (props: Props) => {
                             loading={false} rectangle={true}
                             onClick={() => handleRequestWithdrawal(withdrawalInputBN)}
                         >
-                            Request withdrawal
+                            Withdraw
                         </Button>
                     </div>
                     {<div>~{Number(formatBN(withdrawalInputBN * eap.exchangeRate / ONE, eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>}
                 </div>}
                 {isRequested && cancellable &&
                 <Button disabled={false} onClick={() => handleCancelRequest()}>
-                    Cancel request
+                    Cancel withdrawal
                 </Button>}
                 {isRequested &&
                 <Button
                     disabled={!isFulfilled && !freeWithdrawal}
                     onClick={() => handleClaim(isFulfilled)}>
-                    Claim {isFulfilled ? "" : `after ${freeWithdrawalDate}`}
+                    {isFulfilled ? "Claim funds" : `Funds available from ${freeWithdrawalDate}`}
                 </Button>}
                 {isRequested && isFulfilled && eap.isEth &&
                 <Button

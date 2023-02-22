@@ -14,7 +14,7 @@ const Markets: React.FC<Props> = (props : Props) => {
                 <div className="markets-content">
                     <MarketContainer>
                         <MarketContainerTitle>
-                            Effectively allocating pools
+                            Efficiently allocating pools
                         </MarketContainerTitle>
                         <PoolList supplyMarketDialog={props.supplyMarketDialog}/>
                     </MarketContainer>
