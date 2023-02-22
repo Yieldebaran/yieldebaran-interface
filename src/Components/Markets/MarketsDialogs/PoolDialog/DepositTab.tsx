@@ -4,6 +4,7 @@ import { approve, deposit, depositEth } from 'src/Classes/AppState';
 import { useYieldebaranDataContext } from 'src/Types/appDataContext';
 import { useGlobalContext } from 'src/Types/globalContext';
 import { useUiContext } from 'src/Types/uiContext';
+
 import { bnFromInput, validateInput } from 'src/Utils/numbers';
 
 import Button from '../../../Button/button';
