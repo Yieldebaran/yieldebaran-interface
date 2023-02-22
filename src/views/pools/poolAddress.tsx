@@ -24,7 +24,6 @@ export const PoolAddress = () => {
 
   const mountedSupply = useRef<boolean>(false);
 
-  console.log('dkfsjd', eapStates);
   const eap: any = selectedPool ? eapStates[selectedPool] : { underlyingSymbol: '' };
 
   useEffect(() => {

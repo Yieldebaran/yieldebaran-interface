@@ -182,7 +182,7 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
                             Withdraw
                         </Button>
                     </div>
-                    {<div>~{Number(formatBN(withdrawalInputBN * eap.exchangeRate / ONE, eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>}
+                    {<div className="estimated-amount">~{Number(formatBN(withdrawalInputBN * eap.exchangeRate / ONE, eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>}
                 </div>}
                 {isRequested && cancellable &&
                 <Button disabled={false} onClick={() => handleCancelRequest()}>

@@ -55,17 +55,17 @@ export const Layout = () => {
   } = yieldebaranData();
 
   useEffect(() => {
-    console.log('renderdf');
+    // console.log('renderdf');
   }, []);
 
   useEffect(() => {
     const net = window.localStorage.getItem('yieldebaran-network');
     const prov = window.localStorage.getItem('yieldebaran-provider');
-    console.log('net', net);
+    // console.log('net', net);
 
     if (!net || net === 'null') {
-      console.log('net', net);
-      console.log('hello223 no network detected, open network modal');
+      // console.log('net', net);
+      // console.log('hello223 no network detected, open network modal');
       setOpenNetwork(true);
     }
 
@@ -86,23 +86,9 @@ export const Layout = () => {
   }, []);
 
   useEffect(() => {
-    console.log('yieldebaran-network set', network);
+    // console.log('yieldebaran-network set', network);
     window.localStorage.setItem('yieldebaran-network', JSON.stringify(network));
   }, [network]);
-
-  const myErrorHandler = (error: Error, info: { componentStack: string }) => {
-    console.log(error);
-    console.log(info);
-    toast.error('An error has occurred, please check console log.', {
-      position: 'top-right',
-      autoClose: 10000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
 
   useEffect(() => {
     if (chainId) {

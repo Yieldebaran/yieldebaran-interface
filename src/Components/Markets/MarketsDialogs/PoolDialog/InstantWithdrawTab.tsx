@@ -16,10 +16,10 @@ interface Props {
   selectedPool: string;
 }
 const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
-  const { toastErrorMessage, toastSuccessMessage } = useUiContext();
-  const { eapStates } = useYieldebaranDataContext();
+  const {toastErrorMessage, toastSuccessMessage} = useUiContext();
+  const {eapStates} = useYieldebaranDataContext();
 
-  const { address } = useGlobalContext();
+  const {address} = useGlobalContext();
 
   const mounted = useRef<boolean>(false);
 
@@ -49,10 +49,10 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
   };
 
   const handleInstantWithdrawal = async (
-    pool: string,
-    amount: bigint,
-    minFromBalance: bigint,
-    account: string,
+      pool: string,
+      amount: bigint,
+      minFromBalance: bigint,
+      account: string,
   ) => {
     try {
       const tx = await instantWithdrawal(pool, amount, minFromBalance, account);
@@ -71,10 +71,10 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
   };
 
   const handleInstantWithdrawalEth = async (
-    pool: string,
-    amount: bigint,
-    minFromBalance: bigint,
-    account: string,
+      pool: string,
+      amount: bigint,
+      minFromBalance: bigint,
+      account: string,
   ) => {
     try {
       const tx = await instantWithdrawalEth(pool, amount, minFromBalance, account);
@@ -95,63 +95,72 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
   const withdrawalInputBN = bnFromInput(withdrawalInput, eap.decimals);
 
   const sharesWithdrawable =
-    eap.sharesWithdrawable.native > eap.accountShares.native
-      ? eap.accountShares
-      : eap.sharesWithdrawable;
+      eap.sharesWithdrawable.native > eap.accountShares.native
+          ? eap.accountShares
+          : eap.sharesWithdrawable;
   const underlyingWithdrawable = (sharesWithdrawable.native * eap.exchangeRate) / ONE;
 
   const minFromBalance =
-    eap.underlyingUnallocated.native > withdrawalInputBN
-      ? withdrawalInputBN
-      : eap.underlyingUnallocated.native;
+      eap.underlyingUnallocated.native > withdrawalInputBN
+          ? withdrawalInputBN
+          : eap.underlyingUnallocated.native;
 
-    return (eap && mounted ?
-            <>
-                <div className="supply-note">Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee</div>
-                <div className="dialog-line"/>
+  const notAllMoneyAvailable = eap.accountAllocated.native > underlyingWithdrawable
+
+  const noFeeAmount = eap.underlyingUnallocated.native > underlyingWithdrawable ? underlyingWithdrawable : eap.underlyingUnallocated.native
+
+  return (eap && mounted ?
+          <>
+            <div className="supply-note">Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee</div>
+            <div className="dialog-line"/>
+            <MarketDialogItem
+                title={'Shares balance'}
+                toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
+                value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
+            />
+            {eap.underlyingUnallocated.native !== 0n && <div className="dialog-line"/>}
+            {noFeeAmount !== 0n &&
                 <MarketDialogItem
-                    title={'Shares balance'}
-                    toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
-                    value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
-                />
-                {eap.underlyingUnallocated.native !== 0n &&<div className="dialog-line"/>}
-                {eap.underlyingUnallocated.native !== 0n &&
-                <MarketDialogItem
-                    toolTipContent={'When there are some unallocated funds (e. g. new deposits) it can be withdrawn without fee'}
+                    toolTipContent={'When there are some unallocated funds (e. g. just deposited funds) it can be withdrawn without a fee'}
                     title={'No-fee withdrawal'}
-                    value={`${eap.underlyingUnallocated.formatted} ${eap.underlyingSymbol}`}
+                    value={`${formatBN(noFeeAmount, eap.decimals)} ${eap.underlyingSymbol}`}
                 />}
-                <div className="dialog-line"/>
-                <MarketDialogItem
-                    title={'Total withdrawable'}
-                    toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${eap.underlyingSymbol}. Sometimes when markets are highly utilized not funds are available for instant withdrawals. But it's temporary.`}
-                    value={`${sharesWithdrawable.formatted} y${eap.underlyingSymbol}`}
-                />
-                <div className="dialog-line"/>
-               <div className="input-group">
-                        <TextBox
-                            placeholder={`0 y${eap.underlyingSymbol}`}
-                            disabled={eap.accountShares.native === 0n}
-                            value={withdrawalInput}
-                            setInput={setWithdrawalInput}
-                            validation={withdrawalErrorMessage}
-                            button={'Max'}
-                            onClick={()=>setMaxWithdrawal()}/>
-                    <div>You will get ~{Number(formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals)).toFixed(3)} {eap.underlyingSymbol}</div>
-                </div>
-                <Button
-                    disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
-                    onClick={() => handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)}>
-                    Withdraw
-                </Button>
-                {eap.isEth && <Button
-                    disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
-                    onClick={() => handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)}>
-                    Withdraw as {eap.underlyingSymbol.substring(1)}
-                </Button>}
-            </>
-            : null
-    )
+            <div className="dialog-line"/>
+            {notAllMoneyAvailable && <MarketDialogItem
+                title={'Total withdrawable'}
+                toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${eap.underlyingSymbol}`}
+                value={`${sharesWithdrawable.formatted} y${eap.underlyingSymbol}`}
+            />}
+            {notAllMoneyAvailable &&
+                <div className="supply-note">Currently markets are highly utilized, so not all funds are available for
+                  the instant withdrawal. But it's temporary. </div>}
+            {notAllMoneyAvailable && <div className="dialog-line"/>}
+            <div className="input-group">
+              <TextBox
+                  placeholder={`0 y${eap.underlyingSymbol}`}
+                  disabled={eap.accountShares.native === 0n}
+                  value={withdrawalInput}
+                  setInput={setWithdrawalInput}
+                  validation={withdrawalErrorMessage}
+                  button={'Max'}
+                  onClick={() => setMaxWithdrawal()}/>
+              <div className="estimated-amount">
+                ~{Number(formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals)).toFixed(3)} {eap.underlyingSymbol}
+              </div>
+            </div>
+            <Button
+                disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+                onClick={() => handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)}>
+              Withdraw
+            </Button>
+            {eap.isEth && <Button
+                disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+                onClick={() => handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)}>
+              Withdraw as {eap.underlyingSymbol.substring(1)}
+            </Button>}
+          </>
+          : null
+  )
 }
 
 function calculateInstantWithdrawal(shares: bigint, eap: EapData): bigint {

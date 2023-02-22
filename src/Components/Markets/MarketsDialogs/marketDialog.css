@@ -124,6 +124,10 @@
   margin-top: 20px;
 }
 
+.estimated-amount {
+  color: #1c2026;
+}
+
 .amount-group {
   display: flex;
   justify-content: space-between;
