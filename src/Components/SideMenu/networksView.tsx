@@ -2,14 +2,15 @@ import { useWeb3React } from '@web3-react/core';
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
 import React from 'react';
 
-import { toHex } from '../../helpers';
+import { ethers } from 'ethers';
+
 import NETWORKS from '../../networks';
 import { useGlobalContext } from '../../Types/globalContext';
 import { useUiContext } from '../../Types/uiContext';
 import Modal from '../Modal/modal';
 
 import './networksView.css';
-import { ethers } from 'ethers';
+import {toHex} from '../../helpers';
 
 const NetworksView: React.FC = () => {
   const { connector, library } = useWeb3React();

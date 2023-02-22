@@ -44,11 +44,11 @@ export const PoolAddress = () => {
       headers.push({ title: 'Deposit' });
       contents.push(<DepositTab eap={eap} selectedPool={selectedPool} />);
 
-      headers.push({ title: 'Withdraw' });
-      contents.push(<WithdrawTab eap={eap} selectedPool={selectedPool} />);
+      headers.push({ title: 'Withdrawal' });
+      contents.push(<WithdrawTab selectedPool={selectedPool} />);
 
-      headers.push({ title: 'Fast withdraw' });
-      contents.push(<InstantWithdrawTab eap={eap} selectedPool={selectedPool} />);
+      headers.push({ title: 'Quick withdrawal' });
+      contents.push(<InstantWithdrawTab selectedPool={selectedPool} />);
 
       setTabHeaders(headers);
       setTabContents(contents);
