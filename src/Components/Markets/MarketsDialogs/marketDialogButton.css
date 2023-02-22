@@ -27,7 +27,7 @@
 
 .market-dialog-button button:hover {
   background-color: var(--boxBackground);
-  color: var(--secondaryText);
+  color: var(--text-color);
 }
 
 .market-dialog-button button:active {

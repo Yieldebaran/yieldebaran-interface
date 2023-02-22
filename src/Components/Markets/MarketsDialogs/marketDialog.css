@@ -86,7 +86,7 @@
 .native-asset-amount {
   font-size: 0.8rem;
   position: relative;
-  color: var(--secondaryText);
+  color: var(--text-color);
 }
 
 .native-asset-amount span {

@@ -107,7 +107,7 @@
   transform: translateY(-50%);
   columns: #646466;
   user-select: none;
-  color: var(--secondaryText);
+  color: var(--text-color);
 }
 
 .textbox .textbox-button .input-button:hover {
