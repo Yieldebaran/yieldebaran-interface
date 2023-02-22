@@ -1,10 +1,12 @@
-import React from "react"
-import {MarketContainer, MarketContainerTitle} from "./marketContainer"
-import "./style.css"
-import PoolList from "./AvailablePools/PoolList"
+import React from 'react';
+
+import PoolList from './AvailablePools/PoolList';
+
+import { MarketContainer, MarketContainerTitle } from './marketContainer';
+import './style.css';
 
 interface Props {
-    supplyMarketDialog: (selectedPool: string) => void,
+  supplyMarketDialog: (selectedPool: string) => void;
 }
 const Markets: React.FC<Props> = (props : Props) => {
 
@@ -24,4 +26,4 @@ const Markets: React.FC<Props> = (props : Props) => {
     )
 }
 
-export default Markets
+export default Markets;

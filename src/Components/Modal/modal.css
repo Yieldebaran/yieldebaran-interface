@@ -1,105 +1,101 @@
-.modal{
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 10000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal .modal-background{
-    position: fixed;
-    z-index: 10001;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: var(--modal-layout);
+.modal .modal-background {
+  position: fixed;
+  z-index: 10001;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--modal-layout);
 }
 
-.modal .modal-wrapper{
-    z-index: 10002;
-    width: 98%;
-    min-height: 250px;
-    max-width: 400px;
-    max-height: 640px;
-    overflow: auto;
-    box-shadow: var(--modal-shadow);
-    border: 2px solid transparent;
-    border-radius: 10px;
-    color: var(--text-color);
+.modal .modal-wrapper {
+  z-index: 10002;
+  width: 98%;
+  min-height: 250px;
+  max-width: 400px;
+  max-height: 640px;
+  overflow: auto;
+  box-shadow: var(--modal-shadow);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: var(--text-color);
 
-    background: var(--modal-background) padding-box,
-    var(--modal-border) border-box;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    
-    
+  background: var(--modal-background) padding-box, var(--modal-border) border-box;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal .modal-wrapper .modal-title{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.3rem;
-    gap: 2rem;    
-    position: relative;
+.modal .modal-wrapper .modal-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2.3rem;
+  gap: 2rem;
+  position: relative;
 }
 
-.modal .modal-wrapper .modal-title span{
-    text-align: center;
+.modal .modal-wrapper .modal-title span {
+  text-align: center;
 }
 
-.modal .modal-wrapper .modal-title .title-img{
-    width: 30px;
-    height: 30px;
+.modal .modal-wrapper .modal-title .title-img {
+  width: 30px;
+  height: 30px;
 }
 
-.modal .modal-wrapper .modal-title .modal-close{
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+.modal .modal-wrapper .modal-title .modal-close {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.modal .modal-wrapper .modal-title .modal-close:hover{
-    opacity: .7;
+.modal .modal-wrapper .modal-title .modal-close:hover {
+  opacity: 0.7;
 }
 
-.modal .modal-wrapper .modal-body{
-    width: 100%;
-    height: 100%;
-    flex: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-direction: column;
-    
+.modal .modal-wrapper .modal-body {
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
 }
 
-.modal .modal-wrapper .modal-title .error{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+.modal .modal-wrapper .modal-title .error {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
-.modal .modal-wrapper .modal-title .error span{
-    background-color: #E93D3D;
-    font-size: 2rem;
-    line-height: 35px;
-    padding: 0 1rem;
-    margin-right: 1rem;
-    border-radius: 50%;
-    font-style: normal;
-    font-weight: 900;
+.modal .modal-wrapper .modal-title .error span {
+  background-color: #e93d3d;
+  font-size: 2rem;
+  line-height: 35px;
+  padding: 0 1rem;
+  margin-right: 1rem;
+  border-radius: 50%;
+  font-style: normal;
+  font-weight: 900;
 }
