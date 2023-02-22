@@ -27,9 +27,10 @@
 }
 
 .supply-note {
-  text-align: center;
-  font-weight: 400;
-  font-size: 0.9rem;
+    text-align: center;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: red;
 }
 
 .dialog-line {
@@ -121,6 +122,10 @@
 
 .input-group {
   margin-top: 20px;
+}
+
+.estimated-amount {
+  color: #1c2026;
 }
 
 .amount-group {

@@ -1,42 +1,40 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import { Network } from '../../../networks';
-import { useGlobalContext } from '../../../Types/globalContext';
-import { useUiContext } from '../../../Types/uiContext';
+import { ChainConfig } from 'src/constants/chain';
+import { useSetModal } from 'src/providers/StoreProvider';
+
+import { useGlobalContext } from 'src/Types/globalContext';
+import { useUiContext } from 'src/Types/uiContext';
+
 import Button from '../../Button/button';
 
 const NetworkButton: React.FC = () => {
-  const { setOpenNetwork, setMobileMenuOpen, openNetwork } = useUiContext();
+  const { setMobileMenuOpen } = useUiContext();
+  const setModal = useSetModal();
   const { network } = useGlobalContext();
-  const [lastOpenNetwork, setLastOpenNetwork] = useState(false);
-  const netWorkRef = useRef<Network | null>(null);
+  const netWorkRef = useRef<ChainConfig | null>(null);
   netWorkRef.current = network;
 
   useEffect(() => {
-    const temp = { ...network } as Network;
+    const temp = { ...network } as ChainConfig;
     if (temp) netWorkRef.current = temp;
-    if (lastOpenNetwork && !openNetwork && (!network || String(network) === 'null')) {
-      // console.log('no network detected, show network modal')
-      // setOpenNetwork(true)
-    }
-    setLastOpenNetwork(openNetwork);
-  }, [network, openNetwork]);
+  }, [network]);
 
-  const handleOpenNetworks = (): void => {
+  function handleChangeNetwork() {
     setMobileMenuOpen(false);
-    setOpenNetwork(true);
-  };
+    setModal({ key: 'selectChain' });
+  }
 
   return netWorkRef.current ? (
     <Button
-      onClick={() => handleOpenNetworks()}
+      onClick={handleChangeNetwork}
       arrow={true}
       image={<img src={netWorkRef.current?.logo} alt="" />}
     >
       {netWorkRef.current?.network}
     </Button>
   ) : (
-    <Button onClick={() => handleOpenNetworks()} arrow={true}>
+    <Button onClick={handleChangeNetwork} arrow={true}>
       <span className="network-name">Networks</span>
     </Button>
   );

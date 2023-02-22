@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { AbstractConnector } from '@web3-react/abstract-connector';
+import { ModalSettings } from 'src/providers/store/modal';
 import warning from 'tiny-warning';
 
-import { SendReturnResult, SendReturn, Send, SendOld } from './types';
+import { Send, SendOld, SendReturn, SendReturnResult } from './types';
 
 function parseSendReturn(sendReturn: SendReturnResult | SendReturn): any {
   return sendReturn.hasOwnProperty('result') ? sendReturn.result : sendReturn;
@@ -33,10 +34,10 @@ export class MetamaskNotFounfError extends Error {
 }
 
 export class MetamaskConnector extends AbstractConnector {
-  private setOpenNetwork: (flag: boolean) => void;
+  private setOpenNetwork: (newModal: ModalSettings | null) => void;
   private chainIdSelected: number | null;
 
-  constructor(kwargs: any, setOpenNetwork: (flag: boolean) => void) {
+  constructor(kwargs: any, setOpenNetwork: (newModal: ModalSettings | null) => void) {
     super(kwargs);
 
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this);
@@ -51,7 +52,7 @@ export class MetamaskConnector extends AbstractConnector {
   private handleChainChanged(chainId: string | number): void {
     if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(chainId))) {
       // console.log('handleChainChanged, unsupported chain')
-      this.setOpenNetwork(true);
+      this.setOpenNetwork({ key: 'selectChain' });
     }
     this.chainIdSelected = Number(chainId);
     // if (__DEV__) {
@@ -94,7 +95,7 @@ export class MetamaskConnector extends AbstractConnector {
 
     if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(data.chainId))) {
       // console.log('handleConnect, unsupported chain')
-      this.setOpenNetwork(true);
+      this.setOpenNetwork({ key: 'selectChain' });
     }
 
     this.chainIdSelected = Number(data.chainId);
@@ -143,7 +144,7 @@ export class MetamaskConnector extends AbstractConnector {
 
     if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(this.chainIdSelected))) {
       // console.log('activate, unsupported chain')
-      this.setOpenNetwork(true);
+      this.setOpenNetwork({ key: 'selectChain' });
     }
 
     return { provider: window.ethereum, ...(account ? { account } : {}) };

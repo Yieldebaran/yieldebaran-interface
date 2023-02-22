@@ -10,7 +10,8 @@ import {
 } from '@web3-react/walletconnect-connector';
 import { WalletLinkConnector } from '@web3-react/walletlink-connector';
 
-import NETWORKS from '../networks';
+import { CHAIN_LIST, ChainId } from 'src/constants/chain';
+import { ModalSettings } from 'src/providers/store/modal';
 
 import { MetamaskConnector, MetamaskNotFounfError } from './metamask-connector';
 
@@ -27,7 +28,7 @@ export enum connectrorsEnum {
   xDefi,
 }
 
-const Networks = Object.values(NETWORKS);
+const Networks = Object.values(CHAIN_LIST);
 const supportedChains = [...Networks].map((n) => n.chainId);
 const RPC_URLS: any = {};
 Networks.forEach((n) => {
@@ -43,8 +44,8 @@ let walletConnect = new WalletConnectConnector({
 
 export const GetConnector = (
   c: any,
-  setOpenNetwork: (flag: boolean) => void,
-  chain?: number,
+  setOpenNetwork: (newModal: ModalSettings | null) => void,
+  chain?: ChainId,
 ): any => {
   if (c === connectrorsEnum.WalletConnect) {
     if (chain)
@@ -58,7 +59,7 @@ export const GetConnector = (
   }
   if (c === connectrorsEnum.Coinbase) {
     return new WalletLinkConnector({
-      url: chain ? NETWORKS[chain].publicRpc : NETWORKS[250].publicRpc,
+      url: chain ? CHAIN_LIST[chain].publicRpc : CHAIN_LIST[ChainId.FTM].publicRpc,
       appName: 'Yieldebaran app',
       supportedChainIds: supportedChains,
     });

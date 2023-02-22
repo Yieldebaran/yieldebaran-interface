@@ -1,12 +1,11 @@
+import { ethers } from 'ethers';
 import { createContext, useContext } from 'react';
 
-import { ethers } from 'ethers';
-
-import { Network } from '../networks';
+import { ChainConfig } from 'src/constants/chain';
 
 export type GlobalContext = {
-  network: Network | null;
-  setNetwork: (n: Network | null) => void;
+  network: ChainConfig | null;
+  setNetwork: (n: ChainConfig | null) => void;
   webSocketProvider: ethers.providers.WebSocketProvider | undefined;
   setWebSocketProvider: (p: ethers.providers.WebSocketProvider) => void;
   address: string;
