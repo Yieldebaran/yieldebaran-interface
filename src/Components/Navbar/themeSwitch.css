@@ -1,16 +1,16 @@
-.theme-switch{
-    width: 60px;
-    height: 30px;   
-    border: 2px solid var(--switch-theme-border);
-    background-color: var(--switch-theme-background);
-    border-radius: 30px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
-    -ms-flex-pack: distribute;
-        justify-content: space-around;
-    cursor: pointer;
+.theme-switch {
+  width: 60px;
+  height: 30px;
+  border: 2px solid var(--switch-theme-border);
+  background-color: var(--switch-theme-background);
+  border-radius: 30px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: distribute;
+  justify-content: space-around;
+  cursor: pointer;
 }

@@ -1,162 +1,161 @@
-.dialog{
-    display: none;
-    position: fixed;
-    top:0vh;
-    width:100%;
-    height: 100%;
-    z-index: 5000;
-    left:0;
-    margin: 0;
-    padding: 10px;
-    overflow: hidden;
+.dialog {
+  display: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5000;
+  left: 0;
+  margin: 0;
+  padding: 10px;
+  overflow: hidden;
 }
 
-.dialog .dialog-background{
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    display: block;
-    background-color: var(--modal-layout);
-    top:0;
-    left: 0;
+.dialog .dialog-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: block;
+  background-color: var(--modal-layout);
+  top: 0;
+  left: 0;
 }
 
-.open-dialog{
-    display: block;
-    color: var(--text-color);
+.open-dialog {
+  display: block;
+  color: var(--text-color);
 }
 
-.supply-note{
-    text-align: center;
-    font-weight: 400;
-    font-size: .9rem;
+.supply-note {
+  text-align: center;
+  font-weight: 400;
+  font-size: 0.9rem;
 }
 
-.dialog-line{
-    border: 1px solid #4D6484;
-    opacity: .5;
+.dialog-line {
+  border: 1px solid #4d6484;
+  opacity: 0.5;
 }
 
-.supply-box{
-    min-width: 305px;
-    max-width: 450px;
-    max-height: 99.9%;
-    border-radius: 10px;
-    padding:1rem;
-    position: relative;
-    margin: auto;
-    top:50%;
-    transform: translateY(-50%);
-    background: var(--modal-background) padding-box,
-    var(--modal-border) border-box;
-    display: flex;
-    flex-direction: column;
-    overflow: auto;
-    box-shadow: var(--modal-shadow);
+.supply-box {
+  min-width: 305px;
+  max-width: 450px;
+  max-height: 99.9%;
+  border-radius: 10px;
+  padding: 1rem;
+  position: relative;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--modal-background) padding-box, var(--modal-border) border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  box-shadow: var(--modal-shadow);
 }
 
-.supply-box-expand{
-    max-height: 650px;
+.supply-box-expand {
+  max-height: 650px;
 }
 
-.supply-box .dialog-close  {
-    height: 15px;
-    width: 15px;
-    border-radius: 50%;
-    cursor: pointer;
-    position: absolute;
-    top: 22.5px;
-    right: 20px;
+.supply-box .dialog-close {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 22.5px;
+  right: 20px;
 }
-/* 
+/*
 .supply-box .dialog-close:hover{
     background-color: var(--buttonColor);
     color: var(--buttonHover2);
 } */
 
-.supply-box .dialog-title{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 5px; 
-    height: 30px;
-    color: var(--text-color);
-    font-size:1.2rem;
+.supply-box .dialog-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+  height: 30px;
+  color: var(--text-color);
+  font-size: 1.2rem;
 }
 
 .native-asset-amount {
-    font-size: 0.8rem;
-    position: relative;
-    color: var(--secondaryText);
+  font-size: 0.8rem;
+  position: relative;
+  color: var(--text-color);
 }
 
 .native-asset-amount span {
-    position: absolute;
-    bottom: -26px;
-    left: 0;
+  position: absolute;
+  bottom: -26px;
+  left: 0;
 }
 
 .amount-select {
-    display: grid;
-    grid-template-columns: 25% 25% 25% 25%;
-    align-items: end;
-    width: 150px;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  align-items: end;
+  width: 150px;
 }
 
-.amount-select-disabled{
-    opacity: .7;
-    pointer-events: none;
+.amount-select-disabled {
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .amount-select div {
-    margin-bottom: unset !important;
-    text-decoration: underline;
-    cursor: pointer;
+  margin-bottom: unset !important;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .native-asset-amount .amount-select {
-    position: absolute;
-    bottom: -26px;
-    right: 0;
+  position: absolute;
+  bottom: -26px;
+  right: 0;
 }
 
-.input-group{
-    margin-top: 20px;
+.input-group {
+  margin-top: 20px;
 }
 
-.amount-group{
-    display: flex;
-    justify-content: space-between;
+.amount-group {
+  display: flex;
+  justify-content: space-between;
 }
 
-.amount-group span{
-    white-space: nowrap;
+.amount-group span {
+  white-space: nowrap;
 }
 
 .input-button-group {
-    display: grid;
-    grid-template-columns: 69% 29%;
-    align-items: center;
-    grid-gap: 2%;
-    margin-top: -12px;
+  display: grid;
+  grid-template-columns: 69% 29%;
+  align-items: center;
+  grid-gap: 2%;
+  margin-top: -12px;
 }
 
-.input-button-group .textbox .validation{
-    bottom:-15px;
+.input-button-group .textbox .validation {
+  bottom: -15px;
 }
 
-.button-section{
-    margin: 2rem 0;
+.button-section {
+  margin: 2rem 0;
 }
 
-.secondary-button-section{
-    margin: .5rem 0;
+.secondary-button-section {
+  margin: 0.5rem 0;
 }
 
-.dialog-content{
-    padding: 0 1rem;
+.dialog-content {
+  padding: 0 1rem;
 }
 
-.dialog-message{
-    padding: 1rem 0;
+.dialog-message {
+  padding: 1rem 0;
 }
