@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { useYieldebaranDataContext } from '../../Types/appDataContext';
-import { useUiContext } from '../../Types/uiContext';
+import { useYieldebaranDataContext } from 'src/Types/appDataContext';
+import { useUiContext } from 'src/Types/uiContext';
 
 import Markets from '../Markets/markets';
 import InteractionDialog from '../Markets/MarketsDialogs/PoolDialog/PoolDialog';

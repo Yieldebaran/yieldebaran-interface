@@ -1,7 +1,9 @@
 import { Logger } from '@ethersproject/logger';
+import debug from 'debug';
 import { ethers, utils, version } from 'ethers';
 
 const logger = new Logger(version);
+const logg = debug('utils:BigNumber');
 
 const _constructorGuard = {};
 
@@ -36,16 +38,16 @@ export class BigNumber {
     const tempNum1 = BigNumber.parseValueSafe(
       num1.toString(),
       decimals > 18 ? 18 : decimals,
-      decimals > 18 ? true : false,
+      decimals > 18,
     );
     const tempNum2 = BigNumber.parseValueSafe(
       num2.toString(),
       decimals > 18 ? 18 : decimals,
-      decimals > 18 ? true : false,
+      decimals > 18,
     );
 
     if (log)
-      console.log(
+      logg(
         `--------------------\nOperation: ${operation}\nDecimals: ${decimals}\nNum1: ${tempNum1._value}\nNum2: ${tempNum2._value}\n--------------------`,
       );
 
@@ -210,9 +212,7 @@ export class BigNumber {
       temp.length === 2 ? (decimals = temp[1].length) : (decimals = 0);
     }
     if (temp.length === 2 && temp[1] === '') value = temp[0];
-    console.log(
-      `--------------------\nValue: ${value}\nDecimals: ${decimals}\n--------------------\n\n`,
-    );
+    logg(`--------------------\nValue: ${value}\nDecimals: ${decimals}\n--------------------\n\n`);
     const num = utils.parseUnits(value, decimals);
     return new BigNumber(_constructorGuard, num, decimals);
   };
@@ -262,7 +262,7 @@ declare global {
 
 Number.prototype.noExponents = function () {
   const data = String(this).split(/[eE]/);
-  if (data.length == 1) return data[0];
+  if (data.length === 1) return data[0];
 
   let z = '';
   const sign = this < 0 ? '-' : '';
@@ -272,7 +272,7 @@ Number.prototype.noExponents = function () {
   if (mag < 0) {
     z = sign + '0.';
     while (mag++) z += '0';
-    return z + str.replace(/^\-/, '');
+    return z + str.replace(/^-/, '');
   }
   mag -= str.length;
   while (mag--) z += '0';

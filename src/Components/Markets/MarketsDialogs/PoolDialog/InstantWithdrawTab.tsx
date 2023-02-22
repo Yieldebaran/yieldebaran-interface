@@ -154,7 +154,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
         </div>
       </div>
       <Button
-        disabled={withdrawalInputBN == 0n || withdrawalErrorMessage !== ''}
+        disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
         onClick={() =>
           handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)
         }
@@ -163,7 +163,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
       </Button>
       {eap.isEth && (
         <Button
-          disabled={withdrawalInputBN == 0n || withdrawalErrorMessage !== ''}
+          disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
           onClick={() =>
             handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)
           }

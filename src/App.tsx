@@ -92,7 +92,7 @@ const App: React.FC = () => {
     toast.error(error, {
       position: 'top-right',
       autoClose: autoClose ? closeDelay : false,
-      hideProgressBar: autoClose ? false : true,
+      hideProgressBar: autoClose,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,
@@ -105,7 +105,7 @@ const App: React.FC = () => {
     toast.success(message, {
       position: 'top-right',
       autoClose: autoClose ? closeDelay : false,
-      hideProgressBar: autoClose ? false : true,
+      hideProgressBar: !autoClose,
       closeOnClick: true,
       pauseOnHover: true,
       draggable: true,

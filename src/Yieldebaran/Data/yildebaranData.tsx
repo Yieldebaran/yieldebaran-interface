@@ -1,10 +1,13 @@
 import { useWeb3React } from '@web3-react/core';
+import debug from 'debug';
 import { ethers } from 'ethers';
 import { useEffect, useRef, useState } from 'react';
 
-import { EapData, loadAppState } from '../../Classes/AppState';
-import { FVal } from '../../Types/appDataContext';
-import { useGlobalContext } from '../../Types/globalContext';
+import { EapData, loadAppState } from 'src/Classes/AppState';
+import { FVal } from 'src/Types/appDataContext';
+import { useGlobalContext } from 'src/Types/globalContext';
+
+const log = debug('hooks:useFetchData');
 
 const useFetchData = () => {
   const networkId = useRef<number>();
@@ -52,7 +55,7 @@ const useFetchData = () => {
   }, [library, network, account]);
 
   const fetchAppState = async (blockNumber?: number) => {
-    console.log('updating app data');
+    log('updating app data');
     if (network) {
       const net = { ...network };
       const appState = await loadAppState(
@@ -65,8 +68,8 @@ const useFetchData = () => {
       setBlockTimestamp(appState.blockTimestamp);
       setBlockNumber(appState.blockNumber);
       setAccountEthBalance(appState.accountEthBalance);
-      console.log('app data updated', appState.blockNumber, appState.accountEthBalance);
-      console.log(appState.states);
+      log('app data updated', appState.blockNumber, appState.accountEthBalance);
+      log(appState.states);
     }
   };
 

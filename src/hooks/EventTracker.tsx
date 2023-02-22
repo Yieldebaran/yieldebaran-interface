@@ -2,12 +2,16 @@ import { EventFilter } from '@ethersproject/contracts';
 
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useRef, useState} from 'react';
+
+import debug from 'debug';
 
 import erc20Abi from '../abi/erc20.json';
 import { useYieldebaranDataContext } from '../Types/appDataContext';
 
 import { useGlobalContext } from '../Types/globalContext';
+
+const log = debug('utils:EventTracker');
 
 const EventTracker: React.FC = () => {
   const { network, webSocketProvider } = useGlobalContext();
@@ -16,27 +20,27 @@ const EventTracker: React.FC = () => {
 
   const { account } = useWeb3React();
 
-  let lastUpdateBlock = 0;
+  const lastUpdateBlock = useRef(0);
 
   const clearSubs = () => {
-    console.log('remove listeners');
+    log('remove listeners');
     webSocketProvider?.removeAllListeners();
   };
 
   useEffect(() => {
     if (!network || !webSocketProvider) {
-      lastUpdateBlock = 0;
+      lastUpdateBlock.current = 0;
       return;
     }
 
     const newEaps = Object.keys(eapStates);
     if (JSON.stringify(newEaps) === JSON.stringify(eaps)) {
-      console.log('eaps not changed, so we will NOT resubscribe');
+      log('eaps not changed, so we will NOT resubscribe');
       return;
     } else {
-      console.log('new eaps', newEaps);
+      log('new eaps', newEaps);
       setEaps(newEaps);
-      lastUpdateBlock = blockNumber;
+      lastUpdateBlock.current = blockNumber;
     }
 
     clearSubs();
@@ -60,24 +64,24 @@ const EventTracker: React.FC = () => {
   }, [account, network, eapStates, webSocketProvider]);
 
   async function initListeners(filters: EventFilter[]) {
-    console.log('initListeners', webSocketProvider?._wsReady);
+    log('initListeners', webSocketProvider?._wsReady);
     await webSocketProvider?._networkPromise;
 
     filters.forEach((f) => {
       webSocketProvider?.on(f, async (data) => {
-        console.log(data);
+        log(data);
         if (!data) return;
-        if (data.blockNumber > lastUpdateBlock) {
-          console.log(
-            `received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`,
+        if (data.blockNumber > lastUpdateBlock.current) {
+          log(
+            `received new block ${data.blockNumber}, prev ${lastUpdateBlock.current}. Updating state`,
           );
-          lastUpdateBlock = data.blockNumber;
+          lastUpdateBlock.current = data.blockNumber;
           await updateAppState(Number(data.blockNumber));
         }
       });
-      console.log(f);
+      log(f);
     });
-    console.log(webSocketProvider);
+    log(webSocketProvider);
   }
 
   return <></>;

@@ -43,10 +43,6 @@ export const Layout = () => {
     setOpenNetwork(true);
   };
 
-  useEffect(() => {
-    return () => console.log('Unmounted');
-  }, [network, account]);
-
   const {
     selectedPool,
     setSelectedPool,
@@ -82,8 +78,6 @@ export const Layout = () => {
   }, [network]);
 
   const myErrorHandler = (error: Error, info: { componentStack: string }) => {
-    console.log(error);
-    console.log(info);
     toast.error('An error has occurred, please check console log.', {
       position: 'top-right',
       autoClose: 10000,
