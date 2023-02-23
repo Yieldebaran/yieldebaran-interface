@@ -41,7 +41,7 @@ export const PoolAddress = () => {
       const headers = [];
       const contents = [];
       headers.push({ title: 'Deposit' });
-      contents.push(<DepositTab eap={eap} selectedPool={selectedPool} />);
+      contents.push(<DepositTab selectedPool={selectedPool} />);
 
       headers.push({ title: 'Withdrawal' });
       contents.push(<WithdrawTab selectedPool={selectedPool} />);

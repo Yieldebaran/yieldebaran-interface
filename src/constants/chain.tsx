@@ -1,7 +1,11 @@
-import Logos from './logos';
+import Logos from 'src/logos';
 
-type Network = {
-  chainId: number;
+export enum ChainId {
+  FTM = 250,
+}
+
+export type ChainConfig = {
+  chainId: ChainId;
   network: string;
   logo: string;
   blocksPerYear?: number;
@@ -18,7 +22,7 @@ type Network = {
   etherscanApiKey: string;
   inception: number;
   networkProperties: {
-    chainId: string | number;
+    chainId: ChainId;
     chainName: string;
     nativeCurrency: {
       name: string;
@@ -30,13 +34,9 @@ type Network = {
   };
 };
 
-type NetworkData = {
-  [chainId: number]: Network;
-};
-
-const NETWORKS: NetworkData = {
-  250: {
-    chainId: 250,
+const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
+  [ChainId.FTM]: {
+    chainId: ChainId.FTM,
     network: 'Fantom Opera',
     logo: Logos['FTM'],
     blocksPerYear: 24 * 60 * 60 * 365,
@@ -53,7 +53,7 @@ const NETWORKS: NetworkData = {
     timestampContract: '0x6e11aaD63d11234024eFB6f7Be345d1d5b8a8f38',
     blockNumberContract: '0x37517C5D880c5c282437a3Da4d627B4457C10BEB',
     networkProperties: {
-      chainId: 250,
+      chainId: ChainId.FTM,
       chainName: 'Fantom',
       nativeCurrency: {
         name: 'FTM',
@@ -66,5 +66,4 @@ const NETWORKS: NetworkData = {
   },
 };
 
-export default NETWORKS;
-export type { Network };
+export const CHAIN_LIST = Object.freeze(BASE_CHAIN_LIST);

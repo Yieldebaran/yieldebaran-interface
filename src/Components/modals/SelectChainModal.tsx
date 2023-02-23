@@ -1,27 +1,24 @@
 import { useWeb3React } from '@web3-react/core';
-import { WalletConnectConnector } from '@web3-react/walletconnect-connector';
-import React from 'react';
 import { ethers } from 'ethers';
-
+import React from 'react';
+import Modal from 'src/Components/Modal/modal';
+import { CHAIN_LIST, ChainId } from 'src/constants/chain';
 import { toHex } from 'src/helpers';
-import NETWORKS from 'src/networks';
+import { useSetModal } from 'src/providers/StoreProvider';
 import { useGlobalContext } from 'src/Types/globalContext';
 
-import { useUiContext } from 'src/Types/uiContext';
-
-import Modal from '../Modal/modal';
 import './networksMenu.css';
 
-const NetworkConnect: React.FC = () => {
-  const { connector, library } = useWeb3React();
+export const SelectChainModal: React.FC = () => {
   const { setNetwork, setWebSocketProvider } = useGlobalContext();
+  const { connector, library } = useWeb3React();
+  const setModal = useSetModal();
 
-  const { openNetwork, setOpenNetwork, setSwitchModal } = useUiContext();
+  function handleClose() {
+    setModal(null);
+  }
 
-  const switchNetwork = async (chain: number) => {
-    if (connector instanceof WalletConnectConnector) {
-      setSwitchModal(true);
-    }
+  async function switchNetwork(chain: ChainId) {
     if (connector) {
       try {
         if (library)
@@ -37,44 +34,42 @@ const NetworkConnect: React.FC = () => {
               params: [{ chainId: toHex(chain) }],
             });
         }
-        setSwitchModal(false);
-        setOpenNetwork(false);
+        handleClose();
       } catch (switchError: any) {
-        console.log(switchError);
         if (switchError.code === 4902) {
           try {
             if (library)
               await library.provider.request({
                 method: 'wallet_addEthereumChain',
-                params: [NETWORKS[chain].networkProperties],
+                params: [CHAIN_LIST[chain].networkProperties],
               });
             else {
               const prov = await connector.getProvider();
               await prov.request({
                 method: 'wallet_addEthereumChain',
-                params: [NETWORKS[chain].networkProperties],
+                params: [CHAIN_LIST[chain].networkProperties],
               });
             }
-            setSwitchModal(false);
-            setOpenNetwork(false);
+            handleClose();
           } catch (error) {
             console.log('Error', error);
           }
         }
       }
     } else {
-      setNetwork(NETWORKS[chain]);
-      setWebSocketProvider(new ethers.providers.WebSocketProvider(NETWORKS[chain].publicWebSocket));
-      setSwitchModal(false);
-      setOpenNetwork(false);
+      setNetwork(CHAIN_LIST[chain]);
+      setWebSocketProvider(
+        new ethers.providers.WebSocketProvider(CHAIN_LIST[chain].publicWebSocket),
+      );
+      handleClose();
     }
-  };
+  }
 
   return (
     <>
-      <Modal open={openNetwork} close={() => setOpenNetwork(false)} title="Select network">
+      <Modal open={true} close={handleClose} title="Select network">
         <div className="networks-view">
-          {Object.values(NETWORKS).map((value, index) => {
+          {Object.values(CHAIN_LIST).map((value, index) => {
             let disabled = false;
             if (connector?.supportedChainIds) {
               disabled = !connector.supportedChainIds.includes(value.chainId);
@@ -98,5 +93,3 @@ const NetworkConnect: React.FC = () => {
     </>
   );
 };
-
-export default NetworkConnect;

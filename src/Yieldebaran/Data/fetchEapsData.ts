@@ -2,10 +2,11 @@ import { Call, Contract, Provider } from 'ethcall';
 
 import { ethers } from 'ethers';
 
-import { AppState, ApyData, EapData } from '../../Classes/AppState';
-import { Network } from '../../networks';
+import { AppState, ApyData, EapData } from 'src/Classes/AppState';
+import { ChainConfig } from 'src/constants/chain';
+import { formatBN } from 'src/Utils/numbers';
+
 import Logos from '../../logos';
-import { formatBN } from '../../Utils/numbers';
 
 export const ONE = 10n ** 18n;
 
@@ -186,7 +187,7 @@ const confValF = formatter(16, 3);
 const YEAR = 365n * 24n * 3600n;
 export async function getEapStates(
   ethcallProvider: Provider,
-  network: Network,
+  network: ChainConfig,
   apyTimePoints: number[],
   account: string,
   blockNumber?: number,
@@ -463,7 +464,7 @@ export async function getEapStates(
 
 async function getClosestBlockNumbers(
   timestamps: number[],
-  network: Network,
+  network: ChainConfig,
 ): Promise<Array<number>> {
   const { etherscanApiUrl, etherscanApiKey, inception } = network;
   return await Promise.all(

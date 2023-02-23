@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { approve, deposit, depositEth } from '../../../../Classes/AppState';
-import { useYieldebaranDataContext } from '../../../../Types/appDataContext';
-import { useGlobalContext } from '../../../../Types/globalContext';
-import { useUiContext } from '../../../../Types/uiContext';
-import { bnFromInput, validateInput } from '../../../../Utils/numbers';
+import { approve, deposit, depositEth } from 'src/Classes/AppState';
+import { useYieldebaranDataContext } from 'src/Types/appDataContext';
+import { useGlobalContext } from 'src/Types/globalContext';
+import { useUiContext } from 'src/Types/uiContext';
+
+import { bnFromInput, validateInput } from 'src/Utils/numbers';
+
 import Button from '../../../Button/button';
 
 import TextBox from '../../../Textbox/textBox';
@@ -13,7 +15,6 @@ import MarketDialogItem from '../marketDialogItem';
 
 interface Props {
   selectedPool: string;
-  eap: any;
 }
 const DepositTab: React.FC<Props> = (props: Props) => {
   const { accountEthBalance, updateAppState, eapStates } = useYieldebaranDataContext();
@@ -29,9 +30,7 @@ const DepositTab: React.FC<Props> = (props: Props) => {
 
   const [ethInput, setEthInput] = useState<string>('');
   const [ethErrorMessage, setEthErrorMessage] = useState<string>('');
-
-  const selectedPoolAddress = props.selectedPool;
-  const eap = props.eap;
+  const eap = eapStates[props.selectedPool];
 
   useEffect(() => {
     mounted.current = true;
