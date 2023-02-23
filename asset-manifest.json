@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.css": "/static/css/main.934fb548.css",
-    "main.js": "/static/js/main.69b601d6.js",
+    "main.css": "/static/css/main.87608006.css",
+    "main.js": "/static/js/main.67bb0832.js",
     "static/js/563.5bb61817.chunk.js": "/static/js/563.5bb61817.chunk.js",
     "static/js/942.4fbf3604.chunk.js": "/static/js/942.4fbf3604.chunk.js",
     "static/js/27.8ec098aa.chunk.js": "/static/js/27.8ec098aa.chunk.js",
-    "static/js/836.9e581b15.chunk.js": "/static/js/836.9e581b15.chunk.js",
+    "static/js/836.8b49d4bc.chunk.js": "/static/js/836.8b49d4bc.chunk.js",
     "static/js/550.7946801d.chunk.js": "/static/js/550.7946801d.chunk.js",
     "static/media/vGNO-logo.png": "/static/media/vGNO-logo.8e812896835d17d5dcd7.png",
     "static/media/ARBITRUM-logo.png": "/static/media/ARBITRUM-logo.5d22e2f1357459728d2a.png",
@@ -41,7 +41,7 @@
     "static/media/LINK-logo.svg": "/static/media/LINK-logo.991cf5ef3a77b59c086348e1d3914586.svg"
   },
   "entrypoints": [
-    "static/css/main.934fb548.css",
-    "static/js/main.69b601d6.js"
+    "static/css/main.87608006.css",
+    "static/js/main.67bb0832.js"
   ]
 }
