@@ -1,4 +1,5 @@
 import { useWeb3React } from '@web3-react/core';
+import debug from 'debug';
 
 import { ethers } from 'ethers';
 import { useEffect, useRef, useState } from 'react';
@@ -6,6 +7,8 @@ import { EapData, loadAppState } from 'src/Classes/AppState';
 import { FVal } from 'src/Types/appDataContext';
 
 import { useGlobalContext } from 'src/Types/globalContext';
+
+const log = debug('hooks:useFetchData');
 
 const useFetchData = () => {
   const networkId = useRef<number>();
@@ -39,21 +42,21 @@ const useFetchData = () => {
     setBlockTimestamp(0);
     setAccountEthBalance({ native: 0n, formatted: '0.0' });
     setSelectedPool(undefined);
-    if (network) {
-      if (account && library && network.chainId === chainId) {
-        networkId.current = { ...network }.chainId;
-        //setSpinnerVisible(true)
-        fetchAppState();
-      } else if (!chainId) {
-        networkId.current = { ...network }.chainId;
-        //setSpinnerVisible(true)
-        fetchAppState();
-      }
+    if (!network) return;
+    if (!chainId) {
+      networkId.current = { ...network }.chainId;
+      fetchAppState();
+      return;
+    }
+    if (account && library && network.chainId === chainId) {
+      networkId.current = { ...network }.chainId;
+      fetchAppState();
+      return;
     }
   }, [library, network, account]);
 
   const fetchAppState = async (blockNumber?: number) => {
-    console.log('updating app data');
+    log('updating app data');
     if (network) {
       const net = { ...network };
       const appState = await loadAppState(
@@ -66,8 +69,11 @@ const useFetchData = () => {
       setBlockTimestamp(appState.blockTimestamp);
       setBlockNumber(appState.blockNumber);
       setAccountEthBalance(appState.accountEthBalance);
-      console.log('app data updated', appState.blockNumber, appState.accountEthBalance);
-      console.log(appState.states);
+      log('app data updated', {
+        blockNumber: appState.blockNumber,
+        accountEthBalance: appState.accountEthBalance,
+        states: appState.states,
+      });
     }
   };
 

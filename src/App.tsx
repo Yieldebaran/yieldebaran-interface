@@ -68,7 +68,6 @@ const App: React.FC = () => {
         setIsMobile(true);
         setIsTablet(false);
       } else if (width < 1325) {
-        console.log('Tablet');
         setScale(false);
         setIsTablet(true);
         setIsMobile(false);

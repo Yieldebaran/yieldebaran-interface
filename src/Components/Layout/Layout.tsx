@@ -1,4 +1,5 @@
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
+import debug from 'debug';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -22,6 +23,8 @@ import { useUiContext } from 'src/Types/uiContext';
 import { getChainConfig } from 'src/utils/chain';
 import yieldebaranData from 'src/Yieldebaran/Data/yildebaranData';
 
+const log = debug('components:Layout');
+
 export const Layout = () => {
   const { activate, error, chainId, account, deactivate } = useWeb3React();
   const { isMobile, isTablet } = useUiContext();
@@ -36,7 +39,7 @@ export const Layout = () => {
   };
 
   useEffect(() => {
-    return () => console.log('Unmounted');
+    return () => log('Unmounted');
   }, [network, account]);
 
   const {
@@ -50,13 +53,8 @@ export const Layout = () => {
   } = yieldebaranData();
 
   useEffect(() => {
-    // console.log('renderdf');
-  }, []);
-
-  useEffect(() => {
     const net = window.localStorage.getItem('yieldebaran-network');
     const prov = window.localStorage.getItem('yieldebaran-provider');
-    // console.log('net', net);
 
     if (!net || net === 'null') {
       setModal({ key: 'selectChain' });
@@ -77,7 +75,6 @@ export const Layout = () => {
   }, []);
 
   useEffect(() => {
-    // console.log('yieldebaran-network set', network);
     window.localStorage.setItem('yieldebaran-network', JSON.stringify(network));
   }, [network]);
 

@@ -1,3 +1,4 @@
+import debug from 'debug';
 import { Provider } from 'ethcall';
 
 import { ethers } from 'ethers';
@@ -9,6 +10,8 @@ import ethAdapterAbi from '../abi/EthAdapter.json';
 import withdrawToolAbi from '../abi/WthdrawTool.json';
 import { FVal, zeroAppState } from '../Types/appDataContext';
 import { getEapStates } from '../Yieldebaran/Data/fetchEapsData';
+
+const log = debug('store:AppState');
 
 export type ApyData = {
   apy: number;
@@ -99,100 +102,83 @@ function randomHex(size: number) {
 }
 
 export async function deposit(pool: string, amount: bigint) {
-  console.log('deposit', pool, amount);
-  if (!signer) {
-    return;
-  }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('deposit fired', { pool, amount, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(pool, eapAbi, signer);
+
   return poolContract.deposit(amount);
 }
 
 export async function requestWithdrawal(pool: string, address: string, amount: bigint) {
-  if (!signer) {
-    return;
-  }
-  console.log('requestWithdrawal', pool, address, amount);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('requestWithdrawal fired', { pool, address, amount, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(pool, eapAbi, signer);
+
   return poolContract.requestWithdrawal(amount, address);
 }
 
 export async function cancelRequest(withdrawTool: string) {
-  if (!signer) {
-    return;
-  }
-  console.log('cancelRequest', withdrawTool);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('cancelRequest fired', { withdrawTool, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer);
+
   return poolContract.cancelRequest();
 }
 
 export async function claimWithdrawal(withdrawTool: string) {
-  if (!signer) {
-    return;
-  }
-  console.log('claimWithdrawal', withdrawTool);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('claimWithdrawal fired', { withdrawTool, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer);
   return poolContract.claim();
 }
 
 export async function freeInstantWithdrawal(withdrawTool: string) {
-  if (!signer) {
-    return;
-  }
-  console.log('freeInstantWithdrawal', withdrawTool);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('freeInstantWithdrawal fired', { withdrawTool, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer);
   return poolContract.instantWithdrawal();
 }
 
 export async function freeInstantWithdrawalEth(withdrawTool: string) {
-  if (!signer) {
-    return;
-  }
-  console.log('freeInstantWithdrawalEth', withdrawTool);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('freeInstantWithdrawalEth fired', { withdrawTool, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer);
   return poolContract.instantWithdrawalEth();
 }
 
 export async function claimWithdrawalEth(withdrawTool: string) {
-  if (!signer) {
-    return;
-  }
-  console.log('claimWithdrawalEth', withdrawTool);
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('claimWithdrawalEth', { withdrawTool, signer });
+
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(withdrawTool, withdrawToolAbi, signer);
   return poolContract.claimEth();
 }
 
 export async function approve(token: string, spender: string, amount: bigint) {
-  console.log('approve', token, spender, amount);
-  if (!signer) {
-    return;
-  }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('approve fired', { token, spender, amount, signer });
+  if (!signer) return;
+
   const tokenContract = new ethers.Contract(token, eapAbi, signer);
   return tokenContract.approve(spender, amount);
 }
 
 export async function depositEth(ethAdapter: string, amount: bigint) {
-  console.log('depositEth', ethAdapter, amount);
-  if (!signer) {
-    return;
-  }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('depositEth fired', { ethAdapter, amount, signer });
+  if (!signer) return;
+
   const adapterContract = new ethers.Contract(ethAdapter, ethAdapterAbi, signer);
   return adapterContract.depositEth({ value: amount });
 }
@@ -203,12 +189,9 @@ export async function instantWithdrawal(
   minFromBalance: bigint,
   account: string,
 ) {
-  console.log('instantWithdrawal', pool, amount, minFromBalance, account);
-  if (!signer) {
-    return;
-  }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('instantWithdrawal fired', { pool, amount, minFromBalance, account, signer });
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(pool, eapAbi, signer);
   return poolContract.instantWithdrawal(amount, minFromBalance, account);
 }
@@ -219,12 +202,9 @@ export async function instantWithdrawalEth(
   minFromBalance: bigint,
   account: string,
 ) {
-  console.log('instantWithdrawal', pool, amount, minFromBalance, account);
-  if (!signer) {
-    return;
-  }
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
+  log('instantWithdrawal fired', { pool, amount, minFromBalance, account, signer });
+  if (!signer) return;
+
   const poolContract = new ethers.Contract(pool, eapAbi, signer);
   return poolContract.instantWithdrawalEth(amount, minFromBalance, account);
 }
