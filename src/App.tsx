@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import { Layout } from 'src/Components/Layout/Layout';
@@ -88,32 +88,6 @@ const App: React.FC = () => {
     }
   }, [darkMode]);
 
-  const toastError = (error: string, autoClose = true, closeDelay = 10000) => {
-    toast.error(error, {
-      position: 'top-right',
-      autoClose: autoClose ? closeDelay : false,
-      hideProgressBar: autoClose,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      icon: true,
-    });
-  };
-
-  const toastSuccess = (message: string, autoClose = true, closeDelay = 10000) => {
-    toast.success(message, {
-      position: 'top-right',
-      autoClose: autoClose ? closeDelay : false,
-      hideProgressBar: !autoClose,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      icon: true,
-    });
-  };
-
   return (
     <div id="app" className={`App scroller ${darkMode ? 'dark' : 'light'}`}>
       <MyGlobalContext.Provider
@@ -140,8 +114,6 @@ const App: React.FC = () => {
             setShow,
             theme,
             setTheme,
-            toastSuccessMessage: toastSuccess,
-            toastErrorMessage: toastError,
             scale,
             setScale,
             mobileMenuOpen,

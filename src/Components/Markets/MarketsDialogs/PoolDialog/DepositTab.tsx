@@ -1,11 +1,12 @@
+import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { approve, deposit, depositEth } from 'src/Classes/AppState';
 import { useYieldebaranDataContext } from 'src/Types/appDataContext';
 import { useGlobalContext } from 'src/Types/globalContext';
-import { useUiContext } from 'src/Types/uiContext';
 
 import { bnFromInput, validateInput } from 'src/Utils/numbers';
+import { toastError, toastSuccess } from 'src/utils/toast';
 
 import Button from '../../../Button/button';
 
@@ -13,12 +14,13 @@ import TextBox from '../../../Textbox/textBox';
 import '../marketDialog.css';
 import MarketDialogItem from '../marketDialogItem';
 
+const log = debug('components:DepositTab');
+
 interface Props {
   selectedPool: string;
 }
 const DepositTab: React.FC<Props> = (props: Props) => {
   const { accountEthBalance, updateAppState, eapStates } = useYieldebaranDataContext();
-  const { toastErrorMessage, toastSuccessMessage } = useUiContext();
 
   const { network } = useGlobalContext();
 
@@ -50,7 +52,7 @@ const DepositTab: React.FC<Props> = (props: Props) => {
 
   useEffect(() => {
     const handleEthBalance = () => {
-      console.log('handleEthBalance', accountEthBalance.formatted);
+      log('handleEthBalance fired', accountEthBalance.formatted);
       setEthBalance(accountEthBalance.formatted);
     };
     handleEthBalance();
@@ -62,7 +64,6 @@ const DepositTab: React.FC<Props> = (props: Props) => {
     };
 
     handleEthAmountChange();
-    // eslint-disable-next-line
   }, [ethInput, ethBalance]);
 
   const setMaxDeposit = (): void => {
@@ -78,35 +79,37 @@ const DepositTab: React.FC<Props> = (props: Props) => {
       const tx = await deposit(eap.address, amount);
       if (mounted) setDepositInput('');
       const receipt = await tx.wait();
-      console.log(receipt);
-      if (receipt.status === 1) {
-        toastSuccessMessage('Transaction successfully mined');
-        // await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
-      } else if (receipt.message) {
-        toastErrorMessage(`${receipt.message}`);
-      }
+      log('handleDeposit receipt', receipt);
+      toastSuccess('Transaction successfully mined');
     } catch (error: any) {
-      console.log(error);
-      toastErrorMessage(`${error?.message.replace('.', '')}`);
+      if (!error) {
+        toastError('Unhandled error');
+        return;
+      }
+      if (error.code === 'ACTION_REJECTED') {
+        toastError('User denied transaction signature');
+        return;
+      }
+      toastError(`${error?.message.replace('.', '')}`);
     }
   };
 
   const handleApprove = async () => {
     try {
-      // if (mounted) setDepositInput("")
       const tx = await approve(eap.underlying, eap.address, 2n ** 256n - 1n);
       const receipt = await tx.wait();
-      console.log(receipt);
-      if (receipt.status === 1) {
-        toastSuccessMessage('Transaction successfully mined');
-        // await updateMarket(props.eapAddress, UpdateTypeEnum.Stake)
-        // if (mounted) setDepositInput("")
-      } else if (receipt.message) {
-        toastErrorMessage(`${receipt.message}`);
-      }
+      log('handleApprove receipt', receipt);
+      toastSuccess('Transaction successfully mined');
     } catch (error: any) {
-      console.log(error);
-      toastErrorMessage(`${error?.message.replace('.', '')}`);
+      if (!error) {
+        toastError('Unhandled error');
+        return;
+      }
+      if (error.code === 'ACTION_REJECTED') {
+        toastError('User denied transaction signature');
+        return;
+      }
+      toastError(`${error?.message.replace('.', '')}`);
     }
   };
 
@@ -116,22 +119,27 @@ const DepositTab: React.FC<Props> = (props: Props) => {
       const tx = await depositEth(network.ethAdapter, amount);
       if (mounted) setEthInput('');
       const receipt = await tx.wait();
-      console.log(receipt);
-      if (receipt.status === 1) {
-        toastSuccessMessage('Transaction successfully mined');
-      } else if (receipt.message) {
-        toastErrorMessage(`${receipt.message}`);
-      }
+      log('handleDepositEth receipt', receipt);
+      toastSuccess('Transaction successfully mined');
     } catch (error: any) {
-      console.log(error);
-      toastErrorMessage(`${error?.message.replace('.', '')}`);
+      if (!error) {
+        toastError('Unhandled error');
+        return;
+      }
+      if (error.code === 'ACTION_REJECTED') {
+        toastError('User denied transaction signature');
+        return;
+      }
+      toastError(`${error?.message.replace('.', '')}`);
     }
   };
 
   const depositBN = bnFromInput(depositInput, eap?.decimals || 0);
   const depositEthBN = bnFromInput(ethInput, eap?.decimals || 0);
 
-  return eap && mounted ? (
+  if (!eap || !mounted) return null;
+
+  return (
     <>
       <MarketDialogItem
         title={'Deposited'}
@@ -220,7 +228,7 @@ const DepositTab: React.FC<Props> = (props: Props) => {
         </div>
       )}
     </>
-  ) : null;
+  );
 };
 
 export default DepositTab;

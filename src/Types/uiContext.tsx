@@ -15,8 +15,6 @@ export type UiContext = {
   setShow: (s: boolean) => void;
   theme: Theme;
   setTheme: (t: Theme) => void;
-  toastSuccessMessage: (m: string, autoClose?: boolean, closeDelay?: number) => void;
-  toastErrorMessage: (message: string, autoClose?: boolean, closeDelay?: number) => void;
   scale: boolean;
   setScale: (h: boolean) => void;
   mobileMenuOpen: boolean;
@@ -36,8 +34,6 @@ export const MyUiContext = createContext<UiContext>({
   setShow: () => undefined,
   theme: lightTheme,
   setTheme: () => undefined,
-  toastSuccessMessage: () => undefined,
-  toastErrorMessage: () => undefined,
   scale: false,
   setScale: () => undefined,
   mobileMenuOpen: false,
