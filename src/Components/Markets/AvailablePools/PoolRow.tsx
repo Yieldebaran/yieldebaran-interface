@@ -2,11 +2,10 @@ import Tippy from '@tippyjs/react';
 import { useWeb3React } from '@web3-react/core';
 import { providers } from 'ethers';
 import React from 'react';
+import { useSetModal } from 'src/providers/StoreProvider'; // optional
 
-import 'tippy.js/dist/tippy.css'; // optional
+import 'tippy.js/dist/tippy.css';
 import { useYieldebaranDataContext } from '../../../Types/appDataContext';
-
-import { useUiContext } from '../../../Types/uiContext';
 import { formatBN } from '../../../Utils/numbers';
 
 import '../style.css';
@@ -18,8 +17,8 @@ interface Props {
 
 const PoolRow: React.FC<Props> = (props: Props) => {
   const { accountEthBalance, eapStates } = useYieldebaranDataContext();
-  const { setShowWallets } = useUiContext();
   const { account } = useWeb3React<providers.Web3Provider>();
+  const setModal = useSetModal();
 
   const eap = eapStates[props.pool];
 
@@ -29,7 +28,7 @@ const PoolRow: React.FC<Props> = (props: Props) => {
     // return;
     // console.log('skfjakf', account);
     if (!account) {
-      setShowWallets(true);
+      setModal({ key: 'connectWallet' });
       return;
     }
     if (props.pool) {

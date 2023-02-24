@@ -15,16 +15,10 @@ export type UiContext = {
   setShow: (s: boolean) => void;
   theme: Theme;
   setTheme: (t: Theme) => void;
-  openAddress: boolean;
-  setOpenAddress: (a: boolean) => void;
   toastSuccessMessage: (m: string, autoClose?: boolean, closeDelay?: number) => void;
   toastErrorMessage: (message: string, autoClose?: boolean, closeDelay?: number) => void;
-  switchModal: boolean;
-  setSwitchModal: (m: boolean) => void;
   scale: boolean;
   setScale: (h: boolean) => void;
-  showWallets: boolean;
-  setShowWallets: (w: boolean) => void;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (m: boolean) => void;
   accountOpen: boolean;
@@ -44,16 +38,10 @@ export const MyUiContext = createContext<UiContext>({
   setShow: () => undefined,
   theme: lightTheme,
   setTheme: () => undefined,
-  openAddress: false,
-  setOpenAddress: () => undefined,
   toastSuccessMessage: () => undefined,
   toastErrorMessage: () => undefined,
-  switchModal: false,
-  setSwitchModal: () => undefined,
   scale: false,
   setScale: () => undefined,
-  showWallets: false,
-  setShowWallets: () => undefined,
   mobileMenuOpen: false,
   setMobileMenuOpen: () => undefined,
   accountOpen: false,

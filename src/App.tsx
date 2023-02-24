@@ -48,12 +48,8 @@ const App: React.FC = () => {
   const [isTablet, setIsTablet] = useState<boolean>(false);
   const [show, setShow] = useState<boolean>(false);
   const [theme, setTheme] = useState<Theme>(lightTheme);
-  const [showWallets, setShowWallets] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [accountOpen, setAccountOpen] = useState<boolean>(false);
-
-  const [openAddress, setOpenAddress] = useState<boolean>(false);
-  const [switchModal, setSwitchModal] = useState(false);
   const [scale, setScale] = useState(false);
 
   const { width } = useWindowSize();
@@ -145,16 +141,10 @@ const App: React.FC = () => {
             setShow,
             theme,
             setTheme,
-            openAddress,
-            setOpenAddress,
             toastSuccessMessage: toastSuccess,
             toastErrorMessage: toastError,
-            switchModal,
-            setSwitchModal,
             scale,
             setScale,
-            showWallets,
-            setShowWallets,
             mobileMenuOpen,
             setMobileMenuOpen,
             accountOpen,

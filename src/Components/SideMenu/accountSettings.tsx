@@ -4,11 +4,9 @@ import React from 'react';
 
 import { getShortenAddress } from 'src/helpers';
 import { useGlobalContext } from 'src/Types/globalContext';
-import { useUiContext } from 'src/Types/uiContext';
 import './accountSettings.css';
 
 const AccountSettings: React.FC = () => {
-  const { setOpenAddress } = useUiContext();
   const { address, setAddress } = useGlobalContext();
   const { connector, deactivate } = useWeb3React<ethers.providers.Web3Provider>();
 
@@ -19,8 +17,6 @@ const AccountSettings: React.FC = () => {
 
     window.localStorage.removeItem('provider');
     deactivate();
-
-    setOpenAddress(false);
     setAddress('');
   };
 

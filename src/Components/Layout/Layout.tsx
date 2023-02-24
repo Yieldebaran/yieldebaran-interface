@@ -2,13 +2,11 @@ import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import Account from 'src/Components/Account/account';
 import Button from 'src/Components/Button/button';
 import Error from 'src/Components/Error/error';
 import Footer from 'src/Components/Footer/footer';
 import Menu from 'src/Components/Menu/menu';
 import TabletMenu from 'src/Components/Menu/tabletMenu';
-import Wallets from 'src/Components/Wallets/wallets';
 import { GetConnector, getErrorMessage } from 'src/Connectors/connectors';
 import { MetamaskConnector, MetamaskNotFounfError } from 'src/Connectors/metamask-connector';
 import {
@@ -124,8 +122,6 @@ export const Layout = () => {
       <>
         {!isTablet && !isMobile ? <Menu /> : <TabletMenu />}
         <div className="main-content">
-          <Wallets />
-          <Account />
           <Outlet />
         </div>
         <Footer />

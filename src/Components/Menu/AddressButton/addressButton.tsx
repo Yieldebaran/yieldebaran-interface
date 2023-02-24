@@ -5,11 +5,13 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Button from 'src/Components/Button/button';
 
 import { getShortenAddress } from 'src/helpers';
+import { useSetModal } from 'src/providers/StoreProvider';
 import { useUiContext } from 'src/Types/uiContext';
 
 const AddressButton: React.FC = () => {
-  const { setShowWallets, setMobileMenuOpen, setAccountOpen } = useUiContext();
+  const { setMobileMenuOpen, setAccountOpen } = useUiContext();
   const { account } = useWeb3React<providers.Web3Provider>();
+  const setModal = useSetModal();
 
   const openAccount = () => {
     setMobileMenuOpen(false);
@@ -18,7 +20,7 @@ const AddressButton: React.FC = () => {
 
   const openWallets = () => {
     setMobileMenuOpen(false);
-    setShowWallets(true);
+    setModal({ key: 'connectWallet' });
   };
 
   return account ? (
