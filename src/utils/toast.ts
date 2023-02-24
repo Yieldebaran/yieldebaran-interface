@@ -4,7 +4,7 @@ export const toastError = (error: string, autoClose = true, closeDelay = 10000) 
   toast.error(error, {
     position: 'top-right',
     autoClose: autoClose ? closeDelay : false,
-    hideProgressBar: autoClose,
+    hideProgressBar: !autoClose,
     closeOnClick: true,
     pauseOnHover: true,
     draggable: true,
