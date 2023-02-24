@@ -2,17 +2,18 @@ import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { EapData, instantWithdrawal, instantWithdrawalEth } from 'src/Classes/AppState';
+
+import Button from 'src/Components/Button/button';
+import MarketDialogItem from 'src/Components/Markets/MarketsDialogs/marketDialogItem';
+
+import TextBox from 'src/Components/Textbox/textBox';
 import { useYieldebaranDataContext } from 'src/Types/appDataContext';
 import { useGlobalContext } from 'src/Types/globalContext';
 import { bnFromInput, formatBN, validateInput } from 'src/Utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
 import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
 
-import Button from '../../../Button/button';
-
-import TextBox from '../../../Textbox/textBox';
 import '../marketDialog.css';
-import MarketDialogItem from '../marketDialogItem';
 
 const log = debug('components:InstantWithdrawTab');
 
