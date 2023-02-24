@@ -21,8 +21,6 @@ export type UiContext = {
   setScale: (h: boolean) => void;
   mobileMenuOpen: boolean;
   setMobileMenuOpen: (m: boolean) => void;
-  accountOpen: boolean;
-  setAccountOpen: (a: boolean) => void;
 };
 
 export const MyUiContext = createContext<UiContext>({
@@ -44,8 +42,6 @@ export const MyUiContext = createContext<UiContext>({
   setScale: () => undefined,
   mobileMenuOpen: false,
   setMobileMenuOpen: () => undefined,
-  accountOpen: false,
-  setAccountOpen: () => undefined,
 });
 
 export const useUiContext = (): UiContext => useContext(MyUiContext);

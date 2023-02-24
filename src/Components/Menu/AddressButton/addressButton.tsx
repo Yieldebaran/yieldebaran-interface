@@ -9,13 +9,13 @@ import { useSetModal } from 'src/providers/StoreProvider';
 import { useUiContext } from 'src/Types/uiContext';
 
 const AddressButton: React.FC = () => {
-  const { setMobileMenuOpen, setAccountOpen } = useUiContext();
+  const { setMobileMenuOpen } = useUiContext();
   const { account } = useWeb3React<providers.Web3Provider>();
   const setModal = useSetModal();
 
   const openAccount = () => {
     setMobileMenuOpen(false);
-    setAccountOpen(true);
+    setModal({ key: 'account' });
   };
 
   const openWallets = () => {

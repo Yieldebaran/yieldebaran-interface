@@ -49,7 +49,6 @@ const App: React.FC = () => {
   const [show, setShow] = useState<boolean>(false);
   const [theme, setTheme] = useState<Theme>(lightTheme);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [accountOpen, setAccountOpen] = useState<boolean>(false);
   const [scale, setScale] = useState(false);
 
   const { width } = useWindowSize();
@@ -147,8 +146,6 @@ const App: React.FC = () => {
             setScale,
             mobileMenuOpen,
             setMobileMenuOpen,
-            accountOpen,
-            setAccountOpen,
           }}
         >
           <StoreProvider>
