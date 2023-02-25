@@ -125,7 +125,7 @@
 }
 
 .estimated-amount {
-  color: #1c2026;
+  color: var(--text-color);
 }
 
 .amount-group {
