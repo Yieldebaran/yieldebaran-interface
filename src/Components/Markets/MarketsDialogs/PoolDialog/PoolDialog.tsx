@@ -19,6 +19,7 @@ import '../marketDialog.css';
 import DepositTab from './DepositTab';
 import InstantWithdrawTab from './InstantWithdrawTab';
 import WithdrawTab from './WithdrawTab';
+import AllocationInfoTab from './AllocationInfoTab';
 
 interface Props {
   closeSupplyMarketDialog: () => void;
@@ -63,6 +64,9 @@ const PoolDialog: React.FC<Props> = (props: Props) => {
 
       headers.push({ title: 'Quick withdrawal' });
       contents.push(<InstantWithdrawTab selectedPool={selectedPool} />);
+
+      headers.push({ title: 'Info' });
+      contents.push(<AllocationInfoTab selectedPool={selectedPool} />);
 
       setTabHeaders(headers);
       setTabContents(contents);
