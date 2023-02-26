@@ -144,7 +144,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
                   validation={withdrawalErrorMessage}
                   button={'Max'}
                   onClick={() => setMaxWithdrawal()}/>
-              <div className="estimated-amount">
+              <div className="text-in-modal">
                 ~{Number(formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals)).toFixed(3)} {eap.underlyingSymbol}
               </div>
             </div>

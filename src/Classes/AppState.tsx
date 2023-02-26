@@ -24,6 +24,8 @@ export type AllocationData = {
   underlyingWithdrawable: FVal;
   fullyAvailable: boolean;
   allocationPercent: number;
+  allocationName: string;
+  currentApy: { apy: number, period: number },
 };
 
 export type EapData = {

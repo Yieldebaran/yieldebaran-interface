@@ -8,171 +8,9 @@ import { formatBN } from 'src/Utils/numbers';
 
 import Logos from '../../logos';
 
-export const ONE = 10n ** 18n;
+import multiAbi from './multiiAbi';
 
-const abi = [
-  {
-    inputs: [{ internalType: 'address', name: 'account', type: 'address' }],
-    name: 'balanceOf',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'calculateExchangeRate',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'exchangeRate',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'totalSupply',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'complexityWithdrawalFeeFactor',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'reserveFactor',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'requestTimeLimit',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getBlockNumber',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'symbol',
-    outputs: [{ internalType: 'string', name: '', type: 'string' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getBlockTimestamp',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'decimals',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'address', name: 'owner', type: 'address' },
-      { internalType: 'address', name: 'spender', type: 'address' },
-    ],
-    name: 'allowance',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'reserves',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'fulfillmentIndex',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'withdrawTool',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'underlying',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getAllocations',
-    outputs: [{ internalType: 'address[]', name: '', type: 'address[]' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'requestIndex',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'requestTime',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'sharesRequested',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'underlyingRequested',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getReserves',
-    outputs: [
-      { internalType: 'uint112', name: '_reserve0', type: 'uint112' },
-      { internalType: 'uint112', name: '_reserve1', type: 'uint112' },
-      { internalType: 'uint32', name: '_blockTimestampLast', type: 'uint32' },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-];
+export const ONE = 10n ** 18n;
 
 export const formatter = (decimals: number, roundTo = decimals) => {
   return (bn: bigint) => {
@@ -182,6 +20,7 @@ export const formatter = (decimals: number, roundTo = decimals) => {
     return String(Number(bn / 10n ** BigInt(decimals - roundTo)) / 10 ** roundTo);
   };
 };
+
 const confValF = formatter(16, 3);
 
 const YEAR = 365n * 24n * 3600n;
@@ -192,8 +31,8 @@ export async function getEapStates(
   account: string,
   blockNumber?: number,
 ): Promise<AppState> {
-  const timestampContract = new Contract(network.timestampContract, abi);
-  const blockNumberContract = new Contract(network.blockNumberContract, abi);
+  const timestampContract = new Contract(network.timestampContract, multiAbi);
+  const blockNumberContract = new Contract(network.blockNumberContract, multiAbi);
   const usdc = network.usdc;
   const eapCalls: Call[] = [];
   const secondBatchCall: Call[] = [];
@@ -206,7 +45,7 @@ export async function getEapStates(
   const exchangeRateCalls: Call[] = [];
 
   eaps.forEach((x) => {
-    const eapContract = new Contract(x, abi);
+    const eapContract = new Contract(x, multiAbi);
     eapCalls.push(eapContract.decimals());
     eapCalls.push(eapContract.calculateExchangeRate());
     exchangeRateCalls.push(eapContract.calculateExchangeRate());
@@ -230,8 +69,6 @@ export async function getEapStates(
     blockNumberContract.getBlockNumber(),
   );
 
-  secondBatchCall.push(timestampContract.getBlockTimestamp());
-
   const data = await ethcallProvider.all(eapCalls, blockNumber ? blockNumber : 'latest');
   // console.log('first query result', data)
   blockNumber = Number(data.pop() as string);
@@ -252,8 +89,9 @@ export async function getEapStates(
 
   const secondCallBatchForCurrentBlock = [...exchangeRateCalls]; // touch exchange rates
   eaps.forEach((eap, i) => {
-    const toolContract = new Contract(withdrawTools[i], abi);
-    const underlyingContract = new Contract(underlyings[i], abi);
+    const eapContract = new Contract(eap, multiAbi);
+    const toolContract = new Contract(withdrawTools[i], multiAbi);
+    const underlyingContract = new Contract(underlyings[i], multiAbi);
     secondCallBatchForCurrentBlock.push(
       toolContract.requestTime(account),
       toolContract.fulfillmentIndex(),
@@ -267,28 +105,32 @@ export async function getEapStates(
       underlyingContract.symbol(),
     );
     if (BigInt(underlyings[i]) !== BigInt(usdc)) {
-      const pair = new Contract(getPairAddress(underlyings[i], usdc), abi);
+      const pair = new Contract(getPairAddress(underlyings[i], usdc), multiAbi);
       secondCallBatchForCurrentBlock.push(pair.getReserves());
     }
     allocations[i].forEach((alloc) => {
-      const sharesContract = new Contract(alloc, abi);
+      const sharesContract = new Contract(alloc, multiAbi);
       secondCallBatchForCurrentBlock.push(
         sharesContract.balanceOf(eap),
         underlyingContract.balanceOf(alloc),
         sharesContract.exchangeRate(),
+        eapContract.platformAdapter(alloc),
       );
+      secondBatchCall.push(sharesContract.exchangeRate());
     });
   });
 
-  const secondCallResult = await Promise.all([
+  secondBatchCall.push(timestampContract.getBlockTimestamp());
+
+  const secondCallResults = await Promise.all([
     ...apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x)),
     ethcallProvider.all(secondCallBatchForCurrentBlock, blockNumber),
   ]);
 
-  const secondDataBatchCurrentBlock = secondCallResult.pop() as any[];
+  const secondDataBatchCurrentBlock = secondCallResults.pop() as any[];
   exchangeRateCalls.map(() => secondDataBatchCurrentBlock.shift());
 
-  const periods = secondCallResult.map((x) => blockTimestamp - Number(x.pop()));
+  const periods = secondCallResults.map((x) => blockTimestamp - Number(x.pop()));
 
   const states: { [eapAddress: string]: EapData } = {};
 
@@ -353,9 +195,18 @@ export async function getEapStates(
       reserves.native
     ).toFVal(format);
 
+    const apyAfterFee: ApyData[] = [];
+    periods.forEach((period, periodIdx) => {
+      const pastER = BigInt(secondCallResults[periodIdx][i] as string);
+      const apy =
+        Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
+        1000;
+      apyAfterFee.push({ apy, period });
+    });
+
     let totalWithdrawable = 0n;
     const allocationProps = [];
-    allocations[i].forEach((alloc) => {
+    allocations[i].forEach((alloc, allocIndex) => {
       const sharesBalance = BigInt(
         secondDataBatchCurrentBlock[secondDataCursor++] as string,
       ).toFVal(formatter(18));
@@ -363,6 +214,8 @@ export async function getEapStates(
         secondDataBatchCurrentBlock[secondDataCursor++] as string,
       ).toFVal(format);
       const exchangeRate = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string);
+      const platformAdapter = secondDataBatchCurrentBlock[secondDataCursor++] as string;
+      const allocationName: string = (network.adapters[platformAdapter] || 'unknown platform') + ' ' + underlyingSymbol
       const underlyingAllocated = ((sharesBalance.native * exchangeRate) / ONE).toFVal(format);
       const underlyingWithdrawable =
         underlyingAvailable.native > underlyingAllocated.native
@@ -374,6 +227,13 @@ export async function getEapStates(
           (Number(underlyingAllocated.formatted) * 10000) /
             Number(totalUnderlyingBalance.formatted),
         ) / 100;
+      if (allocationPercent === 0) return
+
+
+      const pastER = BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
+      const apy = Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n) / 1000;
+      const currentApy = { apy, period: periods[0] };
+
       allocationProps.push({
         address: alloc,
         exchangeRate,
@@ -383,37 +243,33 @@ export async function getEapStates(
         underlyingWithdrawable,
         fullyAvailable,
         allocationPercent,
+        allocationName,
+        currentApy
       });
       totalWithdrawable += underlyingWithdrawable.native;
     });
 
-    allocationProps.push({
-      address: 'unallocated',
-      exchangeRate: ONE,
-      sharesBalance: 0n.toFVal(formatter(18)),
-      underlyingAvailable: underlyingUnallocated,
-      underlyingAllocated: underlyingUnallocated,
-      underlyingWithdrawable: underlyingUnallocated,
-      fullyAvailable: true,
-      allocationPercent:
-        Math.round(
-          (Number(underlyingUnallocated.formatted) * 10000) /
+    if (underlyingUnallocated.native !== 0n) {
+      allocationProps.push({
+        address: 'unallocated',
+        exchangeRate: ONE,
+        sharesBalance: 0n.toFVal(formatter(18)),
+        underlyingAvailable: underlyingUnallocated,
+        underlyingAllocated: underlyingUnallocated,
+        underlyingWithdrawable: underlyingUnallocated,
+        fullyAvailable: true,
+        allocationPercent:
+          Math.round(
+            (Number(underlyingUnallocated.formatted) * 10000) /
             Number(totalUnderlyingBalance.formatted),
-        ) / 100,
-    });
-    totalWithdrawable += underlyingUnallocated.native;
-
-    const apyAfterFee: ApyData[] = [];
-    periods.forEach((period, periodIdx) => {
-      const pastER = BigInt(secondCallResult[periodIdx][i] as string);
-      const apy =
-        Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
-        1000;
-      apyAfterFee.push({
-        apy,
-        period,
+          ) / 100,
+        allocationName: 'unallocated',
+        currentApy: { apy: 0, period: 0 },
       });
-    });
+    }
+
+    allocationProps.sort((a, b) => b.allocationPercent - a.allocationPercent)
+    totalWithdrawable += underlyingUnallocated.native;
 
     // console.log(Logos[underlyingSymbol])
 
