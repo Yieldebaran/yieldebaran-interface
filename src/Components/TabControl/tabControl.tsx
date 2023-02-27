@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { FCC } from 'src/types/FCC';
 import './tab.css';
-import { FCC } from 'src/Types/FCC';
 
 interface TabProps {
   children?: ReactNode;

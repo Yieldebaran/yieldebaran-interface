@@ -1,11 +1,11 @@
 import Tippy from '@tippyjs/react';
 import { useWeb3React } from '@web3-react/core';
-import { providers } from 'ethers';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { useSetModal } from 'src/providers/StoreProvider'; // optional
 
 import 'tippy.js/dist/tippy.css';
-import { useYieldebaranDataContext } from '../../../Types/appDataContext';
 import { formatBN } from '../../../Utils/numbers';
 
 import '../style.css';
@@ -16,15 +16,16 @@ interface Props {
 }
 
 const PoolRow: React.FC<Props> = (props: Props) => {
-  const { accountEthBalance, eapStates } = useYieldebaranDataContext();
-  const { account } = useWeb3React<providers.Web3Provider>();
+  const { accountEthBalance, eapStates } = useContractsData();
+  const { account } = useWeb3React();
   const setModal = useSetModal();
+  const navigate = useNavigate();
 
   const eap = eapStates[props.pool];
 
   const handleOpenSupplyMarketDialog = () => {
     // console.log(props);
-    // navigate(`/pools/${props.pool}`);
+    // navigate(`pools/${props.pool}`);
     // return;
     // console.log('skfjakf', account);
     if (!account) {

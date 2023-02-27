@@ -6,18 +6,18 @@ import wc from 'src/assets/icons/wc.png';
 import xdefi from 'src/assets/icons/XDEFIWallet.jpeg';
 import Modal from 'src/Components/Modal/modal';
 import { connectrorsEnum, GetConnector } from 'src/Connectors/connectors';
+import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
-import { useGlobalContext } from 'src/Types/globalContext';
 
 import './wallets.css';
 
 export const ConnectWalletModal: React.FC = () => {
-  const { network } = useGlobalContext();
+  const { chainConfig } = useChain();
   const setModal = useSetModal();
   const { activate } = useWeb3React();
 
   const handleConnect = async (c: any) => {
-    const con = GetConnector(c, setModal, network ? network.chainId : undefined);
+    const con = GetConnector(c, setModal, chainConfig ? chainConfig.chainId : undefined);
 
     setModal(null);
 
@@ -30,7 +30,7 @@ export const ConnectWalletModal: React.FC = () => {
   };
 
   return (
-    <Modal open={true} close={() => setModal(null)} title="Connect Wallet">
+    <Modal open={true} onClose={() => setModal(null)} title="Connect Wallet">
       <div className="wallets">
         <div className="wallet-item" onClick={() => handleConnect(connectrorsEnum.Metamask)}>
           <div className="wallet-item-icon">

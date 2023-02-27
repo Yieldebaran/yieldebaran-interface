@@ -1,30 +1,29 @@
 import Buffer from 'buffer';
 
-import { ethers } from 'ethers';
+import { useWeb3React } from '@web3-react/core';
+
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
 import { Layout } from 'src/Components/Layout/Layout';
 import { Modals } from 'src/Components/modals/Modals';
-import { ChainConfig } from 'src/constants/chain';
-import { StoreProvider } from 'src/providers/StoreProvider';
+import { UrlChainIdManager } from 'src/Components/UrlChainIdManager';
+import { GetConnector } from 'src/Connectors/connectors';
+import { MetamaskConnector } from 'src/Connectors/metamask-connector';
+import { xDefiConnector } from 'src/Connectors/xdefi-connector';
+import { useAppearance } from 'src/providers/AppearanceProvider';
+import { useChain } from 'src/providers/ChainProvider';
+import { useSetModal } from 'src/providers/StoreProvider';
 
 import Home from 'src/views/home';
 import { PoolAddress } from 'src/views/pools/poolAddress';
 
-import { useWindowSize } from 'usehooks-ts';
-
 import './App.css';
 
-import Spinner from './Components/Spinner/spinner';
 import { XFI } from './Connectors/xdefi-connector/declarations';
-import { darkTheme, lightTheme, Theme } from './theme';
-import { MyGlobalContext } from './Types/globalContext';
-
-import { MyUiContext } from './Types/uiContext';
 
 declare global {
   interface Window {
@@ -36,108 +35,50 @@ declare global {
 global.Buffer = window.Buffer || Buffer.Buffer;
 
 const App: React.FC = () => {
-  const [address, setAddress] = useState<string>('');
-
-  const [network, setNetwork] = useState<ChainConfig | null>(null);
-  const [webSocketProvider, setWebSocketProvider] = useState<
-    ethers.providers.WebSocketProvider | undefined
-  >(undefined);
-  const [darkMode, setDarkMode] = useState<boolean>(false);
-  const [spinnerVisible, setSpinnerVisible] = useState<boolean>(false);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isTablet, setIsTablet] = useState<boolean>(false);
-  const [show, setShow] = useState<boolean>(false);
-  const [theme, setTheme] = useState<Theme>(lightTheme);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-  const [scale, setScale] = useState(false);
-
-  const { width } = useWindowSize();
+  const { activate } = useWeb3React();
+  const { selectedChainId } = useChain();
+  const { darkMode } = useAppearance();
+  const setModal = useSetModal();
+  const [activation, setActivation] = useState(true);
 
   useEffect(() => {
-    setShow(true);
+    const prov = window.localStorage.getItem('yieldebaran-provider');
 
-    const darkmode = window.localStorage.getItem('yieldebaran-darkmode');
+    if (!prov) {
+      setActivation(false);
+      return;
+    }
 
-    if (darkmode && darkmode === 'dark') setDarkMode(true);
-    else setDarkMode(false);
+    // for getting account from web3React and prevent useless requests
+    setTimeout(() => setActivation(false), 200);
+
+    const con = GetConnector(+prov, setModal, selectedChainId);
+    if (con instanceof xDefiConnector && window.ethereum && window.ethereum.__XDEFI) activate(con);
+    else if (con instanceof MetamaskConnector && window.ethereum && !window.ethereum.__XDEFI)
+      activate(con);
+    else activate(con);
   }, []);
 
-  useEffect(() => {
-    if (show) {
-      if (width < 925) {
-        setIsMobile(true);
-        setIsTablet(false);
-      } else if (width < 1325) {
-        setScale(false);
-        setIsTablet(true);
-        setIsMobile(false);
-      } else {
-        setIsTablet(false);
-      }
-    }
-  }, [width, show]);
-
-  useEffect(() => {
-    if (darkMode) {
-      window.localStorage.setItem('yieldebaran-darkmode', 'dark');
-      setTheme(darkTheme);
-    } else {
-      window.localStorage.setItem('yieldebaran-darkmode', 'light');
-      setTheme(lightTheme);
-    }
-  }, [darkMode]);
+  if (activation) return null;
 
   return (
     <div id="app" className={`App scroller ${darkMode ? 'dark' : 'light'}`}>
-      <MyGlobalContext.Provider
-        value={{
-          network,
-          setNetwork,
-          address,
-          setAddress,
-          setWebSocketProvider,
-          webSocketProvider,
-        }}
-      >
-        <MyUiContext.Provider
-          value={{
-            darkMode,
-            setDarkMode,
-            spinnerVisible,
-            setSpinnerVisible,
-            isMobile,
-            setIsMobile,
-            isTablet,
-            setIsTablet,
-            show,
-            setShow,
-            theme,
-            setTheme,
-            scale,
-            setScale,
-            mobileMenuOpen,
-            setMobileMenuOpen,
-          }}
-        >
-          <StoreProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route element={<Layout />}>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/pools">
-                    <Route index element={<Navigate to="/" replace />} />
-                    <Route path=":poolAddress" element={<PoolAddress />} />
-                  </Route>
-                </Route>
-              </Routes>
-              <ReactTooltip id="tooltip" />
-              <Spinner />
-              <Modals />
-            </BrowserRouter>
-            <ToastContainer />
-          </StoreProvider>
-        </MyUiContext.Provider>
-      </MyGlobalContext.Provider>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<UrlChainIdManager />}>
+            <Route path=":chainId">
+              <Route index element={<Home />} />
+              <Route path="pools">
+                <Route index element={<Navigate to="/" replace />} />
+                <Route path=":poolAddress" element={<PoolAddress />} />
+              </Route>
+            </Route>
+          </Route>
+        </Route>
+      </Routes>
+      <ReactTooltip id="tooltip" />
+      <Modals />
+      <ToastContainer />
     </div>
   );
 };

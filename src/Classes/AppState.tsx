@@ -8,7 +8,7 @@ import { ChainConfig } from 'src/constants/chain';
 import eapAbi from '../abi/EAP.json';
 import ethAdapterAbi from '../abi/EthAdapter.json';
 import withdrawToolAbi from '../abi/WthdrawTool.json';
-import { FVal, zeroAppState } from '../Types/appDataContext';
+import { FVal, zeroAppState } from '../types/appDataContext';
 import { getEapStates } from '../Yieldebaran/Data/fetchEapsData';
 
 const log = debug('store:AppState');
@@ -27,6 +27,8 @@ export type AllocationData = {
   underlyingWithdrawable: FVal;
   fullyAvailable: boolean;
   allocationPercent: number;
+  allocationName: string;
+  currentApy: { apy: number; period: number };
 };
 
 export type EapData = {
@@ -111,7 +113,8 @@ export async function deposit(pool: string, amount: bigint) {
   return poolContract.deposit(amount);
 }
 
-export async function requestWithdrawal(pool: string, address: string, amount: bigint) {
+export async function requestWithdrawal(pool: string, amount: bigint, address?: string | null) {
+  if (!address) return;
   log('requestWithdrawal fired', { pool, address, amount, signer });
 
   if (!signer) return;

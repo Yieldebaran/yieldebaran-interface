@@ -1,16 +1,16 @@
 import React from 'react';
 
 import ReactDOM from 'react-dom';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 
-import { useUiContext } from '../../Types/uiContext';
-import './nav-mobile.css';
-import NetworkButton from '../Menu/NetworkButton/networkButton';
 import AddressButton from '../Menu/AddressButton/addressButton';
+import NetworkButton from '../Menu/NetworkButton/networkButton';
+import './nav-mobile.css';
 
 import NavbarLink from './navBarLink';
 
 const NavMobile: React.FC = () => {
-  const { darkMode, setMobileMenuOpen, mobileMenuOpen } = useUiContext();
+  const { darkMode, setMobileMenuOpen, mobileMenuOpen } = useAppearance();
   const navMobileContainer = document.getElementById('modal') as Element;
 
   const navMobile = (

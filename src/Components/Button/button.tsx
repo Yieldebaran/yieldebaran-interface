@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Spinner } from 'src/assets/huIcons/huIcons';
-import { useUiContext } from 'src/Types/uiContext';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 import './button.css';
 
 interface Props {
@@ -30,7 +30,7 @@ const Button: React.FC<Props> = ({
   searchText,
   children,
 }: Props) => {
-  const { isMobile, isTablet } = useUiContext();
+  const { isMobile, isTablet } = useAppearance();
 
   let className = '';
   if (disabled || loading) className += 'button-disabled ';

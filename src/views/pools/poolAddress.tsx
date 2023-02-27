@@ -12,13 +12,14 @@ import {
   TabHeader,
   TabHeaderItem,
 } from 'src/Components/TabControl/tabControl';
-import { useYieldebaranDataContext } from 'src/Types/appDataContext';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 export const PoolAddress = () => {
-  const { selectedPool, setSelectedPool, eapStates } = useYieldebaranDataContext();
+  const { selectedPool, setSelectedPool, eapStates } = useContractsData();
   const [tabChange, setTabChange] = useState<number>(1);
   const [tabHeaders, setTabHeaders] = useState<any[]>([]);
   const [tabContents, setTabContents] = useState<any>([]);
+  const { poolAddress } = useParams();
 
   const params = useParams();
 
@@ -53,6 +54,8 @@ export const PoolAddress = () => {
       setTabContents(contents);
     }
   }, [selectedPool, eap]);
+
+  console.log('skdfajkf', mountedSupply.current, selectedPool, tabHeaders.length > 0);
 
   if (mountedSupply.current && selectedPool && tabHeaders.length > 0) {
     return (

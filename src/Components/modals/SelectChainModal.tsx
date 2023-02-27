@@ -1,16 +1,15 @@
 import { useWeb3React } from '@web3-react/core';
-import { ethers } from 'ethers';
 import React from 'react';
 import Modal from 'src/Components/Modal/modal';
 import { CHAIN_LIST, ChainId } from 'src/constants/chain';
 import { toHex } from 'src/helpers';
+import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
-import { useGlobalContext } from 'src/Types/globalContext';
 
 import './networksMenu.css';
 
 export const SelectChainModal: React.FC = () => {
-  const { setNetwork, setWebSocketProvider } = useGlobalContext();
+  const { setSelectedChainId } = useChain();
   const { connector, library } = useWeb3React();
   const setModal = useSetModal();
 
@@ -52,22 +51,19 @@ export const SelectChainModal: React.FC = () => {
             }
             handleClose();
           } catch (error) {
-            console.log('Error', error);
+            console.error('Error', error);
           }
         }
       }
     } else {
-      setNetwork(CHAIN_LIST[chain]);
-      setWebSocketProvider(
-        new ethers.providers.WebSocketProvider(CHAIN_LIST[chain].publicWebSocket),
-      );
+      setSelectedChainId(chain);
       handleClose();
     }
   }
 
   return (
     <>
-      <Modal open={true} close={handleClose} title="Select network">
+      <Modal open={true} onClose={handleClose} title="Select network">
         <div className="networks-view">
           {Object.values(CHAIN_LIST).map((value, index) => {
             let disabled = false;

@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -12,8 +13,7 @@ import {
 import Button from 'src/Components/Button/button';
 import MarketDialogItem from 'src/Components/Markets/MarketsDialogs/marketDialogItem';
 import TextBox from 'src/Components/Textbox/textBox';
-import { useYieldebaranDataContext } from 'src/Types/appDataContext';
-import { useGlobalContext } from 'src/Types/globalContext';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { bnFromInput, formatBN, validateInput } from 'src/Utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
 import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
@@ -26,9 +26,8 @@ interface Props {
   selectedPool: string;
 }
 const WithdrawTab: React.FC<Props> = (props: Props) => {
-  const { eapStates, blockTimestamp } = useYieldebaranDataContext();
-
-  const { address } = useGlobalContext();
+  const { eapStates, blockTimestamp } = useContractsData();
+  const { account } = useWeb3React();
 
   const mounted = useRef<boolean>(false);
 
@@ -59,7 +58,7 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
 
   const handleRequestWithdrawal = async (amount: bigint) => {
     try {
-      const tx = await requestWithdrawal(eap.address, address, amount);
+      const tx = await requestWithdrawal(eap.address, amount, account);
       if (mounted) setWithdrawalInput('');
       const receipt = await tx.wait();
       log('handleRequestWithdrawal receipt', receipt);
@@ -205,7 +204,7 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
             </Button>
           </div>
           {
-            <div className="estimated-amount">
+            <div className="text-in-modal">
               ~
               {Number(formatBN((withdrawalInputBN * eap.exchangeRate) / ONE, eap.decimals)).toFixed(
                 3,

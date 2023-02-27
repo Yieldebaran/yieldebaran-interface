@@ -12,7 +12,7 @@ interface Props {
 
 const Error: React.FC<Props> = ({ open, close, errorMessage, button }: Props) => {
   return (
-    <Modal open={open} close={close} title="Error" error={true}>
+    <Modal open={open} onClose={close} title="Error" error={true}>
       <div className="error">
         <div className="error-message">
           <span>{errorMessage}</span>

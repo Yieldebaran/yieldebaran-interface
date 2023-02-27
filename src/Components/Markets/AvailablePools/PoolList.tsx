@@ -1,19 +1,18 @@
 import React, { useEffect } from 'react';
+import ReactTooltip from 'react-tooltip';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
+import 'tippy.js/dist/tippy.css';
 
 import '../style.css';
-import ReactTooltip from 'react-tooltip';
-
-import { useYieldebaranDataContext } from '../../../Types/appDataContext';
 
 import PoolRow from './PoolRow';
-import 'tippy.js/dist/tippy.css';
 
 interface Props {
   supplyMarketDialog: (selectedPool: string) => void;
 }
 
 const PoolList: React.FC<Props> = (props: Props) => {
-  const { eapStates } = useYieldebaranDataContext();
+  const { eapStates } = useContractsData();
 
   useEffect(() => {
     ReactTooltip.rebuild();

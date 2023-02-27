@@ -2,8 +2,8 @@ import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { approve, deposit, depositEth } from 'src/Classes/AppState';
-import { useYieldebaranDataContext } from 'src/Types/appDataContext';
-import { useGlobalContext } from 'src/Types/globalContext';
+import { useChain } from 'src/providers/ChainProvider';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 import { bnFromInput, validateInput } from 'src/Utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
@@ -20,9 +20,9 @@ interface Props {
   selectedPool: string;
 }
 const DepositTab: React.FC<Props> = (props: Props) => {
-  const { accountEthBalance, updateAppState, eapStates } = useYieldebaranDataContext();
+  const { accountEthBalance, updateAppState, eapStates } = useContractsData();
 
-  const { network } = useGlobalContext();
+  const { chainConfig } = useChain();
 
   const mounted = useRef<boolean>(false);
 
@@ -114,9 +114,9 @@ const DepositTab: React.FC<Props> = (props: Props) => {
   };
 
   const handleDepositEth = async (amount: bigint) => {
-    if (!network) return;
+    if (!chainConfig) return;
     try {
-      const tx = await depositEth(network.ethAdapter, amount);
+      const tx = await depositEth(chainConfig.ethAdapter, amount);
       if (mounted) setEthInput('');
       const receipt = await tx.wait();
       log('handleDepositEth receipt', receipt);

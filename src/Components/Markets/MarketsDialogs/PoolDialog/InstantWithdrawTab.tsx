@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core';
 import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -7,8 +8,7 @@ import Button from 'src/Components/Button/button';
 import MarketDialogItem from 'src/Components/Markets/MarketsDialogs/marketDialogItem';
 
 import TextBox from 'src/Components/Textbox/textBox';
-import { useYieldebaranDataContext } from 'src/Types/appDataContext';
-import { useGlobalContext } from 'src/Types/globalContext';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { bnFromInput, formatBN, validateInput } from 'src/Utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
 import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
@@ -22,9 +22,8 @@ interface Props {
 }
 
 const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
-  const { eapStates } = useYieldebaranDataContext();
-
-  const { address } = useGlobalContext();
+  const { eapStates } = useContractsData();
+  const { account } = useWeb3React();
 
   const mounted = useRef<boolean>(false);
 
@@ -57,8 +56,9 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
     pool: string,
     amount: bigint,
     minFromBalance: bigint,
-    account: string,
+    account?: string | null,
   ) => {
+    if (!account) return;
     try {
       const tx = await instantWithdrawal(pool, amount, minFromBalance, account);
       setWithdrawalInput('');
@@ -82,8 +82,9 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
     pool: string,
     amount: bigint,
     minFromBalance: bigint,
-    account: string,
+    account?: string | null,
   ) => {
+    if (!account) return;
     try {
       const tx = await instantWithdrawalEth(pool, amount, minFromBalance, account);
       setWithdrawalInput('');
@@ -173,7 +174,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
           button={'Max'}
           onClick={() => setMaxWithdrawal()}
         />
-        <div className="estimated-amount">
+        <div className="text-in-modal">
           ~
           {Number(
             formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals),
@@ -184,7 +185,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
       <Button
         disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
         onClick={() =>
-          handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)
+          handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
         }
       >
         Withdraw
@@ -193,7 +194,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
         <Button
           disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
           onClick={() =>
-            handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)
+            handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, account)
           }
         >
           Withdraw as {eap.underlyingSymbol.substring(1)}

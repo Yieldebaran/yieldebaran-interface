@@ -5,11 +5,11 @@ import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import Button from 'src/Components/Button/button';
 
 import { getShortenAddress } from 'src/helpers';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
-import { useUiContext } from 'src/Types/uiContext';
 
 const AddressButton: React.FC = () => {
-  const { setMobileMenuOpen } = useUiContext();
+  const { setMobileMenuOpen } = useAppearance();
   const { account } = useWeb3React<providers.Web3Provider>();
   const setModal = useSetModal();
 

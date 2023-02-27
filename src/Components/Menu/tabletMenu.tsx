@@ -1,4 +1,5 @@
 import React from 'react';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 
 import Navbar from '../Navbar/navbar';
 import NavBarButton from '../Navbar/navBarButton';
@@ -9,13 +10,12 @@ import NavbarMobile from '../Navbar/navbarMobile';
 import NavBarRight from '../Navbar/navBarRight';
 import ThemeSwitch from '../Navbar/themeSwitch';
 
-import { useUiContext } from '../../Types/uiContext';
-
-import NetworkButton from './NetworkButton/networkButton';
 import AddressButton from './AddressButton/addressButton';
 
+import NetworkButton from './NetworkButton/networkButton';
+
 const TabletMenu: React.FC = () => {
-  const { isTablet, isMobile, show } = useUiContext();
+  const { isTablet, isMobile, show } = useAppearance();
 
   return (isTablet || isMobile) && show ? (
     <>

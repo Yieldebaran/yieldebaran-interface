@@ -45,7 +45,7 @@ let walletConnect = new WalletConnectConnector({
 export const GetConnector = (
   c: any,
   setOpenNetwork: (newModal: ModalSettings | null) => void,
-  chain?: ChainId,
+  chain?: ChainId | null,
 ): any => {
   if (c === connectrorsEnum.WalletConnect) {
     if (chain)

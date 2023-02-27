@@ -9,10 +9,10 @@ import NavBarLinks from 'src/Components/Navbar/navBarLinks';
 import NavbarLogo from 'src/Components/Navbar/navbarLogo';
 import NavBarRight from 'src/Components/Navbar/navBarRight';
 import ThemeSwitch from 'src/Components/Navbar/themeSwitch';
-import { useUiContext } from 'src/Types/uiContext';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 
 const Menu: React.FC = () => {
-  const { isTablet, isMobile, show } = useUiContext();
+  const { isTablet, isMobile, show } = useAppearance();
   const showNavbar = !isTablet && !isMobile && show;
 
   if (!showNavbar) return null;

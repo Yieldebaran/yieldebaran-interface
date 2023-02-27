@@ -124,8 +124,8 @@
   margin-top: 20px;
 }
 
-.estimated-amount {
-  color: #1c2026;
+.text-in-modal {
+  color: var(--text-color);
 }
 
 .amount-group {

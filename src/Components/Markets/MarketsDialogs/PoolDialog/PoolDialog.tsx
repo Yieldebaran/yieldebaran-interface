@@ -2,11 +2,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import ReactToolTip from 'react-tooltip';
+import { useAppearance } from 'src/providers/AppearanceProvider';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 import closeIcon from '../../../../assets/icons/closeIcon.png';
-
-import { useYieldebaranDataContext } from '../../../../Types/appDataContext';
-import { useUiContext } from '../../../../Types/uiContext';
 import {
   Tab,
   TabContent,
@@ -16,6 +15,7 @@ import {
 } from '../../../TabControl/tabControl';
 
 import '../marketDialog.css';
+import AllocationInfoTab from './AllocationInfoTab';
 import DepositTab from './DepositTab';
 import InstantWithdrawTab from './InstantWithdrawTab';
 import WithdrawTab from './WithdrawTab';
@@ -25,8 +25,8 @@ interface Props {
 }
 
 const PoolDialog: React.FC<Props> = (props: Props) => {
-  const { selectedPool, setSelectedPool, eapStates } = useYieldebaranDataContext();
-  const { spinnerVisible, darkMode } = useUiContext();
+  const { selectedPool, setSelectedPool, eapStates } = useContractsData();
+  const { spinnerVisible, darkMode } = useAppearance();
   const [tabChange, setTabChange] = useState<number>(1);
   const [tabHeaders, setTabHeaders] = useState<any[]>([]);
   const [tabContents, setTabContents] = useState<any>([]);
@@ -46,7 +46,7 @@ const PoolDialog: React.FC<Props> = (props: Props) => {
     mountedSupply.current = true;
     setTabChange(1);
     return () => {
-      setSelectedPool(undefined);
+      setSelectedPool('');
       mountedSupply.current = false;
     };
   }, []);
@@ -63,6 +63,9 @@ const PoolDialog: React.FC<Props> = (props: Props) => {
 
       headers.push({ title: 'Quick withdrawal' });
       contents.push(<InstantWithdrawTab selectedPool={selectedPool} />);
+
+      headers.push({ title: 'Info' });
+      contents.push(<AllocationInfoTab selectedPool={selectedPool} />);
 
       setTabHeaders(headers);
       setTabContents(contents);
