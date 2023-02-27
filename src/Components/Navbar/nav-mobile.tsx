@@ -19,20 +19,11 @@ const NavMobile: React.FC = () => {
       <div className="nav-mobile-body">
         <AddressButton />
         <NetworkButton />
-        <NavbarLink link="https://dashboard.hundred.finance" target="_blank">
-          Dashboard
+        <NavbarLink link="https://github.com/yieldebaran/yieldebaran-interface" target="_blank">
+          Interface repo
         </NavbarLink>
-        <NavbarLink link="https://app.multichain.org/#/router" target="_blank">
-          Bridge
-        </NavbarLink>
-        <NavbarLink link="https://docs.hundred.finance" target="_blank">
-          Docs
-        </NavbarLink>
-        <NavbarLink link="https://vote.hundred.finance" target="_blank">
-          Vote
-        </NavbarLink>
-        <NavbarLink link="https://lendly.hundred.finance" target="_blank">
-          Lendly
+        <NavbarLink link="https://github.com/yieldebaran/yieldebaran-contracts" target="_blank">
+          Contracts repo
         </NavbarLink>
       </div>
     </div>

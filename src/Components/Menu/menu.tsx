@@ -22,8 +22,11 @@ const Menu: React.FC = () => {
       <NavbarLeft>
         <NavbarLogo />
         <NavBarLinks>
-          <NavbarLink link="https://docs.hundred.finance" target="_blank">
-            Docs
+          <NavbarLink link="https://github.com/yieldebaran/yieldebaran-interface" target="_blank">
+            Interface repo
+          </NavbarLink>
+          <NavbarLink link="https://github.com/yieldebaran/yieldebaran-contracts" target="_blank">
+            Contracts repo
           </NavbarLink>
         </NavBarLinks>
       </NavbarLeft>
