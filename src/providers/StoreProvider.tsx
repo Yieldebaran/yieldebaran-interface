@@ -1,7 +1,7 @@
 import debug from 'debug';
 import { createContext, Dispatch, SetStateAction, useCallback, useContext, useState } from 'react';
 import { initialModalState, ModalSettings } from 'src/providers/store/modal';
-import { FCC } from 'src/Types/FCC';
+import { FCC } from 'src/types/FCC';
 
 const log = debug('providers:StoreProvider');
 
@@ -44,13 +44,6 @@ const makeUseState = <P extends any>(
     ] as [P, (newVal: SetStateParameter<P>) => void];
   };
 };
-
-const makeUseStateByKey = <K extends keyof StoreType>(key: K) =>
-  makeUseState<StoreType[K]>(
-    (s) => s[key],
-    (s, val) => ({ ...s, [key]: val }),
-    key,
-  );
 
 export const useModal = () => useStore()[0].modal;
 

@@ -1,32 +1,36 @@
+import { useWeb3React } from '@web3-react/core';
+import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
 
-import { EapData, instantWithdrawal, instantWithdrawalEth } from '../../../../Classes/AppState';
-import { useYieldebaranDataContext } from '../../../../Types/appDataContext';
-import { useGlobalContext } from '../../../../Types/globalContext';
-import { useUiContext } from '../../../../Types/uiContext';
-import { bnFromInput, formatBN, validateInput } from '../../../../Utils/numbers';
-import { ONE } from '../../../../Yieldebaran/Data/fetchEapsData';
-import Button from '../../../Button/button';
+import { EapData, instantWithdrawal, instantWithdrawalEth } from 'src/Classes/AppState';
 
-import TextBox from '../../../Textbox/textBox';
+import Button from 'src/Components/Button/button';
+import MarketDialogItem from 'src/Components/Markets/MarketsDialogs/marketDialogItem';
+
+import TextBox from 'src/Components/Textbox/textBox';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
+import { bnFromInput, formatBN, validateInput } from 'src/Utils/numbers';
+import { toastError, toastSuccess } from 'src/utils/toast';
+import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
+
 import '../marketDialog.css';
-import MarketDialogItem from '../marketDialogItem';
+
+const log = debug('components:InstantWithdrawTab');
 
 interface Props {
   selectedPool: string;
 }
-const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
-  const {toastErrorMessage, toastSuccessMessage} = useUiContext();
-  const {eapStates} = useYieldebaranDataContext();
 
-  const {address} = useGlobalContext();
+const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
+  const { eapStates } = useContractsData();
+  const { account } = useWeb3React();
 
   const mounted = useRef<boolean>(false);
 
   const [withdrawalInput, setWithdrawalInput] = useState<string>('');
   const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState<string>('');
 
-  const eap: EapData = eapStates[props.selectedPool]
+  const eap: EapData = eapStates[props.selectedPool];
 
   useEffect(() => {
     mounted.current = true;
@@ -49,119 +53,156 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
   };
 
   const handleInstantWithdrawal = async (
-      pool: string,
-      amount: bigint,
-      minFromBalance: bigint,
-      account: string,
+    pool: string,
+    amount: bigint,
+    minFromBalance: bigint,
+    account?: string | null,
   ) => {
+    if (!account) return;
     try {
       const tx = await instantWithdrawal(pool, amount, minFromBalance, account);
       setWithdrawalInput('');
       const receipt = await tx.wait();
-      console.log(receipt);
-      if (receipt.status === 1) {
-        toastSuccessMessage('Transaction successfully mined');
-      } else if (receipt.message) {
-        toastErrorMessage(`${receipt.message}`);
-      }
+      log('handleInstantWithdrawal receipt', receipt);
+      toastSuccess('Transaction successfully mined');
     } catch (error: any) {
-      console.log(error);
-      toastErrorMessage(`${error?.message.replace('.', '')}`);
+      if (!error) {
+        toastError('Unhandled error');
+        return;
+      }
+      if (error.code === 'ACTION_REJECTED') {
+        toastError('User denied transaction signature');
+        return;
+      }
+      toastError(`${error?.message.replace('.', '')}`);
     }
   };
 
   const handleInstantWithdrawalEth = async (
-      pool: string,
-      amount: bigint,
-      minFromBalance: bigint,
-      account: string,
+    pool: string,
+    amount: bigint,
+    minFromBalance: bigint,
+    account?: string | null,
   ) => {
+    if (!account) return;
     try {
       const tx = await instantWithdrawalEth(pool, amount, minFromBalance, account);
       setWithdrawalInput('');
       const receipt = await tx.wait();
-      console.log(receipt);
-      if (receipt.status === 1) {
-        toastSuccessMessage('Transaction successfully mined');
-      } else if (receipt.message) {
-        toastErrorMessage(`${receipt.message}`);
-      }
+      log('handleInstantWithdrawalEth receipt', receipt);
+      toastSuccess('Transaction successfully mined');
     } catch (error: any) {
-      console.log(error);
-      toastErrorMessage(`${error?.message.replace('.', '')}`);
+      if (!error) {
+        toastError('Unhandled error');
+        return;
+      }
+      if (error.code === 'ACTION_REJECTED') {
+        toastError('User denied transaction signature');
+        return;
+      }
+      toastError(`${error?.message.replace('.', '')}`);
     }
   };
 
   const withdrawalInputBN = bnFromInput(withdrawalInput, eap.decimals);
 
   const sharesWithdrawable =
-      eap.sharesWithdrawable.native > eap.accountShares.native
-          ? eap.accountShares
-          : eap.sharesWithdrawable;
+    eap.sharesWithdrawable.native > eap.accountShares.native
+      ? eap.accountShares
+      : eap.sharesWithdrawable;
   const underlyingWithdrawable = (sharesWithdrawable.native * eap.exchangeRate) / ONE;
 
   const minFromBalance =
-      eap.underlyingUnallocated.native > withdrawalInputBN
-          ? withdrawalInputBN
-          : eap.underlyingUnallocated.native;
+    eap.underlyingUnallocated.native > withdrawalInputBN
+      ? withdrawalInputBN
+      : eap.underlyingUnallocated.native;
 
-  const notAllMoneyAvailable = eap.accountAllocated.native > underlyingWithdrawable
+  const notAllMoneyAvailable = eap.accountAllocated.native > underlyingWithdrawable;
 
-  const noFeeAmount = eap.underlyingUnallocated.native > underlyingWithdrawable ? underlyingWithdrawable : eap.underlyingUnallocated.native
+  const noFeeAmount =
+    eap.underlyingUnallocated.native > underlyingWithdrawable
+      ? underlyingWithdrawable
+      : eap.underlyingUnallocated.native;
 
-  return (eap && mounted ?
-          <>
-            <div className="supply-note">Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee</div>
-            <div className="dialog-line"/>
-            <MarketDialogItem
-                title={'Shares balance'}
-                toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${eap.underlyingSymbol}`}
-                value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
-            />
-            {eap.underlyingUnallocated.native !== 0n && <div className="dialog-line"/>}
-            {noFeeAmount !== 0n &&
-                <MarketDialogItem
-                    toolTipContent={'When there are some unallocated funds (e. g. just deposited funds) it can be withdrawn without a fee'}
-                    title={'No-fee withdrawal'}
-                    value={`${formatBN(noFeeAmount, eap.decimals)} ${eap.underlyingSymbol}`}
-                />}
-            <div className="dialog-line"/>
-            {notAllMoneyAvailable && <MarketDialogItem
-                title={'Total withdrawable'}
-                toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${eap.underlyingSymbol}`}
-                value={`${sharesWithdrawable.formatted} y${eap.underlyingSymbol}`}
-            />}
-            {notAllMoneyAvailable &&
-                <div className="supply-note">Currently markets are highly utilized, so not all funds are available for
-                  the instant withdrawal. But it's temporary. </div>}
-            {notAllMoneyAvailable && <div className="dialog-line"/>}
-            <div className="input-group">
-              <TextBox
-                  placeholder={`0 y${eap.underlyingSymbol}`}
-                  disabled={eap.accountShares.native === 0n}
-                  value={withdrawalInput}
-                  setInput={setWithdrawalInput}
-                  validation={withdrawalErrorMessage}
-                  button={'Max'}
-                  onClick={() => setMaxWithdrawal()}/>
-              <div className="text-in-modal">
-                ~{Number(formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals)).toFixed(3)} {eap.underlyingSymbol}
-              </div>
-            </div>
-            <Button
-                disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
-                onClick={() => handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, address)}>
-              Withdraw
-            </Button>
-            {eap.isEth && <Button
-                disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
-                onClick={() => handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, address)}>
-              Withdraw as {eap.underlyingSymbol.substring(1)}
-            </Button>}
-          </>
-          : null
-  )
-}
+  return eap && mounted ? (
+    <>
+      <div className="supply-note">
+        Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee
+      </div>
+      <div className="dialog-line" />
+      <MarketDialogItem
+        title={'Shares balance'}
+        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${
+          eap.underlyingSymbol
+        }`}
+        value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
+      />
+      {eap.underlyingUnallocated.native !== 0n && <div className="dialog-line" />}
+      {noFeeAmount !== 0n && (
+        <MarketDialogItem
+          toolTipContent={
+            'When there are some unallocated funds (e. g. just deposited funds) it can be withdrawn without a fee'
+          }
+          title={'No-fee withdrawal'}
+          value={`${formatBN(noFeeAmount, eap.decimals)} ${eap.underlyingSymbol}`}
+        />
+      )}
+      <div className="dialog-line" />
+      {notAllMoneyAvailable && (
+        <MarketDialogItem
+          title={'Total withdrawable'}
+          toolTipContent={`~${Number(formatBN(underlyingWithdrawable, eap.decimals)).toFixed(3)} ${
+            eap.underlyingSymbol
+          }`}
+          value={`${sharesWithdrawable.formatted} y${eap.underlyingSymbol}`}
+        />
+      )}
+      {notAllMoneyAvailable && (
+        <div className="supply-note">
+          Currently markets are highly utilized, so not all funds are available for the instant
+          withdrawal. But it's temporary.{' '}
+        </div>
+      )}
+      {notAllMoneyAvailable && <div className="dialog-line" />}
+      <div className="input-group">
+        <TextBox
+          placeholder={`0 y${eap.underlyingSymbol}`}
+          disabled={eap.accountShares.native === 0n}
+          value={withdrawalInput}
+          setInput={setWithdrawalInput}
+          validation={withdrawalErrorMessage}
+          button={'Max'}
+          onClick={() => setMaxWithdrawal()}
+        />
+        <div className="text-in-modal">
+          ~
+          {Number(
+            formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals),
+          ).toFixed(3)}{' '}
+          {eap.underlyingSymbol}
+        </div>
+      </div>
+      <Button
+        disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+        onClick={() =>
+          handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
+        }
+      >
+        Withdraw
+      </Button>
+      {eap.isEth && (
+        <Button
+          disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+          onClick={() =>
+            handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, account)
+          }
+        >
+          Withdraw as {eap.underlyingSymbol.substring(1)}
+        </Button>
+      )}
+    </>
+  ) : null;
+};
 
 function calculateInstantWithdrawal(shares: bigint, eap: EapData): bigint {
   if (shares === 0n) return 0n;

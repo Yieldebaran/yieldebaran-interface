@@ -1,5 +1,7 @@
 import Logos from 'src/logos';
 
+export const DEFAULT_CHAIN = 250;
+
 export enum ChainId {
   FTM = 250,
 }

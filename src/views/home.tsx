@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Markets from 'src/Components/Markets/markets';
 import PoolDialog from 'src/Components/Markets/MarketsDialogs/PoolDialog/PoolDialog';
-import { useYieldebaranDataContext } from 'src/Types/appDataContext';
-import { useUiContext } from 'src/Types/uiContext';
+import { useAppearance } from 'src/providers/AppearanceProvider';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 const Home: React.FC = () => {
-  const { spinnerVisible } = useUiContext();
-  const { setSelectedPool } = useYieldebaranDataContext();
+  const { spinnerVisible } = useAppearance();
+  const { setSelectedPool } = useContractsData();
 
   const [openSupplyMarketDialog, setOpenSupplyDialog] = useState(false);
 

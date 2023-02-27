@@ -1,35 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import closeIcon from '../../assets/icons/closeIcon.png';
-import { useUiContext } from '../../Types/uiContext';
+import closeIcon from 'src/assets/icons/closeIcon.png';
+import { useAppearance } from 'src/providers/AppearanceProvider';
+import { FCC } from 'src/types/FCC';
+
 import './modal.css';
 
 interface Props {
   open: boolean;
-  close: () => void;
+  onClose: () => void;
   title: string;
   titleImg?: string;
   maxheight?: string;
   error?: boolean;
-  children?: any;
 }
 
-const Modal: React.FC<Props> = ({
-  open,
-  close,
-  title,
-  titleImg,
-  maxheight,
-  error,
-  children,
-}: Props) => {
-  const { darkMode } = useUiContext();
+const Modal: FCC<Props> = ({ open, onClose, title, titleImg, maxheight, error, children }) => {
+  const { darkMode } = useAppearance();
   const modalContainer = document.getElementById('modal') as Element;
 
   const modal = (
     <div className={`modal ${darkMode ? 'dark' : 'light'}`}>
-      <div className="modal-background" onClick={close}></div>
+      <div className="modal-background" onClick={onClose}></div>
       <div className="modal-wrapper" style={{ maxHeight: maxheight ? maxheight : '82%' }}>
         <div className="modal-title">
           {titleImg ? <img src={titleImg} alt="" className="title-img" /> : null}
@@ -41,7 +34,7 @@ const Modal: React.FC<Props> = ({
           ) : (
             <span>{title}</span>
           )}
-          <img src={closeIcon} alt="" onClick={close} className="modal-close" />
+          <img src={closeIcon} alt="" onClick={onClose} className="modal-close" />
         </div>
         <div className="seperator" />
         {children}

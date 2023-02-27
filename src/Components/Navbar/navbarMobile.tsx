@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react';
-
-import { useUiContext } from '../../Types/uiContext';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 import './navbar.css';
 
 interface Props {
@@ -8,7 +7,7 @@ interface Props {
 }
 
 const NavbarMobile: React.FC<Props> = ({ children }: Props) => {
-  const { mobileMenuOpen } = useUiContext();
+  const { mobileMenuOpen } = useAppearance();
   return (
     <div className={`navbar-mobile-content ${mobileMenuOpen ? 'navbar-mobile-content-open' : ''}`}>
       {children}

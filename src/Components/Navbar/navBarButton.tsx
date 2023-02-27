@@ -1,10 +1,9 @@
 import React from 'react';
-
-import { useUiContext } from '../../Types/uiContext';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 import './navbarButton.css';
 
 const NavBarButton: React.FC = () => {
-  const { mobileMenuOpen, setMobileMenuOpen } = useUiContext();
+  const { mobileMenuOpen, setMobileMenuOpen } = useAppearance();
 
   const handleClick = (): void => {
     setMobileMenuOpen(!mobileMenuOpen);

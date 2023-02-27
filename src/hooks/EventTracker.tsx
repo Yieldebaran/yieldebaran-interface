@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { ethers } from 'ethers';
-
-import { useWeb3React } from '@web3-react/core';
-
 import { EventFilter } from '@ethersproject/contracts';
 
-import { useGlobalContext } from '../Types/globalContext';
+import { useWeb3React } from '@web3-react/core';
+import { ethers } from 'ethers';
+import React, { useEffect, useState } from 'react';
+import { useChain } from 'src/providers/ChainProvider';
+import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 import erc20Abi from '../abi/erc20.json';
-import { useYieldebaranDataContext } from '../Types/appDataContext';
 
 const EventTracker: React.FC = () => {
-  const { network, webSocketProvider } = useGlobalContext();
-  const { eapStates, updateAppState, blockNumber } = useYieldebaranDataContext();
+  const { chainConfig, wSSProvider } = useChain();
+  const { eapStates, updateAppState, blockNumber } = useContractsData();
   const [eaps, setEaps] = useState(Object.keys(eapStates));
 
   const { account } = useWeb3React();
@@ -21,11 +19,11 @@ const EventTracker: React.FC = () => {
 
   const clearSubs = () => {
     console.log('remove listeners');
-    webSocketProvider?.removeAllListeners();
+    wSSProvider?.removeAllListeners();
   };
 
   useEffect(() => {
-    if (!network || !webSocketProvider) {
+    if (!chainConfig || !wSSProvider) {
       lastUpdateBlock = 0;
       return;
     }
@@ -58,14 +56,14 @@ const EventTracker: React.FC = () => {
     });
 
     initListeners(filters);
-  }, [account, network, eapStates, webSocketProvider]);
+  }, [account, chainConfig, eapStates, wSSProvider]);
 
   async function initListeners(filters: EventFilter[]) {
-    console.log('initListeners', webSocketProvider?._wsReady);
-    await webSocketProvider?._networkPromise;
+    console.log('initListeners', wSSProvider?._wsReady);
+    await wSSProvider?._networkPromise;
 
     filters.forEach((f) => {
-      webSocketProvider?.on(f, async (data) => {
+      wSSProvider?.on(f, async (data) => {
         console.log(data);
         if (!data) return;
         if (data.blockNumber > lastUpdateBlock) {
@@ -78,7 +76,7 @@ const EventTracker: React.FC = () => {
       });
       console.log(f);
     });
-    console.log(webSocketProvider);
+    console.log(wSSProvider);
   }
 
   return <></>;

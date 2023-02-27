@@ -1,12 +1,12 @@
 import React from 'react';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 
 import { Moon, Sun } from '../../assets/assets';
-import { useUiContext } from '../../Types/uiContext';
 
 import './themeSwitch.css';
 
 const ThemeSwitch: React.FC = () => {
-  const { darkMode, setDarkMode } = useUiContext();
+  const { darkMode, setDarkMode } = useAppearance();
   const handleSwitchTheme = () => {
     setDarkMode(!darkMode);
   };

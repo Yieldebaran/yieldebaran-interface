@@ -1,41 +1,36 @@
 import { useWeb3React } from '@web3-react/core';
-
-import { providers } from 'ethers';
 import React from 'react';
+import cbw from 'src/assets/icons/cbw.png';
+import mm from 'src/assets/icons/mm.png';
+import wc from 'src/assets/icons/wc.png';
+import xdefi from 'src/assets/icons/XDEFIWallet.jpeg';
+import Modal from 'src/Components/Modal/modal';
+import { connectrorsEnum, GetConnector } from 'src/Connectors/connectors';
+import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
 
-import cbw from '../../assets/icons/cbw.png';
-import mm from '../../assets/icons/mm.png';
-import wc from '../../assets/icons/wc.png';
-import xdefi from '../../assets/icons/XDEFIWallet.jpeg';
-import { connectrorsEnum, GetConnector } from '../../Connectors/connectors';
-
-import { useGlobalContext } from '../../Types/globalContext';
-import { useUiContext } from '../../Types/uiContext';
-
-import Modal from '../Modal/modal';
 import './wallets.css';
 
-const Wallets: React.FC = () => {
-  const { showWallets, setShowWallets } = useUiContext();
-  const { network } = useGlobalContext();
-  const { activate } = useWeb3React<providers.Web3Provider>();
+export const ConnectWalletModal: React.FC = () => {
+  const { chainConfig } = useChain();
   const setModal = useSetModal();
+  const { activate } = useWeb3React();
 
   const handleConnect = async (c: any) => {
-    setShowWallets(false);
-    const con = GetConnector(c, setModal, network ? network.chainId : undefined);
+    const con = GetConnector(c, setModal, chainConfig ? chainConfig.chainId : undefined);
+
+    setModal(null);
+
     try {
-      // console.log("yieldebaran-provider", c)
       await activate(con);
       window.localStorage.setItem('yieldebaran-provider', c);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
   return (
-    <Modal open={showWallets} close={() => setShowWallets(false)} title="Connect Wallet">
+    <Modal open={true} onClose={() => setModal(null)} title="Connect Wallet">
       <div className="wallets">
         <div className="wallet-item" onClick={() => handleConnect(connectrorsEnum.Metamask)}>
           <div className="wallet-item-icon">
@@ -65,5 +60,3 @@ const Wallets: React.FC = () => {
     </Modal>
   );
 };
-
-export default Wallets;

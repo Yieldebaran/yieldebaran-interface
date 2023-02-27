@@ -11,12 +11,14 @@ const Footer: React.FC = () => {
           <YieldebaranLogo width="150" height="27" />
         </div>
         <div className="content">
-          <h4>Documents</h4>
-          <a href="https://docs.hundred.finance/support/faq" target={'_blank'} rel={'noreferrer'}>
-            <p>FAQ</p>
+          <a href="https://github.com/yieldebaran/yieldebaran-interface" target={'_blank'} rel={'noreferrer'}>
+            <p>Interface repo</p>
           </a>
-          <a href="https://github.com/yieldebaran" target={'_blank'} rel={'noreferrer'}>
-            <p>Github</p>
+          <a href="https://github.com/yieldebaran/yieldebaran-contracts" target={'_blank'} rel={'noreferrer'}>
+            <p>Contracts repo</p>
+          </a>
+          <a href="https://github.com/Yieldebaran/yieldebaran-contracts/blob/master/DEPLOYMENT_INFO.md" target={'_blank'} rel={'noreferrer'}>
+            <p>Deployment info</p>
           </a>
         </div>
         <div className="content">

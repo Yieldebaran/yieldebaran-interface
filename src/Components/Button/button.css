@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1.5px solid transparent;
-  border-radius: 50px;
+  border: 2px solid transparent;
+  border-radius: 10px;
   background: var(--button-background) padding-box, var(--button-border) border-box;
   padding: 0 1rem;
   user-select: none;
@@ -111,7 +111,7 @@
 
 .button-xsmall {
   height: 30px;
-  min-height: 30px;
+  min-height: 35px;
   min-width: 150px;
   gap: 1rem;
 }

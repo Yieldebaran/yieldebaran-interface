@@ -1,24 +1,23 @@
 import React, { useEffect, useRef } from 'react';
 
 import { ChainConfig } from 'src/constants/chain';
+import { useAppearance } from 'src/providers/AppearanceProvider';
+import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
-
-import { useGlobalContext } from 'src/Types/globalContext';
-import { useUiContext } from 'src/Types/uiContext';
 
 import Button from '../../Button/button';
 
 const NetworkButton: React.FC = () => {
-  const { setMobileMenuOpen } = useUiContext();
+  const { setMobileMenuOpen } = useAppearance();
   const setModal = useSetModal();
-  const { network } = useGlobalContext();
+  const { chainConfig } = useChain();
   const netWorkRef = useRef<ChainConfig | null>(null);
-  netWorkRef.current = network;
+  netWorkRef.current = chainConfig;
 
   useEffect(() => {
-    const temp = { ...network } as ChainConfig;
+    const temp = { ...chainConfig } as ChainConfig;
     if (temp) netWorkRef.current = temp;
-  }, [network]);
+  }, [chainConfig]);
 
   function handleChangeNetwork() {
     setMobileMenuOpen(false);

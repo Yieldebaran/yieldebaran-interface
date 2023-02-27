@@ -34,10 +34,10 @@ export class MetamaskNotFounfError extends Error {
 }
 
 export class MetamaskConnector extends AbstractConnector {
-  private setOpenNetwork: (newModal: ModalSettings | null) => void;
+  private setOpenModal: (newModal: ModalSettings | null) => void;
   private chainIdSelected: number | null;
 
-  constructor(kwargs: any, setOpenNetwork: (newModal: ModalSettings | null) => void) {
+  constructor(kwargs: any, setOpenModal: (newModal: ModalSettings | null) => void) {
     super(kwargs);
 
     this.handleNetworkChanged = this.handleNetworkChanged.bind(this);
@@ -45,14 +45,14 @@ export class MetamaskConnector extends AbstractConnector {
     this.handleConnect = this.handleConnect.bind(this);
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this);
     this.handleClose = this.handleClose.bind(this);
-    this.setOpenNetwork = setOpenNetwork;
+    this.setOpenModal = setOpenModal;
     this.chainIdSelected = null;
   }
 
   private handleChainChanged(chainId: string | number): void {
     if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(chainId))) {
       // console.log('handleChainChanged, unsupported chain')
-      this.setOpenNetwork({ key: 'selectChain' });
+      this.setOpenModal({ key: 'selectChain' });
     }
     this.chainIdSelected = Number(chainId);
     // if (__DEV__) {
@@ -95,7 +95,7 @@ export class MetamaskConnector extends AbstractConnector {
 
     if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(data.chainId))) {
       // console.log('handleConnect, unsupported chain')
-      this.setOpenNetwork({ key: 'selectChain' });
+      this.setOpenModal({ key: 'selectChain' });
     }
 
     this.chainIdSelected = Number(data.chainId);
@@ -144,7 +144,7 @@ export class MetamaskConnector extends AbstractConnector {
 
     if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(this.chainIdSelected))) {
       // console.log('activate, unsupported chain')
-      this.setOpenNetwork({ key: 'selectChain' });
+      this.setOpenModal({ key: 'selectChain' });
     }
 
     return { provider: window.ethereum, ...(account ? { account } : {}) };

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 
 import { HuLogoSpinner } from '../../assets/huIcons/huIcons';
-import { useUiContext } from '../../Types/uiContext';
 
 const Spinner: React.FC = () => {
-  const { spinnerVisible, theme } = useUiContext();
+  const { spinnerVisible, theme } = useAppearance();
 
   const style: React.CSSProperties = {
     position: 'fixed',
