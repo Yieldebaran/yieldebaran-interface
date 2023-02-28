@@ -90,10 +90,9 @@ export class MetamaskConnector extends AbstractConnector {
     // if (__DEV__) {
     //   console.log("Handling 'networkChanged' event with payload", networkId)
     // }
-    // console.log(this.supportedChainIds)
     // console.log('on connect', data)
 
-    if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(data.chainId))) {
+    if (data.chainId && !this.supportedChainIds?.includes(Number(data.chainId))) {
       // console.log('handleConnect, unsupported chain')
       this.setOpenModal({ key: 'selectChain' });
     }
