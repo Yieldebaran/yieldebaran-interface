@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Markets from 'src/Components/Markets/markets';
-import PoolDialog from 'src/Components/Markets/MarketsDialogs/PoolDialog/PoolDialog';
+import { PoolModal } from 'src/components/modals/PoolModal/PoolModal';
+import { PoolsList } from 'src/components/PoolsList/PoolsList';
 import { useAppearance } from 'src/providers/AppearanceProvider';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 
@@ -24,9 +24,9 @@ const Home: React.FC = () => {
   // render main logic frame
   return (
     <>
-      <Markets supplyMarketDialog={supplyMarketDialog} />
+      <PoolsList supplyMarketDialog={supplyMarketDialog} />
       {openSupplyMarketDialog ? (
-        <PoolDialog closeSupplyMarketDialog={closeSupplyMarketDialog} />
+        <PoolModal closeSupplyMarketDialog={closeSupplyMarketDialog} />
       ) : null}
     </>
   );

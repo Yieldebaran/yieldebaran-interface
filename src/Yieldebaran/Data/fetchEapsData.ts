@@ -2,9 +2,9 @@ import { Call, Contract, Provider } from 'ethcall';
 
 import { ethers } from 'ethers';
 
-import { AppState, ApyData, EapData } from 'src/Classes/AppState';
+import { AppState, ApyData, EapData } from 'src/classes/AppState';
 import { ChainConfig } from 'src/constants/chain';
-import { formatBN } from 'src/Utils/numbers';
+import { formatBN } from 'src/utils/numbers';
 
 import Logos from '../../logos';
 
@@ -215,7 +215,8 @@ export async function getEapStates(
       ).toFVal(format);
       const exchangeRate = BigInt(secondDataBatchCurrentBlock[secondDataCursor++] as string);
       const platformAdapter = secondDataBatchCurrentBlock[secondDataCursor++] as string;
-      const allocationName: string = (network.adapters[platformAdapter] || 'unknown platform') + ' ' + underlyingSymbol
+      const allocationName: string =
+        (network.adapters[platformAdapter] || 'unknown platform') + ' ' + underlyingSymbol;
       const underlyingAllocated = ((sharesBalance.native * exchangeRate) / ONE).toFVal(format);
       const underlyingWithdrawable =
         underlyingAvailable.native > underlyingAllocated.native
@@ -227,11 +228,12 @@ export async function getEapStates(
           (Number(underlyingAllocated.formatted) * 10000) /
             Number(totalUnderlyingBalance.formatted),
         ) / 100;
-      if (allocationPercent === 0) return
-
+      if (allocationPercent === 0) return;
 
       const pastER = BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
-      const apy = Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n) / 1000;
+      const apy =
+        Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n) /
+        1000;
       const currentApy = { apy, period: periods[0] };
 
       allocationProps.push({
@@ -244,7 +246,7 @@ export async function getEapStates(
         fullyAvailable,
         allocationPercent,
         allocationName,
-        currentApy
+        currentApy,
       });
       totalWithdrawable += underlyingWithdrawable.native;
     });
@@ -261,14 +263,14 @@ export async function getEapStates(
         allocationPercent:
           Math.round(
             (Number(underlyingUnallocated.formatted) * 10000) /
-            Number(totalUnderlyingBalance.formatted),
+              Number(totalUnderlyingBalance.formatted),
           ) / 100,
         allocationName: 'unallocated',
         currentApy: { apy: 0, period: 0 },
       });
     }
 
-    allocationProps.sort((a, b) => b.allocationPercent - a.allocationPercent)
+    allocationProps.sort((a, b) => b.allocationPercent - a.allocationPercent);
     totalWithdrawable += underlyingUnallocated.native;
 
     // console.log(Logos[underlyingSymbol])
@@ -336,8 +338,6 @@ async function findClosestBlock(
 ): Promise<number> {
   const url = `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before&apikey=${apiKey}`;
   const data = await (await fetch(url)).json();
-  console.log('etherscan getBlockNoByTime response');
-  console.log(data);
   const res = Number(data.result);
   return inception > res ? inception : res;
 }

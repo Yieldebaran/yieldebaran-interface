@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core';
 import debug from 'debug';
 import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
-import { EapData, loadAppState } from 'src/Classes/AppState';
+import { EapData, loadAppState } from 'src/classes/AppState';
 import { ChainId } from 'src/constants/chain';
 import { useChain } from 'src/providers/ChainProvider';
 import { FVal } from 'src/types/appDataContext';

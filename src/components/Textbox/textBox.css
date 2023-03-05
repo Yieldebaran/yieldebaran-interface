@@ -1,0 +1,109 @@
+.textbox {
+  width: 100%;
+  position: relative;
+  height: 60px;
+}
+
+.textbox-disabled {
+  opacity: 0.6;
+}
+
+.validation-collapse {
+  height: 50px;
+}
+
+.textbox .validation {
+  color: red;
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+  position: absolute;
+  bottom: -9px;
+  left: 0;
+}
+/* style={{borderColor: focus ? '#427af1' : '#646464'}} */
+
+.validation-collapse .validation {
+  display: none;
+}
+
+.textbox div {
+  border-radius: 5px;
+  height: 45px;
+  margin-bottom: 0;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border: 1.5px solid transparent;
+  background: var(--textbox-background) padding-box, var(--textbox-border) border-box;
+
+  /* background: var(--textBox-background) padding-box, var(--textBox-border) border-box;     */
+}
+
+.textbox-placeholder {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translate(0, -50%);
+  color: var(--text-gray);
+  transition: all 0.2s ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+  background: var(--textbox-background);
+  padding: 3px 3px 3px 0;
+}
+
+.textbox input:focus + .textbox-placeholder,
+.textbox-placeholder--up {
+  left: 12px;
+  top: -11px;
+  padding: 3px;
+  border-radius: 5px;
+  transform: scale(0.9);
+}
+
+.textbox div .placeholder-disabled {
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.textbox div input {
+  outline: none;
+  width: 100%;
+  font-size: 1.2rem;
+  padding: 5px 5px 5px 15px;
+  border: none;
+  color: var(--textbox-color);
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.textbox .textbox-button .input-button {
+  position: absolute;
+  width: 66px;
+  padding: 0 5px;
+  line-height: 43px;
+  text-align: center;
+  right: 2px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  top: 50%;
+  transform: translateY(-50%);
+  columns: #646466;
+  user-select: none;
+  color: var(--text-color);
+}
+
+.textbox .textbox-button .input-button:hover {
+  color: var(--buttonHover);
+}
+
+.textbox .textbox-button .input-button-disabled {
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.textbox .textbox-button input {
+  padding-right: 70px;
+}
