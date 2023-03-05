@@ -24,6 +24,7 @@ import { PoolAddress } from 'src/views/pools/poolAddress';
 import './App.css';
 
 import { XFI } from './connectors/xdefi-connector/declarations';
+import EventTracker from './hooks/EventTracker';
 
 declare global {
   interface Window {
@@ -78,6 +79,7 @@ const App: React.FC = () => {
       </Routes>
       <ReactTooltip id="tooltip" />
       <Modals />
+      <EventTracker />
       <ToastContainer />
     </div>
   );

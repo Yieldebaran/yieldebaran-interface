@@ -19,7 +19,6 @@ export const PoolAddress = () => {
   const [tabChange, setTabChange] = useState<number>(1);
   const [tabHeaders, setTabHeaders] = useState<any[]>([]);
   const [tabContents, setTabContents] = useState<any>([]);
-  const { poolAddress } = useParams();
 
   const params = useParams();
 
@@ -55,7 +54,7 @@ export const PoolAddress = () => {
     }
   }, [selectedPool, eap]);
 
-  console.log('skdfajkf', mountedSupply.current, selectedPool, tabHeaders.length > 0);
+  // console.log('skdfajkf', mountedSupply.current, selectedPool, tabHeaders.length > 0);
 
   if (mountedSupply.current && selectedPool && tabHeaders.length > 0) {
     return (

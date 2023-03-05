@@ -10,6 +10,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 interface Props {
   selectedPool: string;
 }
+
 const AllocationInfoTab: React.FC<Props> = (props: Props) => {
   const { eapStates } = useContractsData();
 
@@ -45,6 +46,9 @@ const AllocationInfoTab: React.FC<Props> = (props: Props) => {
 
   return eap && mounted ? (
     <>
+      <div className="modal-title">
+        Allocation status
+      </div>
       <Doughnut data={pieConfig} />
       <div className="text-in-modal">
         <a href={`https://debank.com/profile/${eap.address}`}>Validate on DeBank</a>
