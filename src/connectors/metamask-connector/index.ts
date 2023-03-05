@@ -35,7 +35,6 @@ export class MetamaskNotFounfError extends Error {
 
 export class MetamaskConnector extends AbstractConnector {
   private setOpenModal: (newModal: ModalSettings | null) => void;
-  private chainIdSelected: number | null;
 
   constructor(kwargs: any, setOpenModal: (newModal: ModalSettings | null) => void) {
     super(kwargs);
@@ -46,25 +45,16 @@ export class MetamaskConnector extends AbstractConnector {
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.setOpenModal = setOpenModal;
-    this.chainIdSelected = null;
   }
 
   private handleChainChanged(chainId: string | number): void {
-    if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(chainId))) {
-      // console.log('handleChainChanged, unsupported chain')
+    if (!this.supportedChainIds?.includes(Number(chainId))) {
       this.setOpenModal({ key: 'selectChain' });
     }
-    this.chainIdSelected = Number(chainId);
-    // if (__DEV__) {
-    //   console.log("Handling 'chainChanged' event with payload", chainId)
-    // }
     this.emitUpdate({ chainId, provider: window.ethereum });
   }
 
   private handleAccountsChanged(accounts: string[]): void {
-    // if (__DEV__) {
-    //   console.log("Handling 'accountsChanged' event with payload", accounts)
-    // }
     if (accounts.length === 0) {
       this.emitDeactivate();
     } else {
@@ -73,31 +63,19 @@ export class MetamaskConnector extends AbstractConnector {
   }
 
   private handleClose(_code: number, _reason: string): void {
-    // if (__DEV__) {
-    //   console.log("Handling 'close' event with payload", code, reason)
-    // }
     this.emitDeactivate();
   }
 
   private handleNetworkChanged(networkId: string | number): void {
-    // if (__DEV__) {
-    //   console.log("Handling 'networkChanged' event with payload", networkId)
-    // }
     this.emitUpdate({ chainId: networkId, provider: window.ethereum });
   }
 
   private handleConnect(data: any): void {
-    // if (__DEV__) {
-    //   console.log("Handling 'networkChanged' event with payload", networkId)
-    // }
     // console.log('on connect', data)
 
     if (data.chainId && !this.supportedChainIds?.includes(Number(data.chainId))) {
-      // console.log('handleConnect, unsupported chain')
       this.setOpenModal({ key: 'selectChain' });
     }
-
-    this.chainIdSelected = Number(data.chainId);
 
     this.emitUpdate({ chainId: data.chainId, provider: window.ethereum });
   }
@@ -141,7 +119,9 @@ export class MetamaskConnector extends AbstractConnector {
       account = parseSendReturn(await window.ethereum.enable())[0];
     }
 
-    if (this.chainIdSelected && !this.supportedChainIds?.includes(Number(this.chainIdSelected))) {
+    const chainId = await this.getChainId()
+
+    if (chainId && !this.supportedChainIds?.includes(Number(chainId))) {
       // console.log('activate, unsupported chain')
       this.setOpenModal({ key: 'selectChain' });
     }
