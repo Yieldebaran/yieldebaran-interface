@@ -12,10 +12,9 @@ const EventTracker: React.FC = () => {
   const { chainConfig, wSSProvider } = useChain();
   const { eapStates, updateAppState, blockNumber } = useContractsData();
   const [eaps, setEaps] = useState(Object.keys(eapStates));
+  const [lastUpdateBlock, setLastUpdateBlock] = useState(0);
 
   const { account } = useWeb3React();
-
-  let lastUpdateBlock = 0;
 
   const clearSubs = () => {
     console.log('remove listeners');
@@ -24,7 +23,7 @@ const EventTracker: React.FC = () => {
 
   useEffect(() => {
     if (!chainConfig || !wSSProvider) {
-      lastUpdateBlock = 0;
+      setLastUpdateBlock(0);
       return;
     }
 
@@ -35,7 +34,7 @@ const EventTracker: React.FC = () => {
     } else {
       console.log('new eaps', newEaps);
       setEaps(newEaps);
-      lastUpdateBlock = blockNumber;
+      setLastUpdateBlock(blockNumber);
     }
 
     clearSubs();
@@ -70,13 +69,13 @@ const EventTracker: React.FC = () => {
           console.log(
             `received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`,
           );
-          lastUpdateBlock = data.blockNumber;
+          setLastUpdateBlock(data.blockNumber);
           await updateAppState(Number(data.blockNumber));
         }
       });
-      console.log(f);
+      // console.log(f);
     });
-    console.log(wSSProvider);
+    // console.log(wSSProvider);
   }
 
   return <></>;

@@ -8,12 +8,12 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactTooltip from 'react-tooltip';
-import { Layout } from 'src/Components/Layout/Layout';
-import { Modals } from 'src/Components/modals/Modals';
-import { UrlChainIdManager } from 'src/Components/UrlChainIdManager';
-import { GetConnector } from 'src/Connectors/connectors';
-import { MetamaskConnector } from 'src/Connectors/metamask-connector';
-import { xDefiConnector } from 'src/Connectors/xdefi-connector';
+import { Layout } from 'src/components/Layout/Layout';
+import { Modals } from 'src/components/modals/Modals';
+import { UrlChainIdManager } from 'src/components/UrlChainIdManager';
+import { GetConnector } from 'src/connectors/connectors';
+import { MetamaskConnector } from 'src/connectors/metamask-connector';
+import { xDefiConnector } from 'src/connectors/xdefi-connector';
 import { useAppearance } from 'src/providers/AppearanceProvider';
 import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
@@ -23,7 +23,8 @@ import { PoolAddress } from 'src/views/pools/poolAddress';
 
 import './App.css';
 
-import { XFI } from './Connectors/xdefi-connector/declarations';
+import { XFI } from './connectors/xdefi-connector/declarations';
+import EventTracker from './hooks/EventTracker';
 
 declare global {
   interface Window {
@@ -78,6 +79,7 @@ const App: React.FC = () => {
       </Routes>
       <ReactTooltip id="tooltip" />
       <Modals />
+      <EventTracker />
       <ToastContainer />
     </div>
   );

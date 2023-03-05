@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+
 import ReactToolTip from 'react-tooltip';
-import { MainBlock } from 'src/components/MainBlock/MainBlock';
+
+import closeIcon from 'src/assets/icons/closeIcon.png';
+import { EapData } from 'src/classes/AppState';
+import AllocationInfoTab from 'src/components/modals/PoolModal/Tabs/AllocationInfoTab';
 import DepositTab from 'src/components/modals/PoolModal/Tabs/DepositTab';
 import InstantWithdrawTab from 'src/components/modals/PoolModal/Tabs/InstantWithdrawTab';
 import WithdrawTab from 'src/components/modals/PoolModal/Tabs/WithdrawTab';
@@ -12,28 +16,39 @@ import {
   TabHeader,
   TabHeaderItem,
 } from 'src/components/TabControl/tabControl';
+import { useAppearance } from 'src/providers/AppearanceProvider';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
+import './style.css';
 
-export const PoolAddress = () => {
+interface Props {
+  closeSupplyMarketDialog: () => void;
+}
+
+export const PoolModal: React.FC<Props> = (props: Props) => {
   const { selectedPool, setSelectedPool, eapStates } = useContractsData();
+  const { spinnerVisible, darkMode } = useAppearance();
   const [tabChange, setTabChange] = useState<number>(1);
   const [tabHeaders, setTabHeaders] = useState<any[]>([]);
   const [tabContents, setTabContents] = useState<any>([]);
 
-  const params = useParams();
-
   const mountedSupply = useRef<boolean>(false);
 
-  const eap: any = selectedPool ? eapStates[selectedPool] : { underlyingSymbol: '' };
+  const eap: Partial<EapData> = selectedPool ? eapStates[selectedPool] : { underlyingSymbol: '' };
 
-  useEffect(() => {
-    if (!params.poolAddress) return;
-    setSelectedPool(params.poolAddress);
-  }, [params.poolAddress]);
+  const dialogContainer = document.getElementById('modal') as Element;
+
+  const CloseDialog = () => {
+    if (spinnerVisible) return;
+    props.closeSupplyMarketDialog();
+  };
 
   useEffect(() => {
     mountedSupply.current = true;
     setTabChange(1);
+    return () => {
+      setSelectedPool('');
+      mountedSupply.current = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -49,25 +64,32 @@ export const PoolAddress = () => {
       headers.push({ title: 'Quick withdrawal' });
       contents.push(<InstantWithdrawTab selectedPool={selectedPool} />);
 
+      headers.push({ title: 'Info' });
+      contents.push(<AllocationInfoTab selectedPool={selectedPool} />);
+
       setTabHeaders(headers);
       setTabContents(contents);
     }
   }, [selectedPool, eap]);
 
-  // console.log('skdfajkf', mountedSupply.current, selectedPool, tabHeaders.length > 0);
-
-  if (mountedSupply.current && selectedPool && tabHeaders.length > 0) {
-    return (
-      <MainBlock>
-        <p>{params.poolAddress}</p>
+  const dialog =
+    mountedSupply.current && selectedPool && tabHeaders.length > 0 ? (
+      <div className={`dialog open-dialog ${darkMode ? 'dark' : 'light'}`}>
         <ReactToolTip id="borrow-dialog-tooltip" effect="solid" />
+        <div className="dialog-background" onClick={() => CloseDialog()}></div>
         <div className="supply-box">
+          <img
+            src={closeIcon}
+            alt="Close Icon"
+            className="dialog-close"
+            onClick={() => CloseDialog()}
+          />
           <div className="dialog-title">
             {selectedPool && (
               <div className="logo-container">
                 <img
                   className="rounded-circle"
-                  style={{ width: '30px', height: '30px' }}
+                  style={{ width: '30px', height: '30px', marginRight: '5px' }}
                   src={eap?.underlyingLogo}
                   alt=""
                 />
@@ -101,9 +123,8 @@ export const PoolAddress = () => {
             </TabContent>
           </Tab>
         </div>
-      </MainBlock>
-    );
-  }
+      </div>
+    ) : null;
 
-  return null;
+  return ReactDOM.createPortal(dialog, dialogContainer);
 };

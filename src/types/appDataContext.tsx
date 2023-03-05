@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { EapData } from '../Classes/AppState';
+import { EapData } from '../classes/AppState';
 import { formatter } from '../Yieldebaran/Data/fetchEapsData';
 
 export type FVal = {
