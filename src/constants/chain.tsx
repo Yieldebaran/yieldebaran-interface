@@ -25,7 +25,7 @@ export type ChainConfig = {
   inception: number;
   adapters: { [address: string]: string };
   networkProperties: {
-    chainId: ChainId;
+    chainId: string;
     chainName: string;
     nativeCurrency: {
       name: string;
@@ -59,7 +59,7 @@ const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
     timestampContract: '0x6e11aaD63d11234024eFB6f7Be345d1d5b8a8f38',
     blockNumberContract: '0x37517C5D880c5c282437a3Da4d627B4457C10BEB',
     networkProperties: {
-      chainId: ChainId.FTM,
+      chainId: '0xfa',
       chainName: 'Fantom',
       nativeCurrency: {
         name: 'FTM',
