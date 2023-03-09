@@ -22,4 +22,4 @@ yarn && yarn start
 
 ## Why the app works so smoothly
 
-To load all the data we perform only a couple of aggregated requests [here](src/Yieldebaran/Data/fetchEapsData.ts) and one to the [FTMScan API](https://ftmscan.com/apis) to get the 7d old block number in order to calculate 7d avg APY
+To load all the data we perform only a couple of aggregated requests [here](src/Yieldebaran/Data/fetchEapsData.ts) via [ethcall library](https://github.com/Destiner/ethcall) and one to the [FTMScan API](https://ftmscan.com/apis) to get the 7d old block number in order to calculate 7d avg APY
