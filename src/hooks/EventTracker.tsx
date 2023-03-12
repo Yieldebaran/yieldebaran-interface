@@ -8,11 +8,12 @@ import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 import erc20Abi from '../abi/erc20.json';
 
+let lastBlockProcessed = 0
+
 const EventTracker: React.FC = () => {
   const { chainConfig, wSSProvider } = useChain();
-  const { eapStates, updateAppState, blockNumber } = useContractsData();
+  const { eapStates, updateAppState } = useContractsData();
   const [eaps, setEaps] = useState(Object.keys(eapStates));
-  const [lastUpdateBlock, setLastUpdateBlock] = useState(0);
 
   const { account } = useWeb3React();
 
@@ -23,7 +24,6 @@ const EventTracker: React.FC = () => {
 
   useEffect(() => {
     if (!chainConfig || !wSSProvider) {
-      setLastUpdateBlock(0);
       return;
     }
 
@@ -34,10 +34,10 @@ const EventTracker: React.FC = () => {
     } else {
       console.log('new eaps', newEaps);
       setEaps(newEaps);
-      setLastUpdateBlock(blockNumber);
     }
 
     clearSubs();
+    lastBlockProcessed = 0
 
     const filters: EventFilter[] = [];
 
@@ -65,13 +65,16 @@ const EventTracker: React.FC = () => {
       wSSProvider?.on(f, async (data) => {
         console.log(data);
         if (!data) return;
-        if (data.blockNumber > lastUpdateBlock) {
-          console.log(
-            `received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`,
-          );
-          setLastUpdateBlock(data.blockNumber);
-          await updateAppState(Number(data.blockNumber));
+        const blockNum = Number(data.blockNumber)
+        if (lastBlockProcessed >= blockNum) {
+          console.log(`block already processed. received ${blockNum} synced to ${lastBlockProcessed}` )
+          return
         }
+        lastBlockProcessed = blockNum
+        console.log(
+          `received new block ${data.blockNumber}. Updating state`,
+        );
+        await updateAppState(Number(data.blockNumber));
       });
       // console.log(f);
     });
