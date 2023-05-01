@@ -1,12 +1,15 @@
 import { EventFilter } from '@ethersproject/contracts';
 
 import { useWeb3React } from '@web3-react/core';
+import debug from 'debug';
 import { ethers } from 'ethers';
 import React, { useEffect, useState } from 'react';
 import { useChain } from 'src/providers/ChainProvider';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 import erc20Abi from '../abi/erc20.json';
+
+const log = debug('utils:EventTracker');
 
 const EventTracker: React.FC = () => {
   const { chainConfig, wSSProvider } = useChain();
@@ -17,7 +20,7 @@ const EventTracker: React.FC = () => {
   const { account } = useWeb3React();
 
   const clearSubs = () => {
-    console.log('remove listeners');
+    log('remove listeners');
     wSSProvider?.removeAllListeners();
   };
 
@@ -29,10 +32,10 @@ const EventTracker: React.FC = () => {
 
     const newEaps = Object.keys(eapStates);
     if (JSON.stringify(newEaps) === JSON.stringify(eaps)) {
-      console.log('eaps not changed, so we will NOT resubscribe');
+      log('eaps not changed, so we will NOT resubscribe');
       return;
     } else {
-      console.log('new eaps', newEaps);
+      log('new eaps', newEaps);
       setEaps(newEaps);
       setLastUpdateBlock(blockNumber);
     }
@@ -58,24 +61,22 @@ const EventTracker: React.FC = () => {
   }, [account, chainConfig, eapStates, wSSProvider]);
 
   async function initListeners(filters: EventFilter[]) {
-    console.log('initListeners', wSSProvider?._wsReady);
+    log('initListeners', wSSProvider?._wsReady);
     await wSSProvider?._networkPromise;
 
     filters.forEach((f) => {
       wSSProvider?.on(f, async (data) => {
-        console.log(data);
+        log(data);
         if (!data) return;
         if (data.blockNumber > lastUpdateBlock) {
-          console.log(
-            `received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`,
-          );
+          log(`received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`);
           setLastUpdateBlock(data.blockNumber);
           await updateAppState(Number(data.blockNumber));
         }
       });
-      // console.log(f);
+      // log(f);
     });
-    // console.log(wSSProvider);
+    // log(wSSProvider);
   }
 
   return <></>;

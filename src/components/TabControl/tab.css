@@ -19,22 +19,17 @@
 }
 
 .tab-header-item {
-  line-height: 30px;
-  width: 50%;
   text-align: center;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
   user-select: none;
-  color: var(--text-color);
+  white-space: nowrap;
 }
 
 .tab-content {
   box-sizing: border-box;
-  overflow-y: auto;
-  height: 100%;
   width: 100%;
   position: relative;
-  margin-top: 20px;
 }
 
 .tab-content-item {
@@ -47,19 +42,6 @@
   transform: scale(0.9);
   opacity: 0;
   transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-
-  /*
-  padding-right: 10px;
-  top:-200%;
-  position: absolute;
-  height: 100%;
-  width: calc(100% - 20px);
-  overflow-y: auto;
-  transform: scale(0.9);
-  opacity: 0;
-  transition: opacity 0.2s ease-in-out,
-              transform 0.2s ease-in-out;
-  */
 }
 
 .tab-content-item div:not(:last-child) {

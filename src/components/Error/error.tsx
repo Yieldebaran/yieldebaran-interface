@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Modal from '../Modal/modal';
+import Modal from 'src/components/Modal/Modal';
 import './error.css';
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 
 const Error: React.FC<Props> = ({ open, close, errorMessage, button }: Props) => {
   return (
-    <Modal open={open} onClose={close} title="Error" error={true}>
+    <Modal open={open} onClose={close} title="Error">
       <div className="error">
         <div className="error-message">
           <span>{errorMessage}</span>

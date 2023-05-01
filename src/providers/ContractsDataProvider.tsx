@@ -1,6 +1,14 @@
 import { useWeb3React } from '@web3-react/core';
 import debug from 'debug';
-import { createContext, Dispatch, SetStateAction, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { EapData, loadAppState } from 'src/classes/AppState';
 import { ChainId } from 'src/constants/chain';
 import { useChain } from 'src/providers/ChainProvider';
@@ -17,6 +25,7 @@ type ContractsDataProviderCtxType = {
   blockNumber: number;
   eapStates: Record<string, EapData>;
   accountEthBalance: FVal;
+  eap: EapData | null;
 };
 
 const ContractsDataProviderInitCtx = {
@@ -30,6 +39,7 @@ const ContractsDataProviderInitCtx = {
     native: 0n,
     formatted: '0.0',
   },
+  eap: null,
 };
 
 let prevChain: ChainId;
@@ -55,18 +65,10 @@ export const ContractsDataProvider: FCC = ({ children }) => {
     prevChain = selectedChainId;
     prevAccount = account;
 
-    resetState();
-
     fetchAppState();
   }, [chainConfig, account, selectedChainId, wSSProvider]);
 
-  function resetState() {
-    setEapStates({});
-    setBlockNumber(0);
-    setBlockTimestamp(0);
-    setAccountEthBalance({ native: 0n, formatted: '0.0' });
-    setSelectedPool('');
-  }
+  const eap = useMemo(() => eapStates[selectedPool], [selectedPool, eapStates]);
 
   async function fetchAppState(blockNumber?: number) {
     log('fetchAppState fired', {
@@ -106,6 +108,7 @@ export const ContractsDataProvider: FCC = ({ children }) => {
         blockNumber,
         eapStates,
         accountEthBalance,
+        eap,
       }}
     >
       {children}

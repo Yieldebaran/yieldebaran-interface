@@ -1,24 +1,34 @@
 import { UnsupportedChainIdError, useWeb3React } from '@web3-react/core';
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import Button from 'src/components/Button/button';
+import { Button } from 'src/components/Button/button';
 import Error from 'src/components/Error/error';
-import Footer from 'src/components/Footer/footer';
-import Menu from 'src/components/Menu/menu';
-import TabletMenu from 'src/components/Menu/tabletMenu';
+import { Footer } from 'src/components/Footer/Footer';
+import { Header } from 'src/components/Header/Header';
+import { StarsBg } from 'src/components/StarsBg/StarsBg';
 import { getErrorMessage } from 'src/connectors/connectors';
 import { MetamaskNotFounfError } from 'src/connectors/metamask-connector';
 import {
   XDEFIWalletNotDefaultError,
   XDEFIWalletNotFoundError,
 } from 'src/connectors/xdefi-connector';
-import { useAppearance } from 'src/providers/AppearanceProvider';
 import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
+import styled from 'styled-components';
+
+const MainContent = styled.div`
+  width: 100%;
+  max-width: 1440px;
+  padding: 8rem 1rem 0;
+  margin: 0 auto;
+
+  @media screen and (max-width: 1100px) {
+    padding-top: 4rem;
+  }
+`;
 
 export const Layout = () => {
   const { error, chainId, deactivate } = useWeb3React();
-  const { isMobile, isTablet } = useAppearance();
   const { setSelectedChainId } = useChain();
   const setModal = useSetModal();
 
@@ -47,10 +57,11 @@ export const Layout = () => {
 
   return (
     <>
-      {isTablet || isMobile ? <TabletMenu /> : <Menu />}
-      <div className="main-content">
+      <StarsBg />
+      <Header />
+      <MainContent style={{ flexGrow: 1 }}>
         <Outlet />
-      </div>
+      </MainContent>
       <Footer />
       {error instanceof UnsupportedChainIdError ? (
         <Error

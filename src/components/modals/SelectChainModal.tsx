@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import React from 'react';
-import Modal from 'src/components/Modal/modal';
+import Modal from 'src/components/Modal/Modal';
 
 import 'src/components/modals/SelectChainModal.css';
 import { CHAIN_LIST, ChainId } from 'src/constants/chain';
@@ -80,7 +80,7 @@ export const SelectChainModal: React.FC = () => {
                 <div className="network-logo">
                   <img src={value.logo} alt="" />
                 </div>
-                <span>{value.network}</span>
+                <span>{value.networkName}</span>
               </div>
             );
           })}

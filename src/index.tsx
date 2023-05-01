@@ -7,6 +7,7 @@ import { AppearanceProvider } from 'src/providers/AppearanceProvider';
 import { ChainProvider } from 'src/providers/ChainProvider';
 import { ContractsDataProvider } from 'src/providers/ContractsDataProvider';
 import { StoreProvider } from 'src/providers/StoreProvider';
+import { GlobalStyles } from 'src/uiKit/GlobalStyles';
 
 import App from './App';
 
@@ -25,6 +26,7 @@ const root = createRoot(container!);
 
 root.render(
   <>
+    <GlobalStyles />
     <Web3ReactProvider getLibrary={getLibrary}>
       <ChainProvider>
         <AppearanceProvider>

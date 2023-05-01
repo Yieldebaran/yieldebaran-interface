@@ -1,6 +1,7 @@
 import { useWeb3React } from '@web3-react/core';
 import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import {
   cancelRequest,
@@ -10,27 +11,26 @@ import {
   freeInstantWithdrawalEth,
   requestWithdrawal,
 } from 'src/classes/AppState';
-import Button from 'src/components/Button/button';
+import { AttentionBlock } from 'src/components/AttentionBlock';
+import { Button } from 'src/components/Button/button';
+import { InputGroup } from 'src/components/InputGroup';
 import { PoolModalRow } from 'src/components/modals/PoolModal/PoolModalRow';
-
-import TextBox from 'src/components/Textbox/textBox';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
+import { UiInput } from 'src/uiKit/UiInput';
 import { bnFromInput, formatBN, validateInput } from 'src/utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
 import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
 
 const log = debug('components:WithdrawTab');
 
-interface Props {
-  selectedPool: string;
-}
-const WithdrawTab: React.FC<Props> = (props: Props) => {
+const WithdrawTab = () => {
+  const { poolAddress } = useParams() as { poolAddress: string };
   const { eapStates, blockTimestamp } = useContractsData();
   const { account } = useWeb3React();
 
   const mounted = useRef<boolean>(false);
 
-  const eap = eapStates[props.selectedPool];
+  const eap = eapStates[poolAddress];
 
   const [withdrawalInput, setWithdrawalInput] = useState<string>('');
   const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState<string>('');
@@ -156,44 +156,46 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
 
   return eap && mounted ? (
     <>
-      <div className="supply-note">This is a delayed withdrawal, it may take up to 48h</div>
-      <div className="dialog-line" />
-      <PoolModalRow
-        title={'Shares balance'}
-        toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${
-          eap.underlyingSymbol
-        }`}
-        value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      <PoolModalRow
-        title={'Withdrawal amount'}
-        value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      <PoolModalRow
-        title={'Available to withdraw'}
-        value={`${
-          eap.lastFulfillmentIndex > eap.accountRequestIndex + 1
-            ? eap.accountUnderlyingRequested.formatted
-            : 0
-        } ${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
+      <AttentionBlock>! This is a delayed withdrawal, it may take up to 48h !</AttentionBlock>
+      <div>
+        <PoolModalRow
+          title={'Shares balance'}
+          toolTipContent={`~${Number(eap.accountAllocated.formatted).toFixed(3)} ${
+            eap.underlyingSymbol
+          }`}
+          value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
+        />
+        <div className="dialog-line" />
+        <PoolModalRow
+          title={'Withdrawal amount'}
+          value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
+        />
+        <div className="dialog-line" />
+        <PoolModalRow
+          title={'Available to withdraw'}
+          value={`${
+            eap.lastFulfillmentIndex > eap.accountRequestIndex + 1
+              ? eap.accountUnderlyingRequested.formatted
+              : 0
+          } ${eap.underlyingSymbol}`}
+        />
+      </div>
       {!isRequested && (
-        <div className="input-group">
-          <div className="input-button-group">
-            <TextBox
-              disabled={eap.accountShares.native === 0n}
-              buttonDisabled={withdrawalInputBN === eap.accountShares.native}
-              placeholder={`y${eap.underlyingSymbol}`}
+        <>
+          <InputGroup>
+            <UiInput
+              style={{ flexGrow: 1 }}
               value={withdrawalInput}
-              setInput={setWithdrawalInput}
-              validation={withdrawalErrorMessage}
-              button={'Max'}
-              onClick={() => setMaxWithdrawal()}
+              onChange={(e) => setWithdrawalInput(e.target.value)}
+              LeftAdornment={<span>y{eap.underlyingSymbol}:</span>}
+              RightAdornment={
+                <span style={{ cursor: 'pointer' }} onClick={setMaxWithdrawal}>
+                  Max
+                </span>
+              }
             />
             <Button
+              style={{ width: '140px' }}
               disabled={withdrawalInput === '' || withdrawalErrorMessage !== ''}
               loading={false}
               rectangle={true}
@@ -201,17 +203,15 @@ const WithdrawTab: React.FC<Props> = (props: Props) => {
             >
               Withdraw
             </Button>
+          </InputGroup>
+          <div style={{ marginTop: '1rem' }}>
+            ~
+            {Number(formatBN((withdrawalInputBN * eap.exchangeRate) / ONE, eap.decimals)).toFixed(
+              3,
+            )}{' '}
+            {eap.underlyingSymbol}
           </div>
-          {
-            <div className="text-in-modal">
-              ~
-              {Number(formatBN((withdrawalInputBN * eap.exchangeRate) / ONE, eap.decimals)).toFixed(
-                3,
-              )}{' '}
-              {eap.underlyingSymbol}
-            </div>
-          }
-        </div>
+        </>
       )}
       {isRequested && cancellable && (
         <Button disabled={false} onClick={() => handleCancelRequest()}>

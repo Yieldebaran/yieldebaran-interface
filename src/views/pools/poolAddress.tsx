@@ -1,109 +1,86 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import ReactToolTip from 'react-tooltip';
-import { MainBlock } from 'src/components/MainBlock/MainBlock';
+import React, { useEffect, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
+import { AllocationInfoTab } from 'src/components/modals/PoolModal/Tabs/AllocationInfoTab';
 import DepositTab from 'src/components/modals/PoolModal/Tabs/DepositTab';
 import InstantWithdrawTab from 'src/components/modals/PoolModal/Tabs/InstantWithdrawTab';
 import WithdrawTab from 'src/components/modals/PoolModal/Tabs/WithdrawTab';
-import {
-  Tab,
-  TabContent,
-  TabContentItem,
-  TabHeader,
-  TabHeaderItem,
-} from 'src/components/TabControl/tabControl';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
+import { MainBlock } from 'src/uiKit/MainBlock';
+import { UiTab, UiTabs } from 'src/uiKit/UiTabs';
+import styled from 'styled-components';
+
+const TABS = Object.freeze([
+  { id: 'deposit', title: 'Deposit', component: <DepositTab /> },
+  { id: 'withdraw', title: 'Withdrawal', component: <WithdrawTab /> },
+  { id: 'quickWithdraw', title: 'Quick withdrawal', component: <InstantWithdrawTab /> },
+  { id: 'info', title: 'Info', component: <AllocationInfoTab /> },
+]);
+
+const PoolContainer = styled(MainBlock)`
+  max-width: 700px;
+  margin: 0 auto;
+`;
+
+const PoolHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    margin-bottom: 3rem;
+    h1 {
+      margin-bottom: 1rem;
+    }
+  }
+`;
 
 export const PoolAddress = () => {
-  const { selectedPool, setSelectedPool, eapStates } = useContractsData();
-  const [tabChange, setTabChange] = useState<number>(1);
-  const [tabHeaders, setTabHeaders] = useState<any[]>([]);
-  const [tabContents, setTabContents] = useState<any>([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { setSelectedPool, eap } = useContractsData();
+  const [currentTab, setCurrentTab] = useState<typeof TABS[number]['id']>(TABS[0].id);
 
-  const params = useParams();
-
-  const mountedSupply = useRef<boolean>(false);
-
-  const eap: any = selectedPool ? eapStates[selectedPool] : { underlyingSymbol: '' };
+  const { poolAddress } = useParams();
 
   useEffect(() => {
-    if (!params.poolAddress) return;
-    setSelectedPool(params.poolAddress);
-  }, [params.poolAddress]);
-
-  useEffect(() => {
-    mountedSupply.current = true;
-    setTabChange(1);
-  }, []);
-
-  useEffect(() => {
-    if (selectedPool && mountedSupply.current) {
-      const headers = [];
-      const contents = [];
-      headers.push({ title: 'Deposit' });
-      contents.push(<DepositTab selectedPool={selectedPool} />);
-
-      headers.push({ title: 'Withdrawal' });
-      contents.push(<WithdrawTab selectedPool={selectedPool} />);
-
-      headers.push({ title: 'Quick withdrawal' });
-      contents.push(<InstantWithdrawTab selectedPool={selectedPool} />);
-
-      setTabHeaders(headers);
-      setTabContents(contents);
+    const tab = searchParams.get('tab');
+    if (!tab) {
+      setCurrentTab(TABS[0].id);
+      return;
     }
-  }, [selectedPool, eap]);
+    setCurrentTab(tab);
+  }, [searchParams]);
 
-  // console.log('skdfajkf', mountedSupply.current, selectedPool, tabHeaders.length > 0);
+  useEffect(() => {
+    if (!poolAddress) return;
+    setSelectedPool(poolAddress);
+  }, [poolAddress]);
 
-  if (mountedSupply.current && selectedPool && tabHeaders.length > 0) {
-    return (
-      <MainBlock>
-        <p>{params.poolAddress}</p>
-        <ReactToolTip id="borrow-dialog-tooltip" effect="solid" />
-        <div className="supply-box">
-          <div className="dialog-title">
-            {selectedPool && (
-              <div className="logo-container">
-                <img
-                  className="rounded-circle"
-                  style={{ width: '30px', height: '30px' }}
-                  src={eap?.underlyingLogo}
-                  alt=""
-                />
-              </div>
-            )}
-            {eap?.underlyingSymbol}
-          </div>
-          <div className="seperator" />
-          <Tab>
-            <TabHeader tabChange={tabChange}>
-              {tabHeaders.map((h, index) => {
-                return (
-                  <TabHeaderItem
-                    key={index}
-                    tabId={index + 1}
-                    title={h.title}
-                    tabChange={tabChange}
-                    setTabChange={setTabChange}
-                  />
-                );
-              })}
-            </TabHeader>
-            <TabContent>
-              {(tabContents as any[]).map((c, index) => {
-                return (
-                  <TabContentItem key={index} tabId={index + 1} tabChange={tabChange} open={true}>
-                    {c}
-                  </TabContentItem>
-                );
-              })}
-            </TabContent>
-          </Tab>
-        </div>
-      </MainBlock>
-    );
-  }
+  if (!eap) return null;
 
-  return null;
+  return (
+    <PoolContainer>
+      <PoolHeader>
+        <h1>{eap.underlyingSymbol} pool</h1>
+        <span>{poolAddress}</span>
+      </PoolHeader>
+      <UiTabs>
+        {TABS.map((tab) => (
+          <UiTab
+            className={currentTab === tab.id ? 'active' : ''}
+            key={tab.id}
+            onClick={() => {
+              setCurrentTab(tab.id);
+              searchParams.set('tab', tab.id);
+              setSearchParams(searchParams);
+            }}
+          >
+            {tab.title}
+          </UiTab>
+        ))}
+      </UiTabs>
+      {TABS.find((tab) => tab.id === currentTab)?.component}
+    </PoolContainer>
+  );
 };

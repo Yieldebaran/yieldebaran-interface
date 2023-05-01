@@ -1,6 +1,4 @@
 .account-settings {
-  height: 100%;
-  width: 100%;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -13,25 +11,22 @@
   font-size: 2rem;
   display: flex;
   align-items: center;
-  justify-content: center;
+  margin: 2rem 0;
 }
 
 .account-settings .account-settings-address span {
   padding-left: 1rem;
+  margin-bottom: -.4rem;
 }
 
 .account-settings .account-settings-address .network-logo {
   padding: 0.5rem;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--logo-background);
+  width: 4rem;
 }
 
 .account-settings .account-settings-address .network-logo img {
-  width: 35px;
-  height: 35px;
+  display: block;
+  width: 100%;
 }

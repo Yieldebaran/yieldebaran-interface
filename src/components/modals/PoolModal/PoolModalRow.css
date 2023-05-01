@@ -1,10 +1,17 @@
 .dialog-section {
-  background-color: var(--dialogSectionBackground);
-  color: var(--text-color);
-  padding: 10px;
   display: flex;
   flex-direction: column;
-  border-radius: 5px;
+}
+.dialog-section:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.dialog-section:first-child {
+  margin-top: 3rem;
+}
+
+.dialog-section:last-child {
+  margin-bottom: 3rem;
 }
 
 .dialog-section-no-top-gap {
@@ -17,7 +24,6 @@
 
 .dialog-section-content {
   display: flex;
-  height: 25px;
   justify-content: space-between;
 }
 

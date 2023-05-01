@@ -1,64 +1,64 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import React, { useRef } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-
-import { EapData } from 'src/classes/AppState';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface Props {
-  selectedPool: string;
-}
+const PIE_OPTIONS = {
+  plugins: {
+    legend: {
+      labels: {
+        color: '#fff',
+      },
+    },
+  },
+};
 
-const AllocationInfoTab: React.FC<Props> = (props: Props) => {
-  const { eapStates } = useContractsData();
+export const AllocationInfoTab = () => {
+  const { eap } = useContractsData();
 
   const mounted = useRef<boolean>(false);
 
-  const eap: EapData = eapStates[props.selectedPool];
+  const data = eap?.allocations.map((x) => Number(x.underlyingAllocated.formatted));
 
-  const data = eap.allocations.map((x) => Number(x.underlyingAllocated.formatted));
+  const backgroundColor = data?.map((x) => getColor(x));
 
-  const total = Number(eap.totalUnderlyingBalance.formatted);
-
-  const backgroundColor = data.map((x) => getColor(x));
-  const borderColor = data.map(
-    (x) => `rgba(${(255 * x) / total}, ${(255 * x) / total}, ${(255 * x) / total}, 1)`,
-  );
-
-  const labels = eap.allocations.map(
+  const labels = eap?.allocations.map(
     (x) => `${x.allocationName} (APY: ${x.currentApy.apy.toFixed(1)}%)`,
   );
 
-  const pieConfig = {
+  const pieData = {
     labels,
     datasets: [
       {
         label: 'allocated',
         data: data,
         backgroundColor,
-        borderColor,
-        borderWidth: 1,
+        borderColor: '#fff',
+        borderWidth: 2,
       },
     ],
   };
 
+  function getColor(value: number): string {
+    return ['hsl(', value, ',100%,50%)'].join('');
+  }
+
   return eap && mounted ? (
     <>
-      <div className="modal-title">
-        Allocation status
-      </div>
-      <Doughnut data={pieConfig} />
+      <div className="modal-title">Allocation status</div>
+      <Doughnut data={pieData} options={PIE_OPTIONS} />
       <div className="text-in-modal">
-        <a href={`https://debank.com/profile/${eap.address}`}>Validate on DeBank</a>
+        <a
+          style={{ color: 'inherit' }}
+          target="_blank"
+          rel="noreferrer"
+          href={`https://debank.com/profile/${eap.address}`}
+        >
+          Validate on DeBank
+        </a>
       </div>
     </>
   ) : null;
 };
-
-function getColor(value: number): string {
-  return ['hsl(', value, ',100%,50%)'].join('');
-}
-
-export default AllocationInfoTab;

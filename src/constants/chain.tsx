@@ -9,7 +9,7 @@ export enum ChainId {
 
 export type ChainConfig = {
   chainId: ChainId;
-  network: string;
+  networkName: string;
   logo: string;
   blocksPerYear?: number;
   publicRpc: string;
@@ -41,7 +41,7 @@ export type ChainConfig = {
 const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
   [ChainId.FTM]: {
     chainId: ChainId.FTM,
-    network: 'Fantom Opera',
+    networkName: 'Fantom Opera',
     logo: Logos['FTM'],
     blocksPerYear: 24 * 60 * 60 * 365,
     publicRpc: 'https://rpc.ftm.tools/',

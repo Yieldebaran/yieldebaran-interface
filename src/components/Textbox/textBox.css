@@ -20,7 +20,6 @@
   bottom: -9px;
   left: 0;
 }
-/* style={{borderColor: focus ? '#427af1' : '#646464'}} */
 
 .validation-collapse .validation {
   display: none;
@@ -36,9 +35,6 @@
   justify-content: center;
   position: relative;
   border: 1.5px solid transparent;
-  background: var(--textbox-background) padding-box, var(--textbox-border) border-box;
-
-  /* background: var(--textBox-background) padding-box, var(--textBox-border) border-box;     */
 }
 
 .textbox-placeholder {
@@ -46,12 +42,12 @@
   left: 15px;
   top: 50%;
   transform: translate(0, -50%);
-  color: var(--text-gray);
   transition: all 0.2s ease-in-out;
   pointer-events: none;
   z-index: 1;
-  background: var(--textbox-background);
   padding: 3px 3px 3px 0;
+  background: #fff;
+  color: #000;
 }
 
 .textbox input:focus + .textbox-placeholder,
@@ -59,7 +55,6 @@
   left: 12px;
   top: -11px;
   padding: 3px;
-  border-radius: 5px;
   transform: scale(0.9);
 }
 
@@ -74,9 +69,8 @@
   font-size: 1.2rem;
   padding: 5px 5px 5px 15px;
   border: none;
-  color: var(--textbox-color);
   box-sizing: border-box;
-  background-color: transparent;
+  background-color: #fff;
 }
 
 .textbox .textbox-button .input-button {
@@ -92,11 +86,6 @@
   transform: translateY(-50%);
   columns: #646466;
   user-select: none;
-  color: var(--text-color);
-}
-
-.textbox .textbox-button .input-button:hover {
-  color: var(--buttonHover);
 }
 
 .textbox .textbox-button .input-button-disabled {

@@ -4,7 +4,7 @@ import cbw from 'src/assets/icons/cbw.png';
 import mm from 'src/assets/icons/mm.png';
 import wc from 'src/assets/icons/wc.png';
 import xdefi from 'src/assets/icons/XDEFIWallet.jpeg';
-import Modal from 'src/components/Modal/modal';
+import Modal from 'src/components/Modal/Modal';
 
 import 'src/components/modals/ConnectWalletModal.css';
 import { connectrorsEnum, GetConnector } from 'src/connectors/connectors';

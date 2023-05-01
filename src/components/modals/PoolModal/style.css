@@ -16,14 +16,12 @@
   width: 100%;
   height: 100%;
   display: block;
-  background-color: var(--modal-layout);
   top: 0;
   left: 0;
 }
 
 .open-dialog {
   display: block;
-  color: var(--text-color);
 }
 
 .supply-note {
@@ -129,10 +127,6 @@
 
 .input-group {
   margin-top: 20px;
-}
-
-.text-in-modal {
-  color: var(--text-color);
 }
 
 .amount-group {

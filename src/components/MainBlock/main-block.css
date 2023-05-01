@@ -7,5 +7,4 @@
   border: 2px solid transparent;
   background: var(--markets-background) padding-box, var(--border-line) border-box;
   border-radius: 5px;
-  overflow: hidden;
 }

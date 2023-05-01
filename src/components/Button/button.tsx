@@ -1,6 +1,7 @@
-import React, { ReactNode } from 'react';
+import React, { HTMLAttributes, ReactNode } from 'react';
 import { Spinner } from 'src/assets/huIcons/huIcons';
-import { useAppearance } from 'src/providers/AppearanceProvider';
+import { FCC } from 'src/types/FCC';
+import styled from 'styled-components';
 import './button.css';
 
 interface Props {
@@ -15,45 +16,53 @@ interface Props {
   rectangle?: boolean;
   searchText?: boolean;
   children?: ReactNode;
+  invertColors?: boolean;
 }
 
-const Button: React.FC<Props> = ({
+export const StyledButton = styled.div<{ invertColors: Props['invertColors'] }>`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 2px solid ${(p) => (p.invertColors ? '#000' : '#fff')};
+  padding: 0.5rem 1.2rem 0.3rem;
+  user-select: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  &:hover {
+    background: ${(p) => (p.invertColors ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.4)')};
+  }
+`;
+
+const Arrow = styled.span`
+  margin-left: 0.6rem;
+`;
+
+export const Button: FCC<Props & HTMLAttributes<HTMLDivElement>> = ({
   onClick,
   arrow,
-  small,
-  large,
   loading,
-  active,
   image,
   disabled,
-  rectangle,
-  searchText,
   children,
-}: Props) => {
-  const { isMobile, isTablet } = useAppearance();
-
-  let className = '';
-  if (disabled || loading) className += 'button-disabled ';
-  if (small) className += 'button-small ';
-  if (!isMobile || !isTablet) className += 'button-xsmall ';
-  if (rectangle) className += 'button-rectangle ';
-  if (large) className += 'button-rectangle-large ';
-  if (active) className += 'button-active ';
-  if (searchText) className += 'search-text-button ';
-
+  invertColors,
+  ...others
+}) => {
   return (
-    <div className={`button ${className}`} onClick={loading || disabled ? () => null : onClick}>
+    <StyledButton
+      {...others}
+      onClick={loading || disabled ? () => null : onClick}
+      invertColors={invertColors}
+    >
       {image && <div className="button-image">{image}</div>}
       {loading ? (
         <span>
           <Spinner size={'30px'} />
         </span>
       ) : (
-        <span>{children}</span>
+        <span style={{ flexGrow: 1 }}>{children}</span>
       )}
-      {arrow && <div className="arrow">&#9660;</div>}
-    </div>
+      {arrow && <Arrow>&#9660;</Arrow>}
+    </StyledButton>
   );
 };
-
-export default Button;

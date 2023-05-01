@@ -1,35 +1,73 @@
-import React, { useState } from 'react';
-import { PoolModal } from 'src/components/modals/PoolModal/PoolModal';
-import { PoolsList } from 'src/components/PoolsList/PoolsList';
-import { useAppearance } from 'src/providers/AppearanceProvider';
+import React from 'react';
+import PoolRow from 'src/components/PoolsList/PoolRow';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
+import { MainBlock } from 'src/uiKit/MainBlock';
+import styled from 'styled-components';
 
-const Home: React.FC = () => {
-  const { spinnerVisible } = useAppearance();
-  const { setSelectedPool } = useContractsData();
+const TableContainer = styled.div`
+  width: 100%;
+  overflow: auto;
+`;
 
-  const [openSupplyMarketDialog, setOpenSupplyDialog] = useState(false);
-
-  const supplyMarketDialog = (pool: string) => {
-    setSelectedPool(pool);
-    setOpenSupplyDialog(true);
-  };
-
-  const closeSupplyMarketDialog = () => {
-    if (!spinnerVisible) {
-      setOpenSupplyDialog(false);
+const StyledTable = styled.table`
+  width: 100%;
+  max-width: 100%;
+  overflow: auto;
+  border-collapse: collapse;
+  margin-top: 4rem;
+  text-align: right;
+  white-space: nowrap;
+  td,
+  th {
+    padding: 1rem;
+  }
+  td:first-child,
+  th:first-child {
+    text-align: left;
+  }
+  th {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  }
+  tbody {
+    tr {
+      cursor: pointer;
+      :not(:last-child) td {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+      }
     }
-  };
+  }
+`;
+
+export const Home: React.FC = () => {
+  const { eapStates } = useContractsData();
 
   // render main logic frame
   return (
-    <>
-      <PoolsList supplyMarketDialog={supplyMarketDialog} />
-      {openSupplyMarketDialog ? (
-        <PoolModal closeSupplyMarketDialog={closeSupplyMarketDialog} />
-      ) : null}
-    </>
+    <MainBlock>
+      <h1 style={{ textAlign: 'center' }}>Efficiently allocating pools</h1>
+      <TableContainer>
+        <StyledTable>
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>APY</th>
+
+              <th>Total assets</th>
+              <th>Your deposit</th>
+              <th>On wallet</th>
+            </tr>
+          </thead>
+          {
+            <tbody>
+              {Object.keys(eapStates).length === 0
+                ? null
+                : Object.keys(eapStates).map((pool, index) => {
+                    return <PoolRow key={index} pool={pool} />;
+                  })}
+            </tbody>
+          }
+        </StyledTable>
+      </TableContainer>
+    </MainBlock>
   );
 };
-
-export default Home;

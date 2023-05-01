@@ -1,24 +1,23 @@
 import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { approve, deposit, depositEth } from 'src/classes/AppState';
 
-import Button from 'src/components/Button/button';
+import { Button } from 'src/components/Button/button';
+import { InputGroup } from 'src/components/InputGroup';
 import { PoolModalRow } from 'src/components/modals/PoolModal/PoolModalRow';
-
-import TextBox from 'src/components/Textbox/textBox';
 import { useChain } from 'src/providers/ChainProvider';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
+import { UiInput } from 'src/uiKit/UiInput';
 
 import { bnFromInput, validateInput } from 'src/utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
 
 const log = debug('components:DepositTab');
 
-interface Props {
-  selectedPool: string;
-}
-const DepositTab: React.FC<Props> = (props: Props) => {
+const DepositTab = () => {
+  const { poolAddress } = useParams() as { poolAddress: string };
   const { accountEthBalance, updateAppState, eapStates } = useContractsData();
 
   const { chainConfig } = useChain();
@@ -31,7 +30,7 @@ const DepositTab: React.FC<Props> = (props: Props) => {
 
   const [ethInput, setEthInput] = useState<string>('');
   const [ethErrorMessage, setEthErrorMessage] = useState<string>('');
-  const eap = eapStates[props.selectedPool];
+  const eap = eapStates[poolAddress];
 
   useEffect(() => {
     mounted.current = true;
@@ -140,91 +139,95 @@ const DepositTab: React.FC<Props> = (props: Props) => {
 
   return (
     <>
-      <PoolModalRow
-        title={'Deposited'}
-        value={`${eap.accountAllocated.formatted} ${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      <PoolModalRow
-        title={'Balance'}
-        value={`${eap.accountUnderlyingBalance.formatted} ${eap.underlyingSymbol}`}
-      />
-      <div className="dialog-line" />
-      {eap.isEth && (
+      <div>
         <PoolModalRow
-          title={'Native balance'}
-          value={`${accountEthBalance.formatted} ${eap.underlyingSymbol.substring(1)}`}
+          title={'Deposited'}
+          value={`${eap.accountAllocated.formatted} ${eap.underlyingSymbol}`}
         />
-      )}
-      <div className="dialog-line" />
-      <PoolModalRow
-        toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
-        title={'Current APY'}
-        value={eap.apyAfterFee[0].apy + '%'}
-      />
-      <div className="dialog-line" onClick={() => updateAppState()} />
-      <PoolModalRow
-        toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
-        title={'7d APY'}
-        value={String(eap.apyAfterFee[1].apy + '%')}
-      />
-      <div className="dialog-line" />
-      <div className="input-group">
-        <div className="input-button-group">
-          <TextBox
-            disabled={eap.accountUnderlyingBalance.native === 0n}
-            buttonDisabled={depositBN === eap.accountUnderlyingBalance.native}
-            placeholder={eap.underlyingSymbol}
-            value={depositInput}
-            setInput={setDepositInput}
-            validation={depositErrorMessage}
-            button={'Max'}
-            onClick={() => setMaxDeposit()}
+        <div className="dialog-line" />
+        <PoolModalRow
+          title={'Balance'}
+          value={`${eap.accountUnderlyingBalance.formatted} ${eap.underlyingSymbol}`}
+        />
+        <div className="dialog-line" />
+        {eap.isEth && (
+          <PoolModalRow
+            title={'Native balance'}
+            value={`${accountEthBalance.formatted} ${eap.underlyingSymbol.substring(1)}`}
           />
-          {eap.accountAllowance.native >= depositBN ? (
-            <Button
-              disabled={depositInput === '' || depositErrorMessage !== ''}
-              loading={false}
-              rectangle={true}
-              onClick={() => handleDeposit(depositBN)}
-            >
-              Deposit
-            </Button>
-          ) : (
-            <Button
-              rectangle={true}
-              loading={false}
-              disabled={depositBN === 0n}
-              onClick={() => handleApprove()}
-            >
-              Approve
-            </Button>
-          )}
-        </div>
+        )}
+        <div className="dialog-line" />
+        <PoolModalRow
+          toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
+          title={'Current APY'}
+          value={eap.apyAfterFee[0].apy + '%'}
+        />
+        <div className="dialog-line" onClick={() => updateAppState()} />
+        <PoolModalRow
+          toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
+          title={'7d APY'}
+          value={String(eap.apyAfterFee[1].apy + '%')}
+        />
       </div>
+      <InputGroup>
+        <UiInput
+          style={{ flexGrow: 1 }}
+          value={depositInput}
+          error={depositErrorMessage}
+          onChange={(e) => setDepositInput(e.target.value)}
+          LeftAdornment={<span>{eap.underlyingSymbol}:</span>}
+          RightAdornment={
+            <span style={{ cursor: 'pointer' }} onClick={setMaxDeposit}>
+              Max
+            </span>
+          }
+        />
+        {eap.accountAllowance.native >= depositBN ? (
+          <Button
+            style={{ width: '140px' }}
+            disabled={depositInput === '' || depositErrorMessage !== ''}
+            loading={false}
+            rectangle={true}
+            onClick={() => handleDeposit(depositBN)}
+          >
+            Deposit
+          </Button>
+        ) : (
+          <Button
+            style={{ width: '140px' }}
+            rectangle={true}
+            loading={false}
+            disabled={depositBN === 0n}
+            onClick={() => handleApprove()}
+          >
+            Approve
+          </Button>
+        )}
+      </InputGroup>
       {eap.isEth && (
-        <div className="input-group">
-          <div className="input-button-group">
-            <TextBox
-              disabled={accountEthBalance.native === 0n}
-              buttonDisabled={depositEthBN === accountEthBalance.native}
-              placeholder={eap.underlyingSymbol.substring(1)}
-              value={ethInput}
-              setInput={setEthInput}
-              validation={ethErrorMessage}
-              button={'Max'}
-              onClick={() => setMaxEthDeposit()}
-            />
-            <Button
-              loading={false}
-              rectangle={true}
-              disabled={ethInput === '' || ethErrorMessage !== ''}
-              onClick={() => handleDepositEth(depositEthBN)}
-            >
-              Deposit {eap.underlyingSymbol.substring(1)}
-            </Button>
-          </div>
-        </div>
+        <InputGroup>
+          <UiInput
+            style={{ flexGrow: 1 }}
+            value={ethInput}
+            error={ethErrorMessage}
+            onChange={(e) => setEthInput(e.target.value)}
+            LeftAdornment={<span>{eap.underlyingSymbol.substring(1)}:</span>}
+            RightAdornment={
+              <span style={{ cursor: 'pointer' }} onClick={setMaxEthDeposit}>
+                Max
+              </span>
+            }
+          />
+          <Button
+            style={{ width: '140px' }}
+            loading={false}
+            rectangle={true}
+            disabled={ethInput === '' || ethErrorMessage !== ''}
+            onClick={() => handleDepositEth(depositEthBN)}
+          >
+            Deposit {eap.underlyingSymbol.substring(1)}
+          </Button>
+        </InputGroup>
       )}
     </>
   );

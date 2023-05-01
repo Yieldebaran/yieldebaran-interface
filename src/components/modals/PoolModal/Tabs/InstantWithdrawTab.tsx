@@ -1,25 +1,24 @@
 import { useWeb3React } from '@web3-react/core';
 import debug from 'debug';
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { EapData, instantWithdrawal, instantWithdrawalEth } from 'src/classes/AppState';
+import { AttentionBlock } from 'src/components/AttentionBlock';
 
-import Button from 'src/components/Button/button';
+import { Button } from 'src/components/Button/button';
+import { InputGroup } from 'src/components/InputGroup';
 import { PoolModalRow } from 'src/components/modals/PoolModal/PoolModalRow';
-
-import TextBox from 'src/components/Textbox/textBox';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
+import { UiInput } from 'src/uiKit/UiInput';
 import { bnFromInput, formatBN, validateInput } from 'src/utils/numbers';
 import { toastError, toastSuccess } from 'src/utils/toast';
 import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
 
 const log = debug('components:InstantWithdrawTab');
 
-interface Props {
-  selectedPool: string;
-}
-
-const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
+const InstantWithdrawTab = () => {
+  const { poolAddress } = useParams() as { poolAddress: string };
   const { eapStates } = useContractsData();
   const { account } = useWeb3React();
 
@@ -28,7 +27,7 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
   const [withdrawalInput, setWithdrawalInput] = useState<string>('');
   const [withdrawalErrorMessage, setWithdrawalErrorMessage] = useState<string>('');
 
-  const eap: EapData = eapStates[props.selectedPool];
+  const eap: EapData = eapStates[poolAddress];
 
   useEffect(() => {
     mounted.current = true;
@@ -124,9 +123,9 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
 
   return eap && mounted ? (
     <>
-      <div className="supply-note">
-        Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee
-      </div>
+      <AttentionBlock>
+        ! Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee !
+      </AttentionBlock>
       <div className="dialog-line" />
       <PoolModalRow
         title={'Shares balance'}
@@ -163,16 +162,53 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
       )}
       {notAllMoneyAvailable && <div className="dialog-line" />}
       <div className="input-group">
-        <TextBox
-          placeholder={`0 y${eap.underlyingSymbol}`}
-          disabled={eap.accountShares.native === 0n}
-          value={withdrawalInput}
-          setInput={setWithdrawalInput}
-          validation={withdrawalErrorMessage}
-          button={'Max'}
-          onClick={() => setMaxWithdrawal()}
-        />
-        <div className="text-in-modal">
+        <InputGroup>
+          <UiInput
+            style={{ flexGrow: 1 }}
+            value={withdrawalInput}
+            onChange={(e) => setWithdrawalInput(e.target.value)}
+            LeftAdornment={<span>y{eap.underlyingSymbol}:</span>}
+            RightAdornment={
+              <span style={{ cursor: 'pointer' }} onClick={setMaxWithdrawal}>
+                Max
+              </span>
+            }
+          />
+          {!eap.isEth && (
+            <Button
+              disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+              onClick={() =>
+                handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
+              }
+            >
+              Withdraw
+            </Button>
+          )}
+        </InputGroup>
+
+        {eap.isEth && (
+          <div style={{ marginTop: '1rem', display: 'flex' }}>
+            <Button
+              style={{ flexBasis: 0, flexGrow: 1, marginRight: '0.5rem' }}
+              disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+              onClick={() =>
+                handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
+              }
+            >
+              Withdraw
+            </Button>
+            <Button
+              style={{ flexBasis: 0, flexGrow: 1, marginLeft: '0.5rem' }}
+              disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+              onClick={() =>
+                handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, account)
+              }
+            >
+              Withdraw as {eap.underlyingSymbol.substring(1)}
+            </Button>
+          </div>
+        )}
+        <div style={{ marginTop: '1rem' }}>
           ~
           {Number(
             formatBN(calculateInstantWithdrawal(withdrawalInputBN, eap), eap.decimals),
@@ -180,24 +216,6 @@ const InstantWithdrawTab: React.FC<Props> = (props: Props) => {
           {eap.underlyingSymbol}
         </div>
       </div>
-      <Button
-        disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
-        onClick={() =>
-          handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
-        }
-      >
-        Withdraw
-      </Button>
-      {eap.isEth && (
-        <Button
-          disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
-          onClick={() =>
-            handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, account)
-          }
-        >
-          Withdraw as {eap.underlyingSymbol.substring(1)}
-        </Button>
-      )}
     </>
   ) : null;
 };

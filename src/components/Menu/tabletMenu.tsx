@@ -1,18 +1,16 @@
 import React from 'react';
+
+import { NetworkSelector } from 'src/components/Menu/NetworkButton/networkSelector';
 import { useAppearance } from 'src/providers/AppearanceProvider';
 
 import Navbar from '../Navbar/navbar';
 import NavBarButton from '../Navbar/navBarButton';
-import NavbarLink from '../Navbar/navBarLink';
-import NavBarLinks from '../Navbar/navBarLinks';
 import NavbarLogo from '../Navbar/navbarLogo';
 import NavbarMobile from '../Navbar/navbarMobile';
 import NavBarRight from '../Navbar/navBarRight';
 import ThemeSwitch from '../Navbar/themeSwitch';
 
 import AddressButton from './AddressButton/addressButton';
-
-import NetworkButton from './NetworkButton/networkButton';
 
 const TabletMenu: React.FC = () => {
   const { isTablet, isMobile, show } = useAppearance();
@@ -24,7 +22,7 @@ const TabletMenu: React.FC = () => {
         <NavBarRight>
           {isTablet && !isMobile ? (
             <>
-              <NetworkButton />
+              <NetworkSelector />
               <AddressButton />
             </>
           ) : null}
@@ -35,18 +33,10 @@ const TabletMenu: React.FC = () => {
       <NavbarMobile>
         {isMobile ? (
           <NavBarRight className="navbar-right-content">
-            <NetworkButton />
+            <NetworkSelector />
             <AddressButton />
           </NavBarRight>
         ) : null}
-        <NavBarLinks>
-          <NavbarLink link="https://github.com/yieldebaran/yieldebaran-interface" target="_blank">
-            Interface repo
-          </NavbarLink>
-          <NavbarLink link="https://github.com/yieldebaran/yieldebaran-contracts" target="_blank">
-            Contracts repo
-          </NavbarLink>
-        </NavBarLinks>
       </NavbarMobile>
     </>
   ) : null;

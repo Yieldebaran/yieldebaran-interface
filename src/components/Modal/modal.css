@@ -26,7 +26,7 @@
   z-index: 10002;
   width: 98%;
   min-height: 250px;
-  max-width: 400px;
+  max-width: 500px;
   max-height: 640px;
   overflow: auto;
   box-shadow: var(--modal-shadow);

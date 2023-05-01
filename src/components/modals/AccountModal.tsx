@@ -1,8 +1,8 @@
 import { useWeb3React } from '@web3-react/core';
 import { ethers } from 'ethers';
 import React from 'react';
-import Button from 'src/components/Button/button';
-import Modal from 'src/components/Modal/modal';
+import { Button } from 'src/components/Button/button';
+import Modal from 'src/components/Modal/Modal';
 
 import 'src/components/modals/AccountModal.css';
 import { getShortenAddress } from 'src/helpers';
@@ -29,7 +29,7 @@ export const AccountModal: React.FC = () => {
   };
 
   return (
-    <Modal open={true} onClose={handleModalClose} title="Address" maxheight="220px">
+    <Modal open={true} onClose={handleModalClose} title="Address">
       <div className="account-settings">
         <div className="account-settings-address">
           <div className="network-logo">
@@ -37,7 +37,7 @@ export const AccountModal: React.FC = () => {
           </div>
           <span>{getShortenAddress(account, 4)}</span>
         </div>
-        <Button onClick={() => handleDisconnect()}>
+        <Button onClick={() => handleDisconnect()} invertColors>
           <span>Disconnect</span>
         </Button>
       </div>
