@@ -9,7 +9,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { EapData, loadAppState } from 'src/classes/AppState';
+import { EapData, loadAppState, setSigner } from 'src/classes/AppState';
 import { ChainId } from 'src/constants/chain';
 import { useChain } from 'src/providers/ChainProvider';
 import { FVal } from 'src/types/appDataContext';
@@ -97,6 +97,8 @@ export const ContractsDataProvider: FCC = ({ children }) => {
         log('skipped old update request', requestId)
         return
       }
+
+      setSigner(library || wSSProvider)
       setEapStates(appState.states);
       setBlockTimestamp(appState.blockTimestamp);
       setBlockNumber(appState.blockNumber);

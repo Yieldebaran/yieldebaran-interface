@@ -90,13 +90,17 @@ export const loadAppState = async (
     userAddress = `0x${randomHex(40)}`;
   }
 
-  signer = provider.getSigner();
-
   if (network.eaps) {
     return getEapStates(ethcallProvider, network, [60, 7 * 24 * 3600], userAddress, blockNumber);
   }
 
   return zeroAppState;
+};
+
+export const setSigner = (
+  provider: any,
+) => {
+  signer = provider.getSigner();
 };
 
 function randomHex(size: number) {
