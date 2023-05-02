@@ -156,7 +156,7 @@ const WithdrawTab = () => {
 
   return eap && mounted ? (
     <>
-      <AttentionBlock>! This is a delayed withdrawal, it may take up to 48h !</AttentionBlock>
+      <AttentionBlock>¡ This is a delayed withdrawal, it may take up to 48h !</AttentionBlock>
       <div>
         <PoolModalRow
           title={'Shares balance'}
@@ -167,7 +167,7 @@ const WithdrawTab = () => {
         />
         <div className="dialog-line" />
         <PoolModalRow
-          title={'Withdrawal amount'}
+          title={'Requested amount'}
           value={`${eap.accountUnderlyingRequested.formatted} ${eap.underlyingSymbol}`}
         />
         <div className="dialog-line" />

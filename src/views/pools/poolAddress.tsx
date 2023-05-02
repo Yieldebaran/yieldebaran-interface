@@ -9,6 +9,8 @@ import { MainBlock } from 'src/uiKit/MainBlock';
 import { UiTab, UiTabs } from 'src/uiKit/UiTabs';
 import styled from 'styled-components';
 
+import { useChain } from '../../providers/ChainProvider';
+
 const TABS = Object.freeze([
   { id: 'deposit', title: 'Deposit', component: <DepositTab /> },
   { id: 'withdraw', title: 'Withdrawal', component: <WithdrawTab /> },
@@ -42,6 +44,7 @@ export const PoolAddress = () => {
   const [currentTab, setCurrentTab] = useState<typeof TABS[number]['id']>(TABS[0].id);
 
   const { poolAddress } = useParams();
+  const { chainConfig } = useChain();
 
   useEffect(() => {
     const tab = searchParams.get('tab');
@@ -63,7 +66,7 @@ export const PoolAddress = () => {
     <PoolContainer>
       <PoolHeader>
         <h1>{eap.underlyingSymbol} pool</h1>
-        <span>{poolAddress}</span>
+        <span><a target={'_blank'} rel={'noreferrer'} href={`${chainConfig!.explorerUrl}/address/${poolAddress}`}>{poolAddress}</a></span>
       </PoolHeader>
       <UiTabs>
         {TABS.map((tab) => (

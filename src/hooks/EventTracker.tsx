@@ -32,7 +32,7 @@ const EventTracker: React.FC = () => {
 
     const newEaps = Object.keys(eapStates);
     if (JSON.stringify(newEaps) === JSON.stringify(eaps)) {
-      log('eaps not changed, so we will NOT resubscribe');
+      log('eaps not changed, so we will NOT resubscribe', newEaps, eaps);
       return;
     } else {
       log('new eaps', newEaps);

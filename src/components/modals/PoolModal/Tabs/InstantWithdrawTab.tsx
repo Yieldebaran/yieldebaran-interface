@@ -124,7 +124,7 @@ const InstantWithdrawTab = () => {
   return eap && mounted ? (
     <>
       <AttentionBlock>
-        ! Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee !
+        ¡ Instant withdrawals incur a {eap.instantWithdrawalFee.formatted}% fee !
       </AttentionBlock>
       <div className="dialog-line" />
       <PoolModalRow

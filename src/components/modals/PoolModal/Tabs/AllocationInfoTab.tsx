@@ -56,7 +56,7 @@ export const AllocationInfoTab = () => {
           rel="noreferrer"
           href={`https://debank.com/profile/${eap.address}`}
         >
-          Validate on DeBank
+          Show on DeBank
         </a>
       </div>
     </>

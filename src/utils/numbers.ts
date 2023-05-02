@@ -8,7 +8,7 @@ export function validateInput(input: string, max: string): string {
   const inputNum = Number(input);
   const maxNum = Number(max);
   if (maxNum <= 0) {
-    return 'No balance to stake';
+    return 'No balance to deposit';
   }
   if (inputNum <= 0) {
     return 'Amount must be > 0';

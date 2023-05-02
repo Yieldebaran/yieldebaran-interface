@@ -45,6 +45,8 @@ const ContractsDataProviderInitCtx = {
 let prevChain: ChainId;
 let prevAccount: string | null | undefined;
 
+let lastRequestId: string
+
 export const ContractsDataProvider: FCC = ({ children }) => {
   const { chainConfig, wSSProvider, selectedChainId } = useChain();
   const { account, library } = useWeb3React();
@@ -62,17 +64,22 @@ export const ContractsDataProvider: FCC = ({ children }) => {
     if (!chainConfig || !wSSProvider || !selectedChainId) return;
     if (selectedChainId === prevChain && account === prevAccount) return;
 
+    log('initializing state', selectedChainId, prevChain, account, prevAccount)
     prevChain = selectedChainId;
     prevAccount = account;
 
-    fetchAppState();
+    lastRequestId = selectedChainId + String(account)
+
+
+    fetchAppState(undefined, lastRequestId);
   }, [chainConfig, account, selectedChainId, wSSProvider]);
 
   const eap = useMemo(() => eapStates[selectedPool], [selectedPool, eapStates]);
 
-  async function fetchAppState(blockNumber?: number) {
+  async function fetchAppState(blockNumber?: number, requestId?: string) {
     log('fetchAppState fired', {
       chainConfig,
+      requestId,
       account,
       selectedChainId,
       prevChain: prevChain,
@@ -86,6 +93,10 @@ export const ContractsDataProvider: FCC = ({ children }) => {
         account as string,
         blockNumber,
       );
+      if (requestId !== undefined && requestId !== lastRequestId) {
+        log('skipped old update request', requestId)
+        return
+      }
       setEapStates(appState.states);
       setBlockTimestamp(appState.blockTimestamp);
       setBlockNumber(appState.blockNumber);
