@@ -16,17 +16,20 @@ import { getChainConfig } from 'src/utils/chain';
 const log = debug('providers:ChainProvider');
 
 type WSSProvider = ethers.providers.WebSocketProvider | null;
+type HTTPProvider = ethers.providers.JsonRpcProvider | null;
 
 type ChainProviderCtxType = {
   selectedChainId: ChainId | null;
-  wSSProvider: WSSProvider;
+  wssProvider: WSSProvider;
+  httpProvider: HTTPProvider;
   setSelectedChainId: Dispatch<SetStateAction<ChainId | null>>;
   chainConfig: ChainConfig | null;
 };
 
 const chainProviderInitCtx = {
   selectedChainId: null,
-  wSSProvider: null,
+  wssProvider: null,
+  httpProvider: null,
   chainConfig: null,
   setSelectedChainId: () => null,
 };
@@ -40,19 +43,27 @@ export const ChainProvider: FCC = ({ children }) => {
     [selectedChainId],
   );
 
-  const wSSProvider = useMemo(() => {
+  const wssProvider = useMemo(() => {
     if (!selectedChainId) return null;
-    log('new wSSProvider created', { selectedChainId });
+    log('new wssProvider created', { selectedChainId });
     const chainConfig = getChainConfig(selectedChainId);
     return new ethers.providers.WebSocketProvider(chainConfig.publicWebSocket);
   }, [selectedChainId]);
 
-  useEffect(() => log('hell', chainConfig), [chainConfig]);
+  const httpProvider = useMemo(() => {
+    if (!selectedChainId) return null;
+    log('new httpProvider created', { selectedChainId });
+    const chainConfig = getChainConfig(selectedChainId);
+    return new ethers.providers.JsonRpcProvider(chainConfig.publicRpc);
+  }, [selectedChainId]);
+
+  useEffect(() => log('hello', chainConfig), [chainConfig]);
 
   const ctx = {
     selectedChainId,
     setSelectedChainId,
-    wSSProvider,
+    wssProvider,
+    httpProvider,
     chainConfig,
   };
 

@@ -69,9 +69,11 @@ export async function getEapStates(
     blockNumberContract.getBlockNumber(),
   );
 
+  // console.log('calling block n', blockNumber ? blockNumber : 'latest')
   const data = await ethcallProvider.all(eapCalls, blockNumber ? blockNumber : 'latest');
   // console.log('first query result', data)
   blockNumber = Number(data.pop() as string);
+  // console.log({ blockNumber })
   const accountEthBalance = BigInt(data.pop() as string);
 
   const allocations = eaps.map(() => data.pop()) as string[][];
@@ -105,7 +107,7 @@ export async function getEapStates(
       underlyingContract.symbol(),
     );
     if (BigInt(underlyings[i]) !== BigInt(usdc)) {
-      const pair = new Contract(getPairAddress(underlyings[i], usdc), multiAbi);
+      const pair = new Contract(getPairAddress(underlyings[i], usdc, network), multiAbi);
       secondCallBatchForCurrentBlock.push(pair.getReserves());
     }
     allocations[i].forEach((alloc) => {
@@ -122,10 +124,13 @@ export async function getEapStates(
 
   secondBatchCall.push(timestampContract.getBlockTimestamp());
 
+  // console.log({apyBlockNumbers})
+
   const secondCallResults = await Promise.all([
     ...apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x)),
     ethcallProvider.all(secondCallBatchForCurrentBlock, blockNumber),
   ]);
+  // console.log('second query result', secondCallResults)
 
   const secondDataBatchCurrentBlock = secondCallResults.pop() as any[];
   exchangeRateCalls.map(() => secondDataBatchCurrentBlock.shift());
@@ -198,7 +203,7 @@ export async function getEapStates(
     const apyAfterFee: ApyData[] = [];
     periods.forEach((period, periodIdx) => {
       const pastER = BigInt(secondCallResults[periodIdx][i] as string);
-      const apy =
+      const apy = exchangeRate <= pastER ? 0 :
         Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
         1000;
       apyAfterFee.push({ apy, period });
@@ -231,7 +236,7 @@ export async function getEapStates(
       if (allocationPercent === 0) return;
 
       const pastER = BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
-      const apy =
+      const apy = exchangeRate <= pastER ? 0 :
         Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n) /
         1000;
       const currentApy = { apy, period: periods[0] };
@@ -326,27 +331,26 @@ async function getClosestBlockNumbers(
 ): Promise<Array<number>> {
   const { etherscanApiUrl, etherscanApiKey, inception } = network;
   return await Promise.all(
-    timestamps.map((x) => findClosestBlock(x, etherscanApiUrl, etherscanApiKey, inception)),
+    timestamps.map((x) => findClosestBlock(x, etherscanApiUrl, inception, etherscanApiKey)),
   );
 }
 
 async function findClosestBlock(
   timestamp: number,
   baseUrl: string,
-  apiKey: string,
   inception: number,
+  apiKey?: string,
 ): Promise<number> {
-  const url = `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before&apikey=${apiKey}`;
+  const url = `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before` + (apiKey ? `&apikey=${apiKey}` : '');
   const data = await (await fetch(url)).json();
-  const res = Number(data.result);
+  const res = Number(typeof data.result === 'object' ? data.result.blockNumber : data.result);
   return inception > res ? inception : res;
 }
 
-export function getPairAddress(tokenA: string, tokenB: string, isStable?: boolean) {
+export function getPairAddress(tokenA: string, tokenB: string, network: ChainConfig) {
   // spookyswap setting
-  const codeHash = '0xcdf2deca40a0bd56de8e3ce5c7df6727e5b1bf2ac96f283fa9c4b3e6b42ea9d2';
-  const factory = '0x152eE697f2E276fA89E96742e9bB9aB1F2E61bE3';
-  return getPair(tokenA, tokenB, codeHash, factory, isStable);
+  const { codeHash, factory, isSolidly } = network.liquiditySource;
+  return getPair(tokenA, tokenB, codeHash, factory, isSolidly ? false : undefined);
 }
 
 export function getPair(

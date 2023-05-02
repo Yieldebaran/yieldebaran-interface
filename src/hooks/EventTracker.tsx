@@ -12,7 +12,7 @@ import erc20Abi from '../abi/erc20.json';
 const log = debug('utils:EventTracker');
 
 const EventTracker: React.FC = () => {
-  const { chainConfig, wSSProvider } = useChain();
+  const { chainConfig, wssProvider } = useChain();
   const { eapStates, updateAppState, blockNumber } = useContractsData();
   const [eaps, setEaps] = useState(Object.keys(eapStates));
   const [lastUpdateBlock, setLastUpdateBlock] = useState(0);
@@ -21,11 +21,11 @@ const EventTracker: React.FC = () => {
 
   const clearSubs = () => {
     log('remove listeners');
-    wSSProvider?.removeAllListeners();
+    wssProvider?.removeAllListeners();
   };
 
   useEffect(() => {
-    if (!chainConfig || !wSSProvider) {
+    if (!chainConfig || !wssProvider) {
       setLastUpdateBlock(0);
       return;
     }
@@ -58,14 +58,14 @@ const EventTracker: React.FC = () => {
     });
 
     initListeners(filters);
-  }, [account, chainConfig, eapStates, wSSProvider]);
+  }, [account, chainConfig, eapStates, wssProvider]);
 
   async function initListeners(filters: EventFilter[]) {
-    log('initListeners', wSSProvider?._wsReady);
-    await wSSProvider?._networkPromise;
+    log('initListeners', wssProvider?._wsReady);
+    await wssProvider?._networkPromise;
 
     filters.forEach((f) => {
-      wSSProvider?.on(f, async (data) => {
+      wssProvider?.on(f, async (data) => {
         log(data);
         if (!data) return;
         if (data.blockNumber > lastUpdateBlock) {

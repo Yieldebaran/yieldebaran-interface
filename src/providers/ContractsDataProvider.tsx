@@ -48,7 +48,7 @@ let prevAccount: string | null | undefined;
 let lastRequestId: string
 
 export const ContractsDataProvider: FCC = ({ children }) => {
-  const { chainConfig, wSSProvider, selectedChainId } = useChain();
+  const { chainConfig, httpProvider, selectedChainId } = useChain();
   const { account, library } = useWeb3React();
 
   const [eapStates, setEapStates] = useState<Record<string, EapData>>({});
@@ -61,7 +61,7 @@ export const ContractsDataProvider: FCC = ({ children }) => {
   const [selectedPool, setSelectedPool] = useState<string>('');
 
   useEffect(() => {
-    if (!chainConfig || !wSSProvider || !selectedChainId) return;
+    if (!chainConfig || !httpProvider || !selectedChainId) return;
     if (selectedChainId === prevChain && account === prevAccount) return;
 
     log('initializing state', selectedChainId, prevChain, account, prevAccount)
@@ -72,7 +72,7 @@ export const ContractsDataProvider: FCC = ({ children }) => {
 
 
     fetchAppState(undefined, lastRequestId);
-  }, [chainConfig, account, selectedChainId, wSSProvider]);
+  }, [chainConfig, account, selectedChainId, httpProvider]);
 
   const eap = useMemo(() => eapStates[selectedPool], [selectedPool, eapStates]);
 
@@ -87,8 +87,9 @@ export const ContractsDataProvider: FCC = ({ children }) => {
     });
     if (chainConfig) {
       const net = { ...chainConfig };
+      // console.log('fetchAppState', blockNumber)
       const appState = await loadAppState(
-        library || wSSProvider,
+        httpProvider,
         net,
         account as string,
         blockNumber,
@@ -98,7 +99,7 @@ export const ContractsDataProvider: FCC = ({ children }) => {
         return
       }
 
-      setSigner(library || wSSProvider)
+      setSigner(library || httpProvider)
       setEapStates(appState.states);
       setBlockTimestamp(appState.blockTimestamp);
       setBlockNumber(appState.blockNumber);

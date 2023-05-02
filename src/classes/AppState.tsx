@@ -83,12 +83,16 @@ export const loadAppState = async (
   blockNumber?: number,
 ): Promise<AppState> => {
   if (initializedChainId !== network.chainId) {
+    // TODO: fix this dirty hack
+    provider.getNetwork = () => ({ chainId: 14 })
     await ethcallProvider.init(provider as ethers.providers.Provider);
     initializedChainId = network.chainId;
   }
   if (!userAddress) {
     userAddress = `0x${randomHex(40)}`;
   }
+
+  signer = provider.getSigner();
 
   if (network.eaps) {
     return getEapStates(ethcallProvider, network, [60, 7 * 24 * 3600], userAddress, blockNumber);

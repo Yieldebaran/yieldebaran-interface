@@ -34,6 +34,7 @@ import AUTOlogo from './assets/images/AUTO-logo.png';
 import BANDlogo from './assets/images/BAND-logo.png';
 import BCHlogo from './assets/images/BCH-logo.png';
 import CAKElogo from './assets/images/CAKE-logo.png';
+import CANTOlogo from './assets/images/CANTO-logo.png';
 import CREAMlogo from './assets/images/CREAM-logo.png';
 import DFlogo from './assets/images/DF-logo.png';
 import DOTlogo from './assets/images/DOT-logo.png';
@@ -177,6 +178,8 @@ const Logos: { [key: string]: string } = {
   vGNO: vGNOlogo,
   agEUR: agEURlogo,
   OP: OPlogo,
+  CANTO: CANTOlogo,
+  WCANTO: CANTOlogo,
 };
 
 export default Logos;

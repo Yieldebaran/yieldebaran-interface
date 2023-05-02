@@ -46,7 +46,7 @@ const Star = styled.div<{
   width: ${(p) => p.index}px;
   height: ${(p) => p.index}px;
   background: transparent;
-  animation: ${animStar} ${(p) => 50 * p.index}s linear infinite;
+  animation: ${animStar} ${(p) => 9999 * p.index}s linear infinite;
   box-shadow: ${(p) => multiplyBoxShadow(p.size, p.windowSize.width)};
   :after {
     content: ' ';
