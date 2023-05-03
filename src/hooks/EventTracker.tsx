@@ -76,6 +76,7 @@ const EventTracker: React.FC = () => {
       });
       // log(f);
     });
+    log('subscribed')
     // log(wSSProvider);
   }
 

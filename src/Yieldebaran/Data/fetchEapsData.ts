@@ -8,6 +8,8 @@ import { formatBN } from 'src/utils/numbers';
 
 import Logos from '../../logos';
 
+import eapAbi from '../../abi/EAP.json';
+
 import multiAbi from './multiiAbi';
 
 export const ONE = 10n ** 18n;
@@ -35,21 +37,34 @@ export async function getEapStates(
   const blockNumberContract = new Contract(network.blockNumberContract, multiAbi);
   const usdc = network.usdc;
   const eapCalls: Call[] = [];
-  const secondBatchCall: Call[] = [];
+  const secondBatchCall: any[] = [];
   const eaps = network.eaps;
+
+  const web3Provider = new ethers.providers.JsonRpcProvider(network.publicRpc);
+
+  const brokenEthCall = network.brokenEthCall
 
   const wToolCalls: Call[] = [];
   const underlyingCalls: Call[] = [];
   const allocationCalls: Call[] = [];
 
   const exchangeRateCalls: Call[] = [];
+  
+  if (brokenEthCall) {
+    blockNumber = Number(await web3Provider.getBlockNumber())
+  }
 
   eaps.forEach((x) => {
     const eapContract = new Contract(x, multiAbi);
     eapCalls.push(eapContract.decimals());
     eapCalls.push(eapContract.calculateExchangeRate());
     exchangeRateCalls.push(eapContract.calculateExchangeRate());
-    secondBatchCall.push(eapContract.calculateExchangeRate());
+    if (brokenEthCall) {
+      const eapContract = new ethers.Contract(x, eapAbi);
+      secondBatchCall.push(web3Provider.getLogs({ ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber }))
+    } else {
+      secondBatchCall.push(eapContract.calculateExchangeRate());
+    }
     eapCalls.push(eapContract.totalSupply());
     eapCalls.push(eapContract.balanceOf(account));
     eapCalls.push(eapContract.reserves());
@@ -86,8 +101,9 @@ export async function getEapStates(
     network,
   );
 
-  // period for current `apy` doesn't matter
-  apyBlockNumbers.unshift(blockNumber - apyTimePoints[0]);
+  // period for current `apy` doesn't matter, so lets take 60 blocks back or so
+  apyBlockNumbers.unshift(blockNumber - 1);
+  // console.log({ apyBlockNumbers })
 
   const secondCallBatchForCurrentBlock = [...exchangeRateCalls]; // touch exchange rates
   eaps.forEach((eap, i) => {
@@ -118,24 +134,44 @@ export async function getEapStates(
         sharesContract.exchangeRate(),
         eapContract.platformAdapter(alloc),
       );
-      secondBatchCall.push(sharesContract.exchangeRate());
+      if (!brokenEthCall) secondBatchCall.push(sharesContract.exchangeRate());
     });
   });
 
-  secondBatchCall.push(timestampContract.getBlockTimestamp());
+  if (!brokenEthCall) secondBatchCall.push(timestampContract.getBlockTimestamp());
 
   // console.log({apyBlockNumbers})
 
   const secondCallResults = await Promise.all([
-    ...apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x)),
+    ...(brokenEthCall ? secondBatchCall : apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x))),
     ethcallProvider.all(secondCallBatchForCurrentBlock, blockNumber),
   ]);
+
   // console.log('second query result', secondCallResults)
 
   const secondDataBatchCurrentBlock = secondCallResults.pop() as any[];
   exchangeRateCalls.map(() => secondDataBatchCurrentBlock.shift());
 
-  const periods = secondCallResults.map((x) => blockTimestamp - Number(x.pop()));
+
+  // TODO:: Now works only for one pool, rewrite for multiple
+  let periods: number[]
+  let lastLog: any
+  if (brokenEthCall) {
+    const logs: any[] = secondCallResults[0]
+    if (logs.length === 0) {
+      periods = [0]
+      console.error('no exchangeRate logs found')
+    } else {
+      lastLog = logs[logs.length - 1]
+      const { timestamp } = await web3Provider.getBlock(lastLog.blockNumber)
+      periods = [blockTimestamp - Number(timestamp)]
+    }
+    // (await Promise.all(apyBlockNumbers.map((x) => web3Provider.getBlock(x)))).map((x) => blockTimestamp - Number(x.timestamp))
+  } else {
+    periods = secondCallResults.map((x) => blockTimestamp - Number(x.pop()));
+  }
+
+  // console.log(periods)
 
   const states: { [eapAddress: string]: EapData } = {};
 
@@ -202,7 +238,14 @@ export async function getEapStates(
 
     const apyAfterFee: ApyData[] = [];
     periods.forEach((period, periodIdx) => {
-      const pastER = BigInt(secondCallResults[periodIdx][i] as string);
+      let pastER
+      if (brokenEthCall) {
+        // console.log(lastLog)
+        pastER = lastLog ? BigInt(lastLog.data.substring(0, 66)) : 10n ** 18n
+      } else {
+        pastER = BigInt(secondCallResults[periodIdx][i] as string);
+      }
+      // console.log({ pastER, exchangeRate, period })
       const apy = exchangeRate <= pastER ? 0 :
         Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
         1000;
@@ -235,7 +278,7 @@ export async function getEapStates(
         ) / 100;
       if (allocationPercent === 0) return;
 
-      const pastER = BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
+      const pastER = brokenEthCall ? exchangeRate : BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
       const apy = exchangeRate <= pastER ? 0 :
         Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n) /
         1000;

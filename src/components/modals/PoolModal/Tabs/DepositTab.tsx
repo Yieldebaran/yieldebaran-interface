@@ -164,9 +164,9 @@ const DepositTab = () => {
         />
         <div className="dialog-line" onClick={() => updateAppState()} />
         <PoolModalRow
-          toolTipContent={`Performance fee ${eap.performanceFee.formatted}% applied`}
+          toolTipContent={eap.apyAfterFee[1] ? `Performance fee ${eap.performanceFee.formatted}% applied` : undefined}
           title={'7d APY'}
-          value={String(eap.apyAfterFee[1].apy + '%')}
+          value={eap.apyAfterFee[1] ? String(eap.apyAfterFee[1].apy + '%') : 'no available on this chain yet'}
         />
       </div>
       <InputGroup>

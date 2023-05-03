@@ -23,6 +23,7 @@ export type ChainConfig = {
   blockNumberContract: string;
   etherscanApiUrl: string;
   etherscanApiKey?: string;
+  brokenEthCall?: boolean;
   inception: number;
   adapters: { [address: string]: string };
   liquiditySource: { codeHash: string, factory: string, isSolidly: boolean };
@@ -81,7 +82,8 @@ const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
     networkName: 'Canto',
     logo: Logos['CANTO'],
     publicRpc: 'https://rpc.cantoarchive.com',
-    publicWebSocket: 'wss://canto.dexvaults.com/ws',
+    brokenEthCall: true,
+    publicWebSocket: 'wss://canto.gravitychain.io:8546',
     explorerUrl: 'https://tuber.build',
     etherscanApiUrl: 'https://evm.explorer.canto.io/api',
     weth: '0x826551890Dc65655a0Aceca109aB11AbDbD7a07B',
