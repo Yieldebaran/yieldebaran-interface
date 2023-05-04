@@ -65,4 +65,8 @@ export const GlobalStyles = createGlobalStyle`
       width: 100%;
     }
   }
+  
+  a {
+    color: inherit;
+  }
 `;

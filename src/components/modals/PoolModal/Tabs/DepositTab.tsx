@@ -7,6 +7,7 @@ import { approve, deposit, depositEth } from 'src/classes/AppState';
 import { Button } from 'src/components/Button/button';
 import { InputGroup } from 'src/components/InputGroup';
 import { PoolModalRow } from 'src/components/modals/PoolModal/PoolModalRow';
+import { useWrongNetworkLabel } from 'src/hooks/useNetworkCheck';
 import { useChain } from 'src/providers/ChainProvider';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { UiInput } from 'src/uiKit/UiInput';
@@ -19,6 +20,7 @@ const log = debug('components:DepositTab');
 const DepositTab = () => {
   const { poolAddress } = useParams() as { poolAddress: string };
   const { accountEthBalance, updateAppState, eapStates } = useContractsData();
+  const wrongLabel = useWrongNetworkLabel();
 
   const { chainConfig } = useChain();
 
@@ -164,9 +166,17 @@ const DepositTab = () => {
         />
         <div className="dialog-line" onClick={() => updateAppState()} />
         <PoolModalRow
-          toolTipContent={eap.apyAfterFee[1] ? `Performance fee ${eap.performanceFee.formatted}% applied` : undefined}
+          toolTipContent={
+            eap.apyAfterFee[1]
+              ? `Performance fee ${eap.performanceFee.formatted}% applied`
+              : undefined
+          }
           title={'7d APY'}
-          value={eap.apyAfterFee[1] ? String(eap.apyAfterFee[1].apy + '%') : 'no available on this chain yet'}
+          value={
+            eap.apyAfterFee[1]
+              ? String(eap.apyAfterFee[1].apy + '%')
+              : 'no available on this chain yet'
+          }
         />
       </div>
       <InputGroup>
@@ -184,23 +194,23 @@ const DepositTab = () => {
         />
         {eap.accountAllowance.native >= depositBN ? (
           <Button
-            style={{ width: '140px' }}
-            disabled={depositInput === '' || depositErrorMessage !== ''}
+            style={{ minWidth: '140px' }}
+            disabled={depositInput === '' || depositErrorMessage !== '' || !!wrongLabel}
             loading={false}
             rectangle={true}
             onClick={() => handleDeposit(depositBN)}
           >
-            Deposit
+            {wrongLabel || 'Deposit'}
           </Button>
         ) : (
           <Button
-            style={{ width: '140px' }}
+            style={{ minWidth: '140px' }}
             rectangle={true}
             loading={false}
-            disabled={depositBN === 0n}
+            disabled={depositBN === 0n || !!wrongLabel}
             onClick={() => handleApprove()}
           >
-            Approve
+            {wrongLabel || 'Approve'}
           </Button>
         )}
       </InputGroup>
@@ -219,13 +229,13 @@ const DepositTab = () => {
             }
           />
           <Button
-            style={{ width: '140px' }}
+            style={{ minWidth: '140px' }}
             loading={false}
             rectangle={true}
-            disabled={ethInput === '' || ethErrorMessage !== ''}
+            disabled={ethInput === '' || ethErrorMessage !== '' || !!wrongLabel}
             onClick={() => handleDepositEth(depositEthBN)}
           >
-            Deposit {eap.underlyingSymbol.substring(1)}
+            {wrongLabel || `Deposit ${eap.underlyingSymbol.substring(1)}`}
           </Button>
         </InputGroup>
       )}

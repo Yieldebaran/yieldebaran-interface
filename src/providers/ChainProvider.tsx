@@ -1,14 +1,6 @@
 import debug from 'debug';
 import { ethers } from 'ethers';
-import {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { createContext, Dispatch, SetStateAction, useContext, useMemo, useState } from 'react';
 import { ChainConfig, ChainId } from 'src/constants/chain';
 import { FCC } from 'src/types/FCC';
 import { getChainConfig } from 'src/utils/chain';
@@ -38,6 +30,7 @@ const ChainProviderCtx = createContext<ChainProviderCtxType>(chainProviderInitCt
 
 export const ChainProvider: FCC = ({ children }) => {
   const [selectedChainId, setSelectedChainId] = useState<ChainId | null>(null);
+
   const chainConfig = useMemo(
     () => (selectedChainId ? getChainConfig(selectedChainId) : null),
     [selectedChainId],
@@ -45,19 +38,19 @@ export const ChainProvider: FCC = ({ children }) => {
 
   const wssProvider = useMemo(() => {
     if (!selectedChainId) return null;
-    log('new wssProvider created', { selectedChainId });
+
     const chainConfig = getChainConfig(selectedChainId);
+
     return new ethers.providers.WebSocketProvider(chainConfig.publicWebSocket);
   }, [selectedChainId]);
 
   const httpProvider = useMemo(() => {
     if (!selectedChainId) return null;
-    log('new httpProvider created', { selectedChainId });
+
     const chainConfig = getChainConfig(selectedChainId);
+
     return new ethers.providers.JsonRpcProvider(chainConfig.publicRpc);
   }, [selectedChainId]);
-
-  useEffect(() => log('hello', chainConfig), [chainConfig]);
 
   const ctx = {
     selectedChainId,
@@ -66,8 +59,6 @@ export const ChainProvider: FCC = ({ children }) => {
     httpProvider,
     chainConfig,
   };
-
-  log('ctx', ctx);
 
   return <ChainProviderCtx.Provider value={ctx}>{children}</ChainProviderCtx.Provider>;
 };

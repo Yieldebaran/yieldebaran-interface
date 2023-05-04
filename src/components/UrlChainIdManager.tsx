@@ -6,7 +6,7 @@ import { getChainConfig } from 'src/utils/chain';
 
 function navigateToDefaultChain(navigate: NavigateFunction) {
   const validChainId = getChainConfig(DEFAULT_CHAIN).chainId;
-  navigate(`/${validChainId}`);
+  navigate(`/${validChainId}`, { replace: true });
 }
 
 export const UrlChainIdManager: React.FC = () => {

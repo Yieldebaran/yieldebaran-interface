@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CHAIN_LIST, ChainId } from 'src/constants/chain';
 import { toHex } from 'src/helpers';
 import { useChain } from 'src/providers/ChainProvider';
@@ -30,9 +31,10 @@ const MenuItem = styled.div`
 `;
 
 export const NetworkSelector: React.FC = () => {
+  const navigate = useNavigate();
   const { connector, library } = useWeb3React();
   const [showMenu, setShowMenu] = useState(false);
-  const { chainConfig, setSelectedChainId } = useChain();
+  const { chainConfig } = useChain();
   const chainsIds = Object.keys(CHAIN_LIST) as unknown as ChainId[];
 
   useEffect(() => {
@@ -44,6 +46,7 @@ export const NetworkSelector: React.FC = () => {
   }
 
   async function switchNetwork(chain: ChainId) {
+    navigate(`/${chain}`);
     if (connector) {
       try {
         if (library)
@@ -82,7 +85,6 @@ export const NetworkSelector: React.FC = () => {
         }
       }
     } else {
-      setSelectedChainId(chain);
       setShowMenu(false);
     }
   }
@@ -104,7 +106,7 @@ export const NetworkSelector: React.FC = () => {
       {chainsIds.length > 1 && showMenu && (
         <Menu>
           {chainsIds.map((chainId: ChainId) => (
-            <MenuItem onClick={() => switchNetwork(CHAIN_LIST[chainId].chainId)}>
+            <MenuItem key={chainId} onClick={() => switchNetwork(CHAIN_LIST[chainId].chainId)}>
               {CHAIN_LIST[chainId].networkName}
             </MenuItem>
           ))}

@@ -6,9 +6,9 @@ import { AppState, ApyData, EapData } from 'src/classes/AppState';
 import { ChainConfig } from 'src/constants/chain';
 import { formatBN } from 'src/utils/numbers';
 
-import Logos from '../../logos';
-
 import eapAbi from '../../abi/EAP.json';
+
+import Logos from '../../logos';
 
 import multiAbi from './multiiAbi';
 
@@ -42,16 +42,16 @@ export async function getEapStates(
 
   const web3Provider = new ethers.providers.JsonRpcProvider(network.publicRpc);
 
-  const brokenEthCall = network.brokenEthCall
+  const brokenEthCall = network.brokenEthCall;
 
   const wToolCalls: Call[] = [];
   const underlyingCalls: Call[] = [];
   const allocationCalls: Call[] = [];
 
   const exchangeRateCalls: Call[] = [];
-  
+
   if (brokenEthCall) {
-    blockNumber = Number(await web3Provider.getBlockNumber())
+    blockNumber = Number(await web3Provider.getBlockNumber());
   }
 
   eaps.forEach((x) => {
@@ -61,7 +61,13 @@ export async function getEapStates(
     exchangeRateCalls.push(eapContract.calculateExchangeRate());
     if (brokenEthCall) {
       const eapContract = new ethers.Contract(x, eapAbi);
-      secondBatchCall.push(web3Provider.getLogs({ ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber }))
+      secondBatchCall.push(
+        web3Provider.getLogs({
+          ...eapContract.filters.ExchangeRate(),
+          fromBlock: blockNumber! - 10_000,
+          toBlock: blockNumber,
+        }),
+      );
     } else {
       secondBatchCall.push(eapContract.calculateExchangeRate());
     }
@@ -143,7 +149,9 @@ export async function getEapStates(
   // console.log({apyBlockNumbers})
 
   const secondCallResults = await Promise.all([
-    ...(brokenEthCall ? secondBatchCall : apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x))),
+    ...(brokenEthCall
+      ? secondBatchCall
+      : apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x))),
     ethcallProvider.all(secondCallBatchForCurrentBlock, blockNumber),
   ]);
 
@@ -152,20 +160,22 @@ export async function getEapStates(
   const secondDataBatchCurrentBlock = secondCallResults.pop() as any[];
   exchangeRateCalls.map(() => secondDataBatchCurrentBlock.shift());
 
-
   // TODO:: Now works only for one pool, rewrite for multiple
-  let periods: number[]
-  let lastLog: any
+  let periods: number[];
+  let lastLog: any;
+
   if (brokenEthCall) {
-    const logs: any[] = secondCallResults[0]
+    const logs: any[] = secondCallResults[0];
+
     if (logs.length === 0) {
-      periods = [0]
-      console.error('no exchangeRate logs found')
+      periods = [0];
+      console.error('no exchangeRate logs found');
     } else {
-      lastLog = logs[logs.length - 1]
-      const { timestamp } = await web3Provider.getBlock(lastLog.blockNumber)
-      periods = [blockTimestamp - Number(timestamp)]
+      lastLog = logs[logs.length - 1];
+      const { timestamp } = await web3Provider.getBlock(lastLog.blockNumber);
+      periods = [blockTimestamp - Number(timestamp)];
     }
+
     // (await Promise.all(apyBlockNumbers.map((x) => web3Provider.getBlock(x)))).map((x) => blockTimestamp - Number(x.timestamp))
   } else {
     periods = secondCallResults.map((x) => blockTimestamp - Number(x.pop()));
@@ -177,11 +187,10 @@ export async function getEapStates(
 
   let secondDataCursor = 0;
   let dataCursor = 0;
+
   eaps.forEach((eap, i) => {
     const decimals = Number(data[dataCursor++] as string);
-
     const format = formatter(decimals);
-
     const exchangeRate = BigInt(data[dataCursor++] as string);
     const totalSupply = BigInt(data[dataCursor++] as string).toFVal(format);
     const accountShares = BigInt(data[dataCursor++] as string).toFVal(format);
@@ -238,22 +247,25 @@ export async function getEapStates(
 
     const apyAfterFee: ApyData[] = [];
     periods.forEach((period, periodIdx) => {
-      let pastER
+      let pastER;
       if (brokenEthCall) {
         // console.log(lastLog)
-        pastER = lastLog ? BigInt(lastLog.data.substring(0, 66)) : 10n ** 18n
+        pastER = lastLog ? BigInt(lastLog.data.substring(0, 66)) : 10n ** 18n;
       } else {
         pastER = BigInt(secondCallResults[periodIdx][i] as string);
       }
-      // console.log({ pastER, exchangeRate, period })
-      const apy = exchangeRate <= pastER ? 0 :
-        Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
-        1000;
+      console.log({ pastER, exchangeRate, period });
+      const apy =
+        exchangeRate <= pastER
+          ? 0
+          : Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(period) / 10n ** 13n) /
+            1000;
       apyAfterFee.push({ apy, period });
     });
 
     let totalWithdrawable = 0n;
     const allocationProps = [];
+
     allocations[i].forEach((alloc, allocIndex) => {
       const sharesBalance = BigInt(
         secondDataBatchCurrentBlock[secondDataCursor++] as string,
@@ -276,12 +288,18 @@ export async function getEapStates(
           (Number(underlyingAllocated.formatted) * 10000) /
             Number(totalUnderlyingBalance.formatted),
         ) / 100;
+
       if (allocationPercent === 0) return;
 
-      const pastER = brokenEthCall ? exchangeRate : BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
-      const apy = exchangeRate <= pastER ? 0 :
-        Number(((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n) /
-        1000;
+      const pastER = brokenEthCall
+        ? exchangeRate
+        : BigInt(secondCallResults[0][eaps.length + allocIndex] as string);
+      const apy =
+        exchangeRate <= pastER
+          ? 0
+          : Number(
+              ((exchangeRate - pastER) * ONE * YEAR) / pastER / BigInt(periods[0]) / 10n ** 13n,
+            ) / 1000;
       const currentApy = { apy, period: periods[0] };
 
       allocationProps.push({
@@ -384,7 +402,9 @@ async function findClosestBlock(
   inception: number,
   apiKey?: string,
 ): Promise<number> {
-  const url = `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before` + (apiKey ? `&apikey=${apiKey}` : '');
+  const url =
+    `${baseUrl}?module=block&action=getblocknobytime&timestamp=${timestamp}&closest=before` +
+    (apiKey ? `&apikey=${apiKey}` : '');
   const data = await (await fetch(url)).json();
   const res = Number(typeof data.result === 'object' ? data.result.blockNumber : data.result);
   return inception > res ? inception : res;

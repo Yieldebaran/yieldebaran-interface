@@ -9,6 +9,7 @@ import { AttentionBlock } from 'src/components/AttentionBlock';
 import { Button } from 'src/components/Button/button';
 import { InputGroup } from 'src/components/InputGroup';
 import { PoolModalRow } from 'src/components/modals/PoolModal/PoolModalRow';
+import { useWrongNetworkLabel } from 'src/hooks/useNetworkCheck';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { UiInput } from 'src/uiKit/UiInput';
 import { bnFromInput, formatBN, validateInput } from 'src/utils/numbers';
@@ -18,6 +19,7 @@ import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
 const log = debug('components:InstantWithdrawTab');
 
 const InstantWithdrawTab = () => {
+  const wrongLabel = useWrongNetworkLabel();
   const { poolAddress } = useParams() as { poolAddress: string };
   const { eapStates } = useContractsData();
   const { account } = useWeb3React();
@@ -176,12 +178,12 @@ const InstantWithdrawTab = () => {
           />
           {!eap.isEth && (
             <Button
-              disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+              disabled={!!wrongLabel || withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
               onClick={() =>
                 handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
               }
             >
-              Withdraw
+              {wrongLabel || 'Withdraw'}
             </Button>
           )}
         </InputGroup>
@@ -190,21 +192,21 @@ const InstantWithdrawTab = () => {
           <div style={{ marginTop: '1rem', display: 'flex' }}>
             <Button
               style={{ flexBasis: 0, flexGrow: 1, marginRight: '0.5rem' }}
-              disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+              disabled={!!wrongLabel || withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
               onClick={() =>
                 handleInstantWithdrawal(eap.address, withdrawalInputBN, minFromBalance, account)
               }
             >
-              Withdraw
+              {wrongLabel || 'Withdraw'}
             </Button>
             <Button
               style={{ flexBasis: 0, flexGrow: 1, marginLeft: '0.5rem' }}
-              disabled={withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
+              disabled={!!wrongLabel || withdrawalInputBN === 0n || withdrawalErrorMessage !== ''}
               onClick={() =>
                 handleInstantWithdrawalEth(eap.address, withdrawalInputBN, minFromBalance, account)
               }
             >
-              Withdraw as {eap.underlyingSymbol.substring(1)}
+              {wrongLabel || `Withdraw as ${eap.underlyingSymbol.substring(1)}`}
             </Button>
           </div>
         )}

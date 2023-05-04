@@ -15,6 +15,7 @@ import { AttentionBlock } from 'src/components/AttentionBlock';
 import { Button } from 'src/components/Button/button';
 import { InputGroup } from 'src/components/InputGroup';
 import { PoolModalRow } from 'src/components/modals/PoolModal/PoolModalRow';
+import { useWrongNetworkLabel } from 'src/hooks/useNetworkCheck';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { UiInput } from 'src/uiKit/UiInput';
 import { bnFromInput, formatBN, validateInput } from 'src/utils/numbers';
@@ -24,6 +25,7 @@ import { ONE } from 'src/Yieldebaran/Data/fetchEapsData';
 const log = debug('components:WithdrawTab');
 
 const WithdrawTab = () => {
+  const wrongLabel = useWrongNetworkLabel();
   const { poolAddress } = useParams() as { poolAddress: string };
   const { eapStates, blockTimestamp } = useContractsData();
   const { account } = useWeb3React();
@@ -195,13 +197,13 @@ const WithdrawTab = () => {
               }
             />
             <Button
-              style={{ width: '140px' }}
-              disabled={withdrawalInput === '' || withdrawalErrorMessage !== ''}
+              style={{ minWidth: '140px' }}
+              disabled={!!wrongLabel || withdrawalInput === '' || withdrawalErrorMessage !== ''}
               loading={false}
               rectangle={true}
               onClick={() => handleRequestWithdrawal(withdrawalInputBN)}
             >
-              Withdraw
+              {wrongLabel || 'Withdraw'}
             </Button>
           </InputGroup>
           <div style={{ marginTop: '1rem' }}>
@@ -214,21 +216,25 @@ const WithdrawTab = () => {
         </>
       )}
       {isRequested && cancellable && (
-        <Button disabled={false} onClick={() => handleCancelRequest()}>
-          Cancel withdrawal
+        <Button disabled={!!wrongLabel} onClick={() => handleCancelRequest()}>
+          {wrongLabel || 'Cancel withdrawal'}
         </Button>
       )}
       {isRequested && (
-        <Button disabled={!isFulfilled && !freeWithdrawal} onClick={() => handleClaim(isFulfilled)}>
-          {isFulfilled ? 'Claim funds' : `Funds available from ${freeWithdrawalDate}`}
+        <Button
+          disabled={(!isFulfilled && !freeWithdrawal) || !!wrongLabel}
+          onClick={() => handleClaim(isFulfilled)}
+        >
+          {wrongLabel ||
+            (isFulfilled ? 'Claim funds' : `Funds available from ${freeWithdrawalDate}`)}
         </Button>
       )}
       {isRequested && isFulfilled && eap.isEth && (
         <Button
-          disabled={!isFulfilled && !freeWithdrawal}
+          disabled={(!isFulfilled && !freeWithdrawal) || !!wrongLabel}
           onClick={() => handleClaimEth(isFulfilled)}
         >
-          Claim funds as {eap.underlyingSymbol.substring(1)}
+          {wrongLabel || `Claim funds as ${eap.underlyingSymbol.substring(1)}`}
         </Button>
       )}
     </>
