@@ -54,6 +54,8 @@ export async function getEapStates(
     blockNumber = Number(await web3Provider.getBlockNumber())
   }
 
+  let logsRequest: any
+
   eaps.forEach((x) => {
     const eapContract = new Contract(x, multiAbi);
     eapCalls.push(eapContract.decimals());
@@ -61,7 +63,8 @@ export async function getEapStates(
     exchangeRateCalls.push(eapContract.calculateExchangeRate());
     if (brokenEthCall) {
       const eapContract = new ethers.Contract(x, eapAbi);
-      secondBatchCall.push(web3Provider.getLogs({ ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber }))
+      logsRequest = { ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber }
+      secondBatchCall.push(web3Provider.getLogs(logsRequest))
     } else {
       secondBatchCall.push(eapContract.calculateExchangeRate());
     }
@@ -156,16 +159,24 @@ export async function getEapStates(
   // TODO:: Now works only for one pool, rewrite for multiple
   let periods: number[]
   let lastLog: any
+  let errCount = 0
   if (brokenEthCall) {
-    const logs: any[] = secondCallResults[0]
-    if (logs.length === 0) {
-      periods = [0]
-      console.error('no exchangeRate logs found')
-    } else {
-      lastLog = logs[logs.length - 1]
-      const { timestamp } = await web3Provider.getBlock(lastLog.blockNumber)
-      periods = [blockTimestamp - Number(timestamp)]
+    let logs: any[] = secondCallResults[0]
+    while (logs.length === 0) {
+      if (errCount < 50) {
+        errCount++
+        logsRequest.toBlock = logsRequest.fromBlock - 1
+        logsRequest.fromBlock = logsRequest.fromBlock - 10_000
+        // console.log(logsRequest)
+        logs = await web3Provider.getLogs(logsRequest)
+      } else {
+        periods = [0]
+        console.error('no exchangeRate logs found')
+      }
     }
+    lastLog = logs[logs.length - 1]
+    const { timestamp } = await web3Provider.getBlock(lastLog.blockNumber)
+    periods = [blockTimestamp - Number(timestamp)]
     // (await Promise.all(apyBlockNumbers.map((x) => web3Provider.getBlock(x)))).map((x) => blockTimestamp - Number(x.timestamp))
   } else {
     periods = secondCallResults.map((x) => blockTimestamp - Number(x.pop()));
