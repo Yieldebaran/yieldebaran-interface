@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useChain } from 'src/providers/ChainProvider';
 import styled from 'styled-components';
 
 const StyledLogo = styled(Link)`
@@ -12,5 +13,6 @@ const StyledLogo = styled(Link)`
 `;
 
 export const Logo = () => {
-  return <StyledLogo to="/">Yieldebaran</StyledLogo>;
+  const { selectedChainId } = useChain();
+  return <StyledLogo to={`/${selectedChainId}`}>Yieldebaran</StyledLogo>;
 };
