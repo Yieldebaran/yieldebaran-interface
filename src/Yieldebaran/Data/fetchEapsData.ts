@@ -105,7 +105,7 @@ export async function getEapStates(
   );
 
   // period for current `apy` doesn't matter, so lets take 60 blocks back or so
-  apyBlockNumbers.unshift(blockNumber - 1);
+  apyBlockNumbers.unshift(blockNumber - 60);
   // console.log({ apyBlockNumbers })
 
   const secondCallBatchForCurrentBlock = [...exchangeRateCalls]; // touch exchange rates
@@ -256,7 +256,7 @@ export async function getEapStates(
       } else {
         pastER = BigInt(secondCallResults[periodIdx][i] as string);
       }
-      console.log({ pastER, exchangeRate, period });
+      // console.log({ pastER, exchangeRate, period });
       const apy =
         exchangeRate <= pastER
           ? 0

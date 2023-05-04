@@ -175,7 +175,7 @@ const DepositTab = () => {
           value={
             eap.apyAfterFee[1]
               ? String(eap.apyAfterFee[1].apy + '%')
-              : 'no available on this chain yet'
+              : 'not available on this chain yet'
           }
         />
       </div>
