@@ -1,32 +1,10 @@
 .spinner {
-  animation: rotate 2s linear infinite;
-  padding-left: 5px;
-  padding-right: 5px;
-}
-.spinner .path {
-  stroke: var(--spinner-color);
-  stroke-linecap: round;
-  animation: dash 1.5s ease-in-out infinite;
-  stroke-width: 5;
+  transform-origin: center;
+  animation: rotate .75s infinite linear
 }
 
 @keyframes rotate {
   100% {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes dash {
-  0% {
-    stroke-dasharray: 1, 150;
-    stroke-dashoffset: 0;
-  }
-  50% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -35;
-  }
-  100% {
-    stroke-dasharray: 90, 150;
-    stroke-dashoffset: -124;
+    transform: rotate(360deg)
   }
 }

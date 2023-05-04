@@ -28,6 +28,7 @@ const Menu = styled.div`
 const MenuItem = styled.div`
   cursor: pointer;
   padding: 0.4rem 0 0.2rem;
+  white-space: nowrap;
 `;
 
 export const NetworkSelector: React.FC = () => {

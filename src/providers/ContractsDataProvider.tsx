@@ -26,6 +26,7 @@ type ContractsDataProviderCtxType = {
   eapStates: Record<string, EapData>;
   accountEthBalance: FVal;
   eap: EapData | null;
+  fetching: boolean;
 };
 
 const ContractsDataProviderInitCtx = {
@@ -40,17 +41,19 @@ const ContractsDataProviderInitCtx = {
     formatted: '0.0',
   },
   eap: null,
+  fetching: true,
 };
 
 let prevChain: ChainId;
 let prevAccount: string | null | undefined;
 
-let lastRequestId: string
+let lastRequestId: string;
 
 export const ContractsDataProvider: FCC = ({ children }) => {
   const { chainConfig, httpProvider, selectedChainId } = useChain();
   const { account, library } = useWeb3React();
 
+  const [fetching, setFetching] = useState(false);
   const [eapStates, setEapStates] = useState<Record<string, EapData>>({});
   const [blockNumber, setBlockNumber] = useState<number>(0);
   const [blockTimestamp, setBlockTimestamp] = useState<number>(0);
@@ -64,13 +67,13 @@ export const ContractsDataProvider: FCC = ({ children }) => {
     if (!chainConfig || !httpProvider || !selectedChainId) return;
     if (selectedChainId === prevChain && account === prevAccount) return;
 
-    log('initializing state', selectedChainId, prevChain, account, prevAccount)
+    log('initializing state', selectedChainId, prevChain, account, prevAccount);
     prevChain = selectedChainId;
     prevAccount = account;
 
-    lastRequestId = selectedChainId + String(account)
+    lastRequestId = selectedChainId + String(account);
 
-
+    setFetching(true);
     fetchAppState(undefined, lastRequestId);
   }, [chainConfig, account, selectedChainId, httpProvider]);
 
@@ -88,18 +91,13 @@ export const ContractsDataProvider: FCC = ({ children }) => {
     if (chainConfig) {
       const net = { ...chainConfig };
       // console.log('fetchAppState', blockNumber)
-      const appState = await loadAppState(
-        httpProvider,
-        net,
-        account as string,
-        blockNumber,
-      );
+      const appState = await loadAppState(httpProvider, net, account as string, blockNumber);
       if (requestId !== undefined && requestId !== lastRequestId) {
-        log('skipped old update request', requestId)
-        return
+        log('skipped old update request', requestId);
+        return;
       }
 
-      setSigner(library || httpProvider)
+      setSigner(library || httpProvider);
       setEapStates(appState.states);
       setBlockTimestamp(appState.blockTimestamp);
       setBlockNumber(appState.blockNumber);
@@ -110,6 +108,7 @@ export const ContractsDataProvider: FCC = ({ children }) => {
         states: appState.states,
       });
     }
+    setFetching(false);
   }
 
   return (
@@ -123,6 +122,7 @@ export const ContractsDataProvider: FCC = ({ children }) => {
         eapStates,
         accountEthBalance,
         eap,
+        fetching,
       }}
     >
       {children}

@@ -40,7 +40,7 @@ const StyledTable = styled.table`
 `;
 
 export const Home: React.FC = () => {
-  const { eapStates } = useContractsData();
+  const { eapStates, fetching } = useContractsData();
 
   // render main logic frame
   return (
