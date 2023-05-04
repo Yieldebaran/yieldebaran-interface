@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spinner } from 'src/assets/huIcons/huIcons';
 import PoolRow from 'src/components/PoolsList/PoolRow';
 import { useContractsData } from 'src/providers/ContractsDataProvider';
 import { MainBlock } from 'src/uiKit/MainBlock';
@@ -59,11 +60,17 @@ export const Home: React.FC = () => {
           </thead>
           {
             <tbody>
-              {Object.keys(eapStates).length === 0
-                ? null
-                : Object.keys(eapStates).map((pool, index) => {
-                    return <PoolRow key={index} pool={pool} />;
-                  })}
+              {fetching ? (
+                <tr>
+                  <td colSpan={1000} style={{ textAlign: 'center' }}>
+                    <Spinner size={'30px'} />
+                  </td>
+                </tr>
+              ) : Object.keys(eapStates).length === 0 ? null : (
+                Object.keys(eapStates).map((pool, index) => {
+                  return <PoolRow key={index} pool={pool} />;
+                })
+              )}
             </tbody>
           }
         </StyledTable>
