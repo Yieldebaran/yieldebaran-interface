@@ -84,7 +84,7 @@ const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
     publicRpc: 'https://rpc.cantoarchive.com',
     brokenEthCall: true,
     publicWebSocket: 'wss://canto.gravitychain.io:8546',
-    explorerUrl: 'https://cantoscan.com',
+    explorerUrl: 'https://tuber.build',
     etherscanApiUrl: 'https://evm.explorer.canto.io/api',
     weth: '0x826551890Dc65655a0Aceca109aB11AbDbD7a07B',
     eaps: ['0xC690A3fFC47257be10Ac50F3b96826896C316E37'],

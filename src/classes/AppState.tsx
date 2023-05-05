@@ -92,6 +92,7 @@ export const loadAppState = async (
     userAddress = `0x${randomHex(40)}`;
   }
 
+  // console.log('signer set', provider.getSigner())
   signer = provider.getSigner();
 
   if (network.eaps) {
@@ -104,6 +105,7 @@ export const loadAppState = async (
 export const setSigner = (
   provider: any,
 ) => {
+  // console.log('signer set', provider.getSigner())
   signer = provider.getSigner();
 };
 

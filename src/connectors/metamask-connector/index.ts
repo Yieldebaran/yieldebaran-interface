@@ -3,7 +3,12 @@ import { AbstractConnector } from '@web3-react/abstract-connector';
 import { ModalSettings } from 'src/providers/store/modal';
 import warning from 'tiny-warning';
 
+import { ethers } from 'ethers';
+
+import { setSigner } from '../../classes/AppState';
+
 import { Send, SendOld, SendReturn, SendReturnResult } from './types';
+
 
 function parseSendReturn(sendReturn: SendReturnResult | SendReturn): any {
   return sendReturn.hasOwnProperty('result') ? sendReturn.result : sendReturn;
@@ -51,6 +56,8 @@ export class MetamaskConnector extends AbstractConnector {
     if (!this.supportedChainIds?.includes(Number(chainId))) {
       this.setOpenModal({ key: 'selectChain' });
     }
+    const provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+    setSigner(provider)
     this.emitUpdate({ chainId, provider: window.ethereum });
   }
 

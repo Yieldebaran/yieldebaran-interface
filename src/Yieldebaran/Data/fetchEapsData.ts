@@ -63,7 +63,7 @@ export async function getEapStates(
     exchangeRateCalls.push(eapContract.calculateExchangeRate());
     if (brokenEthCall) {
       const eapContract = new ethers.Contract(x, eapAbi);
-      logsRequest = { ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber }
+      logsRequest = { ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber! - 2 }
       secondBatchCall.push(web3Provider.getLogs(logsRequest))
     } else {
       secondBatchCall.push(eapContract.calculateExchangeRate());
@@ -256,7 +256,7 @@ export async function getEapStates(
       } else {
         pastER = BigInt(secondCallResults[periodIdx][i] as string);
       }
-      // console.log({ pastER, exchangeRate, period });
+      console.log({ pastER, exchangeRate, period });
       const apy =
         exchangeRate <= pastER
           ? 0

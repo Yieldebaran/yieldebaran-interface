@@ -13,6 +13,6 @@ export const useWrongNetworkLabel = () => {
   const { isConnected, isSupported, networksMatch } = useNetworkCheck();
   if (!isConnected) return 'Wallet not connected';
   if (!isSupported) return 'Unsupported network';
-  if (!networksMatch) return 'Networks do not match';
+  if (!networksMatch) return 'Incorrect network';
   return null;
 };
