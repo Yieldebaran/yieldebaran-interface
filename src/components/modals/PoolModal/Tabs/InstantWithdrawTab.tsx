@@ -136,7 +136,7 @@ const InstantWithdrawTab = () => {
         }`}
         value={`${eap.accountShares.formatted} y${eap.underlyingSymbol}`}
       />
-      {eap.underlyingUnallocated.native !== 0n && <div className="dialog-line" />}
+      {noFeeAmount !== 0n && <div className="dialog-line" />}
       {noFeeAmount !== 0n && (
         <PoolModalRow
           toolTipContent={
