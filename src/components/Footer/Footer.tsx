@@ -55,6 +55,9 @@ export const Footer: React.FC = () => {
       <a href="https://linktr.ee/yieldebaran" target={'_blank'} rel={'noreferrer'}>
         Community
       </a>
+      <a href="https://yieldebaran.gitbook.io/yieldebaran-docs/" target={'_blank'} rel={'noreferrer'}>
+        Docs
+      </a>
     </StyledFooter>
   );
 };
