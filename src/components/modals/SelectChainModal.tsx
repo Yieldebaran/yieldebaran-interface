@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from 'src/components/Modal/Modal';
 
 import 'src/components/modals/SelectChainModal.css';
@@ -9,6 +10,7 @@ import { useChain } from 'src/providers/ChainProvider';
 import { useSetModal } from 'src/providers/StoreProvider';
 
 export const SelectChainModal: React.FC = () => {
+  const navigate = useNavigate();
   const { setSelectedChainId } = useChain();
   const { connector, library } = useWeb3React();
   const setModal = useSetModal();
@@ -18,6 +20,7 @@ export const SelectChainModal: React.FC = () => {
   }
 
   async function switchNetwork(chain: ChainId) {
+    navigate(`/${chain}`);
     if (connector) {
       try {
         if (library)
