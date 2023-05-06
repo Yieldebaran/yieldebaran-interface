@@ -44,7 +44,6 @@ export class MetamaskConnector extends AbstractConnector {
   constructor(kwargs: any, setOpenModal: (newModal: ModalSettings | null) => void) {
     super(kwargs);
 
-    this.handleNetworkChanged = this.handleNetworkChanged.bind(this);
     this.handleChainChanged = this.handleChainChanged.bind(this);
     this.handleConnect = this.handleConnect.bind(this);
     this.handleAccountsChanged = this.handleAccountsChanged.bind(this);
@@ -73,10 +72,6 @@ export class MetamaskConnector extends AbstractConnector {
     this.emitDeactivate();
   }
 
-  private handleNetworkChanged(networkId: string | number): void {
-    this.emitUpdate({ chainId: networkId, provider: window.ethereum });
-  }
-
   private handleConnect(data: any): void {
     // console.log('on connect', data)
 
@@ -100,7 +95,6 @@ export class MetamaskConnector extends AbstractConnector {
       window.ethereum.on('chainChanged', this.handleChainChanged);
       window.ethereum.on('accountsChanged', this.handleAccountsChanged);
       window.ethereum.on('close', this.handleClose);
-      window.ethereum.on('networkChanged', this.handleNetworkChanged);
       window.ethereum.on('connect', this.handleConnect);
     }
 
@@ -223,7 +217,6 @@ export class MetamaskConnector extends AbstractConnector {
       window.ethereum.removeListener('accountsChanged', this.handleAccountsChanged);
       window.ethereum.removeListener('close', this.handleClose);
       window.ethereum.removeListener('connect', this.handleClose);
-      window.ethereum.removeListener('networkChanged', this.handleNetworkChanged);
     }
   }
 

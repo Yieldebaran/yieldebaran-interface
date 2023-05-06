@@ -99,7 +99,7 @@ export async function getEapStates(
   const withdrawTools = eaps.map(() => data.pop()) as string[];
   const blockTimestamp = Number(data.pop());
 
-  const apyBlockNumbers = await getClosestBlockNumbers(
+  const apyBlockNumbers = brokenEthCall ? [] : await getClosestBlockNumbers(
     apyTimePoints.slice(1).map((x) => blockTimestamp - x),
     network,
   );
