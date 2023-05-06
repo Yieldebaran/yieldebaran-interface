@@ -11,22 +11,25 @@ import erc20Abi from '../abi/erc20.json';
 
 const log = debug('utils:EventTracker');
 
+let lastBlockUpd = 0
+
 const EventTracker: React.FC = () => {
-  const { chainConfig, wssProvider } = useChain();
-  const { eapStates, updateAppState, blockNumber } = useContractsData();
+  const { chainConfig, wssProvider, wssProviderAlt } = useChain();
+  const { eapStates, updateAppState } = useContractsData();
   const [eaps, setEaps] = useState(Object.keys(eapStates));
-  const [lastUpdateBlock, setLastUpdateBlock] = useState(0);
 
   const { account } = useWeb3React();
 
   const clearSubs = () => {
     log('remove listeners');
     wssProvider?.removeAllListeners();
+    if (wssProviderAlt) {
+      wssProviderAlt?.removeAllListeners();
+    }
   };
 
   useEffect(() => {
     if (!chainConfig || !wssProvider) {
-      setLastUpdateBlock(0);
       return;
     }
 
@@ -37,7 +40,7 @@ const EventTracker: React.FC = () => {
     } else {
       log('new eaps', newEaps);
       setEaps(newEaps);
-      setLastUpdateBlock(blockNumber);
+      lastBlockUpd = 0
     }
 
     clearSubs();
@@ -63,17 +66,36 @@ const EventTracker: React.FC = () => {
   async function initListeners(filters: EventFilter[]) {
     log('initListeners', wssProvider?._wsReady);
     await wssProvider?._networkPromise;
+    if (wssProviderAlt) {
+      await wssProviderAlt?._networkPromise;
+    }
 
     filters.forEach((f) => {
       wssProvider?.on(f, async (data) => {
-        log(data);
+        log('main provider event', data);
         if (!data) return;
-        if (data.blockNumber > lastUpdateBlock) {
-          log(`received new block ${data.blockNumber}, prev ${lastUpdateBlock}. Updating state`);
-          setLastUpdateBlock(data.blockNumber);
+        if (data.blockNumber > lastBlockUpd) {
+          log(`received new block ${data.blockNumber}, prev ${lastBlockUpd}. Updating state`);
+          lastBlockUpd = data.blockNumber
           await updateAppState(Number(data.blockNumber));
+        } else {
+          log('update already processed', data.blockNumber, lastBlockUpd)
         }
       });
+      if (wssProviderAlt) {
+        log('subscribed to alt provider')
+        wssProviderAlt.on(f, async (data) => {
+          log('alt provider event', data);
+          if (!data) return;
+          if (data.blockNumber > lastBlockUpd) {
+            log(`received new block ${data.blockNumber}, prev ${lastBlockUpd}. Updating state`);
+            lastBlockUpd = data.blockNumber
+            await updateAppState(Number(data.blockNumber));
+          } else {
+            log('update already processed', data.blockNumber, lastBlockUpd)
+          }
+        });
+      }
       // log(f);
     });
     log('subscribed')

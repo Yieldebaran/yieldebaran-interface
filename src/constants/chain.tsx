@@ -14,6 +14,7 @@ export type ChainConfig = {
   logo: string;
   publicRpc: string;
   publicWebSocket: string;
+  publicWebSocketAlt?: string;
   explorerUrl: string;
   weth: string;
   ethAdapter: string;
@@ -84,6 +85,7 @@ const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
     publicRpc: 'https://mainnode.plexnode.org:8545',
     brokenEthCall: true,
     publicWebSocket: 'wss://canto.gravitychain.io:8546',
+    publicWebSocketAlt: 'wss://canto.dexvaults.com/ws',
     explorerUrl: 'https://tuber.build',
     etherscanApiUrl: 'https://evm.explorer.canto.io/api',
     weth: '0x826551890Dc65655a0Aceca109aB11AbDbD7a07B',

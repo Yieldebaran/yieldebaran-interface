@@ -13,6 +13,7 @@ type HTTPProvider = ethers.providers.JsonRpcProvider | null;
 type ChainProviderCtxType = {
   selectedChainId: ChainId | null;
   wssProvider: WSSProvider;
+  wssProviderAlt: WSSProvider;
   httpProvider: HTTPProvider;
   setSelectedChainId: Dispatch<SetStateAction<ChainId | null>>;
   chainConfig: ChainConfig | null;
@@ -21,6 +22,7 @@ type ChainProviderCtxType = {
 const chainProviderInitCtx = {
   selectedChainId: null,
   wssProvider: null,
+  wssProviderAlt: null,
   httpProvider: null,
   chainConfig: null,
   setSelectedChainId: () => null,
@@ -44,6 +46,15 @@ export const ChainProvider: FCC = ({ children }) => {
     return new ethers.providers.WebSocketProvider(chainConfig.publicWebSocket);
   }, [selectedChainId]);
 
+  const wssProviderAlt = useMemo(() => {
+    if (!selectedChainId) return null;
+
+    const chainConfig = getChainConfig(selectedChainId);
+    if (!chainConfig.publicWebSocketAlt) return null;
+
+    return new ethers.providers.WebSocketProvider(chainConfig.publicWebSocketAlt);
+  }, [selectedChainId]);
+
   const httpProvider = useMemo(() => {
     if (!selectedChainId) return null;
 
@@ -56,6 +67,7 @@ export const ChainProvider: FCC = ({ children }) => {
     selectedChainId,
     setSelectedChainId,
     wssProvider,
+    wssProviderAlt,
     httpProvider,
     chainConfig,
   };
