@@ -53,7 +53,7 @@ const BASE_CHAIN_LIST: Record<ChainId, ChainConfig> = {
     etherscanApiKey: '2G6J2JBPRTFVQQRIIQ4BXNZD17AIH1CJMK',
     weth: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
     eaps: ['0x4dA549Be5164a4Afd95F426e48A4f0D320Fe057e'],
-    usdc: '0x04068da6c83afcfa0e13ba15a6696662335d5b75',
+    usdc: '0x1B6382DBDEa11d97f24495C9A90b7c88469134a4',
     adapters: {
       '0xd56C2CbA8479442f9576897B99b74527626Da409': 'Tarot',
     },

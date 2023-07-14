@@ -50,10 +50,6 @@ export async function getEapStates(
 
   const exchangeRateCalls: Call[] = [];
 
-  if (brokenEthCall) {
-    blockNumber = Number(await web3Provider.getBlockNumber());
-  }
-
   let logsRequest: any
 
   eaps.forEach((x) => {
@@ -61,13 +57,7 @@ export async function getEapStates(
     eapCalls.push(eapContract.decimals());
     eapCalls.push(eapContract.calculateExchangeRate());
     exchangeRateCalls.push(eapContract.calculateExchangeRate());
-    if (brokenEthCall) {
-      const eapContract = new ethers.Contract(x, eapAbi);
-      logsRequest = { ...eapContract.filters.ExchangeRate(), fromBlock: blockNumber! - 10_000, toBlock: blockNumber! - 2 }
-      secondBatchCall.push(web3Provider.getLogs(logsRequest))
-    } else {
-      secondBatchCall.push(eapContract.calculateExchangeRate());
-    }
+    secondBatchCall.push(eapContract.calculateExchangeRate());
     eapCalls.push(eapContract.totalSupply());
     eapCalls.push(eapContract.balanceOf(account));
     eapCalls.push(eapContract.reserves());
@@ -104,8 +94,12 @@ export async function getEapStates(
     network,
   );
 
-  // period for current `apy` doesn't matter, so lets take 60 blocks back or so
+
+  // period for current `apy` doesn't matter, so lets take 10 blocks back or so
   apyBlockNumbers.unshift(blockNumber - 60);
+
+
+  console.log({ blockNumber, blockTimestamp }, apyBlockNumbers)
   // console.log({ apyBlockNumbers })
 
   const secondCallBatchForCurrentBlock = [...exchangeRateCalls]; // touch exchange rates
@@ -137,18 +131,16 @@ export async function getEapStates(
         sharesContract.exchangeRate(),
         eapContract.platformAdapter(alloc),
       );
-      if (!brokenEthCall) secondBatchCall.push(sharesContract.exchangeRate());
+      secondBatchCall.push(sharesContract.exchangeRate());
     });
   });
 
-  if (!brokenEthCall) secondBatchCall.push(timestampContract.getBlockTimestamp());
+  secondBatchCall.push(timestampContract.getBlockTimestamp());
 
   // console.log({apyBlockNumbers})
 
   const secondCallResults = await Promise.all([
-    ...(brokenEthCall
-      ? secondBatchCall
-      : apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x))),
+    ...apyBlockNumbers.map((x) => ethcallProvider.all(secondBatchCall, x)),
     ethcallProvider.all(secondCallBatchForCurrentBlock, blockNumber),
   ]);
 
@@ -158,30 +150,13 @@ export async function getEapStates(
   exchangeRateCalls.map(() => secondDataBatchCurrentBlock.shift());
 
   // TODO:: Now works only for one pool, rewrite for multiple
-  let periods: number[]
+  const periods = secondCallResults.map((x) => {
+    const ts = Number(x.pop())
+    const time = blockTimestamp - ts
+    console.log(ts)
+    return time
+  });
   let lastLog: any
-  let errCount = 0
-  if (brokenEthCall) {
-    let logs: any[] = secondCallResults[0]
-    while (logs.length === 0) {
-      if (errCount < 50) {
-        errCount++
-        logsRequest.toBlock = logsRequest.fromBlock - 1
-        logsRequest.fromBlock = logsRequest.fromBlock - 10_000
-        // console.log(logsRequest)
-        logs = await web3Provider.getLogs(logsRequest)
-      } else {
-        periods = [0]
-        console.error('no exchangeRate logs found')
-      }
-    }
-    lastLog = logs[logs.length - 1]
-    const { timestamp } = await web3Provider.getBlock(lastLog.blockNumber)
-    periods = [blockTimestamp - Number(timestamp)]
-    // (await Promise.all(apyBlockNumbers.map((x) => web3Provider.getBlock(x)))).map((x) => blockTimestamp - Number(x.timestamp))
-  } else {
-    periods = secondCallResults.map((x) => blockTimestamp - Number(x.pop()));
-  }
 
   // console.log(periods)
 
@@ -411,6 +386,26 @@ async function findClosestBlock(
   const res = Number(typeof data.result === 'object' ? data.result.blockNumber : data.result);
   return inception > res ? inception : res;
 }
+
+// async function getPreviousExchangeRateFromExplorer(
+//   eap: string,
+//   baseUrl: string,
+//   currentBlock: number,
+//   apiKey?: string,
+// ): Promise<[bigint, number]> {
+//   const url =
+//     `${baseUrl}?module=logs&action=getLogs&fromBlock=${currentBlock - 1_000_000}&toBlock=${currentBlock}` +
+//     (apiKey ? `&apikey=${apiKey}` : '');
+//   const data = await (await fetch(url)).json();
+//   console.log(data.result)
+//   if (data.result.length === 0) return [ONE, (Math.floor(new Date().getTime() / 1000) - 3600 * 24 * 30)]
+//   let lastLog = data.result.pop()
+//   while (Number(lastLog.blockNumber) >= currentBlock) {
+//     if (data.result.length === 0) return [ONE, (Math.floor(new Date().getTime() / 1000) - 3600 * 24 * 30)]
+//     lastLog = data.result.pop()
+//   }
+//   return [BigInt(lastLog.data.sunstring(0, 66)), Number(lastLog.timeStamp)];
+// }
 
 export function getPairAddress(tokenA: string, tokenB: string, network: ChainConfig) {
   // spookyswap setting
